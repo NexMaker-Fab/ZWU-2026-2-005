@@ -1,0 +1,182 @@
+{
+  "site": {
+    "name": "TeamFlow Wiki",
+    "theme": "light"
+  },
+  "pages": [
+    {
+      "id": "welcome",
+      "title": "Welcome",
+      "icon": "👋",
+      "blocks": [
+        {
+          "id": "w1",
+          "type": "heading",
+          "level": 1,
+          "content": "Welcome to TeamFlow"
+        },
+        {
+          "id": "w2",
+          "type": "paragraph",
+          "content": "TeamFlow is a lightweight collaborative wiki that lets your team edit content directly in the browser. Click any text to start editing — it's that simple."
+        },
+        {
+          "id": "w3",
+          "type": "divider"
+        },
+        {
+          "id": "w4",
+          "type": "heading",
+          "level": 2,
+          "content": "✨ Features"
+        },
+        {
+          "id": "w5",
+          "type": "paragraph",
+          "content": "📝 Inline Editing — Click any text and start typing to edit"
+        },
+        {
+          "id": "w6",
+          "type": "paragraph",
+          "content": "🧱 Block-based — Add headings, paragraphs, images, and dividers"
+        },
+        {
+          "id": "w7",
+          "type": "paragraph",
+          "content": "⚡ Slash Commands — Type / to quickly insert new block types"
+        },
+        {
+          "id": "w8",
+          "type": "paragraph",
+          "content": "🖼️ Image Support — Upload images or paste URLs"
+        },
+        {
+          "id": "w9",
+          "type": "paragraph",
+          "content": "💾 Save to GitHub — Commit changes directly from the browser"
+        },
+        {
+          "id": "w10",
+          "type": "paragraph",
+          "content": "🌙 Dark Mode — Toggle between light and dark themes"
+        },
+        {
+          "id": "w11",
+          "type": "divider"
+        },
+        {
+          "id": "w12",
+          "type": "heading",
+          "level": 2,
+          "content": "🚀 Quick Start"
+        },
+        {
+          "id": "w13",
+          "type": "paragraph",
+          "content": "1. Click on any text block to edit it"
+        },
+        {
+          "id": "w14",
+          "type": "paragraph",
+          "content": "2. Use the + button or type / to add new blocks"
+        },
+        {
+          "id": "w15",
+          "type": "paragraph",
+          "content": "3. Drag blocks using the ⠿ handle to reorder them"
+        },
+        {
+          "id": "w16",
+          "type": "paragraph",
+          "content": "4. Click 'Save to Local' to download your content, or configure GitHub to save directly to your repository"
+        }
+      ]
+    },
+    {
+      "id": "guide",
+      "title": "User Guide",
+      "icon": "📖",
+      "blocks": [
+        {
+          "id": "g1",
+          "type": "heading",
+          "level": 1,
+          "content": "User Guide"
+        },
+        {
+          "id": "g2",
+          "type": "paragraph",
+          "content": "This guide covers all the features available in TeamFlow Wiki."
+        },
+        {
+          "id": "g3",
+          "type": "divider"
+        },
+        {
+          "id": "g4",
+          "type": "heading",
+          "level": 2,
+          "content": "Block Types"
+        },
+        {
+          "id": "g5",
+          "type": "paragraph",
+          "content": "TeamFlow supports several block types that you can mix and match to create rich content:"
+        },
+        {
+          "id": "g6",
+          "type": "heading",
+          "level": 3,
+          "content": "Text Blocks"
+        },
+        {
+          "id": "g7",
+          "type": "paragraph",
+          "content": "Heading 1/2/3 — Use headings to organize your content hierarchy. Paragraph — Standard text blocks for your main content."
+        },
+        {
+          "id": "g8",
+          "type": "heading",
+          "level": 3,
+          "content": "Media Blocks"
+        },
+        {
+          "id": "g9",
+          "type": "paragraph",
+          "content": "Image — Add images by uploading files or pasting URLs. Each image can have an optional caption."
+        },
+        {
+          "id": "g10",
+          "type": "heading",
+          "level": 3,
+          "content": "Layout Blocks"
+        },
+        {
+          "id": "g11",
+          "type": "paragraph",
+          "content": "Divider — A horizontal line to visually separate sections of content."
+        },
+        {
+          "id": "g12",
+          "type": "divider"
+        },
+        {
+          "id": "g13",
+          "type": "heading",
+          "level": 2,
+          "content": "Saving Your Work"
+        },
+        {
+          "id": "g14",
+          "type": "paragraph",
+          "content": "Save to Local — Downloads a content.json file to your computer. Replace the existing file in the data/ folder to update the site."
+        },
+        {
+          "id": "g15",
+          "type": "paragraph",
+          "content": "Save to GitHub — Configure your GitHub access token in Settings (⚙️) to commit changes directly to your repository."
+        }
+      ]
+    }
+  ]
+}
