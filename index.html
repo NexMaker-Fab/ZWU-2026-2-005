@@ -78,6 +78,13 @@
           <div class="page-title" id="page-title" contenteditable="true" data-placeholder="Untitled" role="textbox" aria-label="Page title">Welcome</div>
         </div>
 
+        <!-- Page Meta (author + date) -->
+        <div class="page-meta" id="page-meta">
+          <span class="page-meta-author" id="page-meta-author"></span>
+          <span class="page-meta-sep">·</span>
+          <span class="page-meta-date" id="page-meta-date"></span>
+        </div>
+
         <!-- Block Editor -->
         <div class="editor" id="editor" role="document">
           <!-- Blocks rendered by JS -->
@@ -169,6 +176,11 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
+          <label class="form-label" for="settings-username" data-i18n="settings.username">Your Display Name</label>
+          <input type="text" class="form-input" id="settings-username" data-i18n-placeholder="settings.username.placeholder" placeholder="e.g. Zhang San">
+          <p class="form-hint" data-i18n="settings.username.hint">Shown as author when creating pages.</p>
+        </div>
+        <div class="form-group">
           <label class="form-label" for="github-owner" data-i18n="settings.owner">Repository Owner</label>
           <input type="text" class="form-input" id="github-owner" placeholder="e.g. NexMaker-Fab">
           <p class="form-hint" data-i18n="settings.owner.hint">GitHub username or organization name</p>
@@ -198,6 +210,25 @@
   <!-- ===== ICON PICKER ===== -->
   <div class="icon-picker" id="icon-picker">
     <!-- Populated by JS -->
+  </div>
+
+  <!-- ===== WELCOME MODAL (first-time setup) ===== -->
+  <div class="modal-overlay" id="welcome-modal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2 class="modal-title" data-i18n="welcome.title">👋 Welcome to TeamFlow Wiki</h2>
+      </div>
+      <div class="modal-body">
+        <p class="form-hint" style="margin-bottom:16px" data-i18n="welcome.desc">Please enter your display name so your teammates can identify your contributions.</p>
+        <div class="form-group">
+          <label class="form-label" for="welcome-username" data-i18n="welcome.label">Your Name</label>
+          <input type="text" class="form-input" id="welcome-username" data-i18n-placeholder="welcome.placeholder" placeholder="e.g. Zhang San" autofocus>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="welcome-confirm-btn" data-i18n="welcome.confirm">Get Started</button>
+      </div>
+    </div>
   </div>
 
   <!-- ===== TOAST CONTAINER ===== -->

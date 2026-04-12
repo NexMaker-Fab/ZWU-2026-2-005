@@ -61,6 +61,9 @@ class App {
 
     // Update save status
     this._setSaveStatus(t('save.status.ready'));
+
+    // Init user identity
+    this._initUser();
   }
 
   // ─── Page Management ──────────────────────────
@@ -78,6 +81,9 @@ class App {
 
     // Update breadcrumb
     document.getElementById('breadcrumb-page').textContent = page.title || tLang('placeholder.page', page.lang || 'en');
+
+    // Update page meta (author + date)
+    this._updatePageMeta(page);
 
     // Load blocks into editor
     this.editor.load(page.blocks || [], page.lang || 'en');
@@ -104,11 +110,15 @@ class App {
 
   _addPage() {
     const lang = getLang();
+    const now = new Date().toISOString();
     const newPage = {
       id: generateId(),
       title: tLang('placeholder.page', lang),
       icon: '📄',
       lang: lang,
+      author: this._getUsername(),
+      createdAt: now,
+      updatedAt: now,
       blocks: [{
         id: generateId(),
         type: 'heading',
@@ -306,9 +316,17 @@ class App {
     document.getElementById('github-repo').value = settings.repo || '';
     document.getElementById('github-branch').value = settings.branch || 'main';
     document.getElementById('github-token').value = settings.token || '';
+    // Load username into settings form
+    document.getElementById('settings-username').value = this._getUsername();
   }
 
   _saveGitHubSettingsFromForm() {
+    // Save username
+    const username = document.getElementById('settings-username').value.trim();
+    if (username) {
+      localStorage.setItem('teamflow_username', username);
+      this._updateSidebarUser();
+    }
     const settings = {
       owner: document.getElementById('github-owner').value.trim(),
       repo: document.getElementById('github-repo').value.trim(),
@@ -348,7 +366,94 @@ class App {
     }, 3000);
   }
 
-  // ─── Sidebar ──────────────────────────────────
+  // ─── User Identity ────────────────────────────
+
+  _getUsername() {
+    return localStorage.getItem('teamflow_username') || '';
+  }
+
+  _initUser() {
+    const username = this._getUsername();
+    if (!username) {
+      // First-time: show welcome modal
+      this._showWelcomeModal();
+    } else {
+      this._updateSidebarUser();
+    }
+  }
+
+  _showWelcomeModal() {
+    const modal = document.getElementById('welcome-modal');
+    modal.classList.add('visible');
+    // Re-apply translations so placeholder is correct
+    applyTranslations();
+
+    document.getElementById('welcome-confirm-btn').addEventListener('click', () => {
+      const nameInput = document.getElementById('welcome-username');
+      const name = nameInput.value.trim();
+      if (!name) {
+        nameInput.focus();
+        return;
+      }
+      localStorage.setItem('teamflow_username', name);
+      modal.classList.remove('visible');
+      this._updateSidebarUser();
+      this._showToast('success', `👋 ${name}`);
+    });
+
+    // Allow Enter to confirm
+    document.getElementById('welcome-username').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('welcome-confirm-btn').click();
+    });
+  }
+
+  _updateSidebarUser() {
+    const username = this._getUsername();
+    let userBtn = document.getElementById('sidebar-user-btn');
+
+    if (!userBtn) {
+      // Insert user widget into sidebar footer (before theme button)
+      const footer = document.querySelector('.sidebar-footer');
+      userBtn = document.createElement('button');
+      userBtn.id = 'sidebar-user-btn';
+      userBtn.className = 'sidebar-user';
+      footer.insertBefore(userBtn, footer.firstChild);
+      userBtn.addEventListener('click', () => this._showSettingsModal());
+    }
+
+    const initial = username ? username[0].toUpperCase() : '?';
+    userBtn.innerHTML = `
+      <div class="sidebar-user-avatar">${initial}</div>
+      <span class="sidebar-user-name">${username || t('page.meta.anonymous')}</span>
+      <span class="sidebar-user-edit">✏️</span>
+    `;
+  }
+
+  _updatePageMeta(page) {
+    const authorEl = document.getElementById('page-meta-author');
+    const dateEl = document.getElementById('page-meta-date');
+    const sepEl = document.querySelector('.page-meta-sep');
+
+    if (!page.author && !page.createdAt) {
+      // Legacy page: hide meta row
+      authorEl.textContent = '';
+      dateEl.textContent = '';
+      if (sepEl) sepEl.style.display = 'none';
+      return;
+    }
+
+    if (sepEl) sepEl.style.display = '';
+    authorEl.textContent = page.author || t('page.meta.anonymous');
+
+    if (page.createdAt) {
+      const d = new Date(page.createdAt);
+      const lang = page.lang || 'en';
+      const locale = lang === 'zh' ? 'zh-CN' : 'en-US';
+      dateEl.textContent = d.toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' });
+    } else {
+      dateEl.textContent = '';
+    }
+  }
 
   _toggleSidebar() {
     const sidebar = document.getElementById('sidebar');

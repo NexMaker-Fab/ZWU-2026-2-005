@@ -81,7 +81,20 @@ const translations = {
 
     // Misc
     'btn.undo': 'Undo (Ctrl+Z)',
-    'editor.add_block_below': 'Add block below'
+    'editor.add_block_below': 'Add block below',
+
+    // Author / Identity
+    'welcome.title': '👋 Welcome to TeamFlow Wiki',
+    'welcome.desc': 'Please enter your display name so your teammates can identify your contributions.',
+    'welcome.label': 'Your Name',
+    'welcome.placeholder': 'e.g. Zhang San',
+    'welcome.confirm': 'Get Started',
+    'settings.username': 'Display Name',
+    'settings.username.placeholder': 'e.g. Zhang San',
+    'settings.username.hint': 'Shown as author when you create pages.',
+    'page.meta.created_by': 'Created by {author}',
+    'page.meta.on': 'on',
+    'page.meta.anonymous': 'Anonymous'
   },
   zh: {
     // Sidebar
@@ -161,7 +174,20 @@ const translations = {
 
     // Misc
     'btn.undo': '撤销 (Ctrl+Z)',
-    'editor.add_block_below': '在下方添加块'
+    'editor.add_block_below': '在下方添加块',
+
+    // Author / Identity
+    'welcome.title': '👋 欢迎使用 TeamFlow Wiki',
+    'welcome.desc': '请输入您的显示名称，方便队友们识别您的贡献。',
+    'welcome.label': '您的姓名',
+    'welcome.placeholder': '例如 张三',
+    'welcome.confirm': '开始使用',
+    'settings.username': '显示名称',
+    'settings.username.placeholder': '例如 张三',
+    'settings.username.hint': '新建页面时会作为作者显示。',
+    'page.meta.created_by': '由 {author} 创建',
+    'page.meta.on': '于',
+    'page.meta.anonymous': '匿名用户'
   }
 };
 
