@@ -173,9 +173,17 @@ button {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  transition: transform var(--transition-slow), background var(--transition-slow);
+  transition: transform var(--transition-slow), background var(--transition-slow), width var(--transition-slow), opacity var(--transition-fast);
   z-index: 100;
   position: relative;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 0;
+  border-right: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .sidebar-header {
@@ -409,6 +417,10 @@ button {
   font-size: var(--text-lg);
   color: var(--text-secondary);
   transition: all var(--transition-fast);
+}
+
+.sidebar.collapsed + .main-content .topbar-menu-btn {
+  display: flex;
 }
 
 .topbar-menu-btn:hover {

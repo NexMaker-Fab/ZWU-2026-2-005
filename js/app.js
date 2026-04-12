@@ -328,8 +328,15 @@ class App {
   _toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
-    sidebar.classList.toggle('open');
-    overlay.classList.toggle('visible');
+    
+    if (window.innerWidth <= 768) {
+      // Mobile behavior
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('visible');
+    } else {
+      // Desktop behavior
+      sidebar.classList.toggle('collapsed');
+    }
   }
 
   // ─── UI Event Binding ─────────────────────────
