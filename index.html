@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeamFlow Wiki — Collaborative Team Wiki</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+  <meta name="description" content="A lightweight Notion-like wiki for team collaboration. Edit content directly in the browser and save to GitHub.">
+  <meta name="keywords" content="wiki, collaboration, team, notion, editor, github">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">T</div>
+      <span class="sidebar-title" id="site-name">TeamFlow Wiki</span>
+      <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" data-i18n-title="sidebar.toggle" title="Toggle sidebar">◀</button>
+    </div>
+
+    <div class="sidebar-search">
+      <input type="text" class="sidebar-search-input" id="page-search" data-i18n-placeholder="search.placeholder" placeholder="Search pages...">
+    </div>
+
+    <div class="sidebar-section-label">
+      <span data-i18n="sidebar.pages">Pages</span>
+      <button class="btn-icon btn-sm" id="add-page-btn" data-i18n-title="sidebar.new_page" title="New page">+</button>
+    </div>
+
+    <nav class="sidebar-pages" id="page-list">
+      <!-- Pages populated by JS -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="sidebar-footer-btn" id="theme-toggle-btn" data-i18n-title="sidebar.theme.toggle" title="Toggle theme">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-label" data-i18n="sidebar.theme.dark">Dark</span>
+      </button>
+      <button class="sidebar-footer-btn" id="settings-btn" data-i18n-title="sidebar.settings.tooltip" title="Settings">
+        <span>⚙️</span>
+        <span data-i18n="sidebar.settings">Settings</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content" id="main-content">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-menu-btn" id="topbar-menu-btn" data-i18n-title="topbar.menu" title="Menu">☰</button>
+        <div class="topbar-breadcrumb">
+          <span>TeamFlow</span>
+          <span>/</span>
+          <span class="topbar-breadcrumb-current" id="breadcrumb-page">Welcome</span>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost btn-sm btn-lang" id="lang-toggle-btn" title="English / 中文" style="font-weight: 600;">EN/中</button>
+        <button class="btn btn-ghost btn-sm" id="undo-btn" data-i18n-title="btn.undo" title="Undo (Ctrl+Z)">↩️</button>
+      </div>
+    </div>
+
+    <!-- Editor Area -->
+    <div class="editor-container" id="editor-container">
+      <div class="editor-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+          <button class="page-icon-btn" id="page-icon-btn" data-i18n-title="editor.change_icon" title="Change icon">👋</button>
+          <div class="page-title" id="page-title" contenteditable="true" data-placeholder="Untitled" role="textbox" aria-label="Page title">Welcome</div>
+        </div>
+
+        <!-- Block Editor -->
+        <div class="editor" id="editor" role="document">
+          <!-- Blocks rendered by JS -->
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- Save Bar -->
+    <div class="save-bar">
+      <span class="save-status" id="save-status" data-i18n="save.status.ready">Ready</span>
+      <button class="btn btn-secondary" id="save-local-btn">
+        <span>📥</span>
+        <span class="btn-label" data-i18n="save.local">Save to Local</span>
+      </button>
+      <button class="btn btn-primary" id="save-github-btn">
+        <span>📤</span>
+        <span class="btn-label" data-i18n="save.github">Save to GitHub</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- ===== FLOATING TOOLBAR ===== -->
+  <div class="floating-toolbar" id="floating-toolbar" role="toolbar" aria-label="Formatting toolbar">
+    <button class="btn-icon" data-command="bold" data-i18n-title="toolbar.bold" title="Bold (Ctrl+B)"><b>B</b></button>
+    <button class="btn-icon" data-command="italic" data-i18n-title="toolbar.italic" title="Italic (Ctrl+I)"><i>I</i></button>
+    <button class="btn-icon" data-command="underline" data-i18n-title="toolbar.underline" title="Underline (Ctrl+U)"><u>U</u></button>
+    <div class="divider"></div>
+    <button class="btn-icon" data-command="heading1" data-i18n-title="toolbar.h1" title="Heading 1">H1</button>
+    <button class="btn-icon" data-command="heading2" data-i18n-title="toolbar.h2" title="Heading 2">H2</button>
+    <button class="btn-icon" data-command="heading3" data-i18n-title="toolbar.h3" title="Heading 3">H3</button>
+    <button class="btn-icon" data-command="paragraph" data-i18n-title="toolbar.p" title="Paragraph">¶</button>
+  </div>
+
+  <!-- ===== SLASH COMMAND MENU ===== -->
+  <div class="slash-menu" id="slash-menu" role="listbox" aria-label="Block type menu">
+    <div class="slash-menu-label" data-i18n="menu.title">Basic Blocks</div>
+    <div class="slash-menu-item" data-type="paragraph" role="option">
+      <div class="slash-menu-item-icon">📝</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.text">Text</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.text.desc">Plain text paragraph</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="heading1" role="option">
+      <div class="slash-menu-item-icon">H1</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.h1">Heading 1</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.h1.desc">Large section heading</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="heading2" role="option">
+      <div class="slash-menu-item-icon">H2</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.h2">Heading 2</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.h2.desc">Medium section heading</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="heading3" role="option">
+      <div class="slash-menu-item-icon">H3</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.h3">Heading 3</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.h3.desc">Small section heading</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="image" role="option">
+      <div class="slash-menu-item-icon">🖼️</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.image">Image</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.image.desc">Upload or embed an image</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="divider" role="option">
+      <div class="slash-menu-item-icon">—</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.divider">Divider</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.divider.desc">Horizontal line separator</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SETTINGS MODAL ===== -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" data-i18n="settings.title">Settings</h2>
+        <button class="modal-close" id="settings-close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="github-owner" data-i18n="settings.owner">Repository Owner</label>
+          <input type="text" class="form-input" id="github-owner" placeholder="e.g. NexMaker-Fab">
+          <p class="form-hint" data-i18n="settings.owner.hint">GitHub username or organization name</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="github-repo" data-i18n="settings.repo">Repository Name</label>
+          <input type="text" class="form-input" id="github-repo" placeholder="e.g. ZWU-2026-2-005">
+          <p class="form-hint" data-i18n="settings.repo.hint">The repository where your content is stored</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="github-branch" data-i18n="settings.branch">Branch</label>
+          <input type="text" class="form-input" id="github-branch" placeholder="main" value="main">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="github-token" data-i18n="settings.token">GitHub Personal Access Token</label>
+          <input type="password" class="form-input" id="github-token" placeholder="ghp_xxxxxxxxxxxx">
+          <p class="form-hint" data-i18n="settings.token.hint">⚠️ Token is stored in session only and cleared when you close the tab. Needs 'repo' scope.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="settings-cancel-btn" data-i18n="settings.cancel">Cancel</button>
+        <button class="btn btn-primary" id="settings-save-btn" data-i18n="settings.save">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ICON PICKER ===== -->
+  <div class="icon-picker" id="icon-picker">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- ===== TOAST CONTAINER ===== -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
