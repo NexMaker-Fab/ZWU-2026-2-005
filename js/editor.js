@@ -4,6 +4,7 @@
  */
 
 import { generateId } from './storage.js';
+import { t } from './i18n.js';
 
 export class BlockEditor {
   constructor({ editorEl, slashMenuEl, floatingToolbarEl, onUpdate }) {
@@ -197,7 +198,7 @@ export class BlockEditor {
         el.contentEditable = 'true';
         el.dataset.type = 'heading';
         el.dataset.level = block.level || 1;
-        el.dataset.placeholder = `Heading ${block.level || 1}`;
+        el.dataset.placeholder = t('placeholder.heading') + (block.level || 1);
         el.textContent = block.content || '';
         return el;
       }
@@ -206,7 +207,7 @@ export class BlockEditor {
         el.className = 'block-content';
         el.contentEditable = 'true';
         el.dataset.type = 'paragraph';
-        el.dataset.placeholder = "Type '/' for commands...";
+        el.dataset.placeholder = t('placeholder.paragraph');
         el.textContent = block.content || '';
         return el;
       }
@@ -224,7 +225,7 @@ export class BlockEditor {
           caption.className = 'image-caption';
           caption.contentEditable = 'true';
           caption.textContent = block.caption || '';
-          caption.dataset.placeholder = 'Write a caption...';
+          caption.dataset.placeholder = t('placeholder.caption');
           caption.addEventListener('input', () => {
             block.caption = caption.textContent;
             this.onUpdate();
@@ -259,9 +260,9 @@ export class BlockEditor {
 
     area.innerHTML = `
       <div class="image-upload-icon">🖼️</div>
-      <div class="image-upload-text">Click to upload an image or paste a URL below</div>
+      <div class="image-upload-text">${t('placeholder.image.upload')}</div>
       <input type="file" class="image-upload-input" accept="image/*">
-      <input type="text" class="image-url-input" placeholder="Paste image URL and press Enter">
+      <input type="text" class="image-url-input" placeholder="${t('placeholder.image.url')}">
     `;
 
     const fileInput = area.querySelector('.image-upload-input');
@@ -309,6 +310,10 @@ export class BlockEditor {
   // ─── Event Binding ────────────────────────────
 
   _bindEvents() {
+    window.addEventListener('language-changed', () => {
+      this.render();
+    });
+
     // Input handler — debounced auto-save
     let saveTimer = null;
     this.editorEl.addEventListener('input', (e) => {

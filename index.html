@@ -26,11 +26,11 @@
     </div>
 
     <div class="sidebar-search">
-      <input type="text" class="sidebar-search-input" id="page-search" placeholder="Search pages...">
+      <input type="text" class="sidebar-search-input" id="page-search" data-i18n-placeholder="search.placeholder" placeholder="Search pages...">
     </div>
 
     <div class="sidebar-section-label">
-      <span>Pages</span>
+      <span data-i18n="sidebar.pages">Pages</span>
       <button class="btn-icon btn-sm" id="add-page-btn" title="New page">+</button>
     </div>
 
@@ -41,11 +41,11 @@
     <div class="sidebar-footer">
       <button class="sidebar-footer-btn" id="theme-toggle-btn" title="Toggle theme">
         <span id="theme-icon">🌙</span>
-        <span id="theme-label">Dark</span>
+        <span id="theme-label" data-i18n="sidebar.theme.dark">Dark</span>
       </button>
       <button class="sidebar-footer-btn" id="settings-btn" title="Settings">
         <span>⚙️</span>
-        <span>Settings</span>
+        <span data-i18n="sidebar.settings">Settings</span>
       </button>
     </div>
   </aside>
@@ -64,7 +64,8 @@
         </div>
       </div>
       <div class="topbar-actions">
-        <button class="btn btn-ghost btn-sm" id="undo-btn" title="Undo (Ctrl+Z)">↩️</button>
+        <button class="btn btn-ghost btn-sm btn-lang" id="lang-toggle-btn" title="English / 中文" style="font-weight: 600;">EN/中</button>
+        <button class="btn btn-ghost btn-sm" id="undo-btn" data-i18n-title="btn.undo" title="Undo (Ctrl+Z)">↩️</button>
       </div>
     </div>
 
@@ -85,21 +86,21 @@
         <!-- Add block at end -->
         <div class="editor-add-block" id="editor-add-block" role="button" tabindex="0">
           <div class="editor-add-block-icon">+</div>
-          <span>Add a block</span>
+          <span data-i18n="editor.add.block">Add a block</span>
         </div>
       </div>
     </div>
 
     <!-- Save Bar -->
     <div class="save-bar">
-      <span class="save-status" id="save-status">Ready</span>
+      <span class="save-status" id="save-status" data-i18n="save.status.ready">Ready</span>
       <button class="btn btn-secondary" id="save-local-btn">
         <span>📥</span>
-        <span class="btn-label">Save to Local</span>
+        <span class="btn-label" data-i18n="save.local">Save to Local</span>
       </button>
       <button class="btn btn-primary" id="save-github-btn">
         <span>📤</span>
-        <span class="btn-label">Save to GitHub</span>
+        <span class="btn-label" data-i18n="save.github">Save to GitHub</span>
       </button>
     </div>
   </main>
@@ -118,47 +119,47 @@
 
   <!-- ===== SLASH COMMAND MENU ===== -->
   <div class="slash-menu" id="slash-menu" role="listbox" aria-label="Block type menu">
-    <div class="slash-menu-label">Basic Blocks</div>
+    <div class="slash-menu-label" data-i18n="menu.title">Basic Blocks</div>
     <div class="slash-menu-item" data-type="paragraph" role="option">
       <div class="slash-menu-item-icon">📝</div>
       <div class="slash-menu-item-info">
-        <div class="slash-menu-item-name">Text</div>
-        <div class="slash-menu-item-desc">Plain text paragraph</div>
+        <div class="slash-menu-item-name" data-i18n="menu.text">Text</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.text.desc">Plain text paragraph</div>
       </div>
     </div>
     <div class="slash-menu-item" data-type="heading1" role="option">
       <div class="slash-menu-item-icon">H1</div>
       <div class="slash-menu-item-info">
-        <div class="slash-menu-item-name">Heading 1</div>
-        <div class="slash-menu-item-desc">Large section heading</div>
+        <div class="slash-menu-item-name" data-i18n="menu.h1">Heading 1</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.h1.desc">Large section heading</div>
       </div>
     </div>
     <div class="slash-menu-item" data-type="heading2" role="option">
       <div class="slash-menu-item-icon">H2</div>
       <div class="slash-menu-item-info">
-        <div class="slash-menu-item-name">Heading 2</div>
-        <div class="slash-menu-item-desc">Medium section heading</div>
+        <div class="slash-menu-item-name" data-i18n="menu.h2">Heading 2</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.h2.desc">Medium section heading</div>
       </div>
     </div>
     <div class="slash-menu-item" data-type="heading3" role="option">
       <div class="slash-menu-item-icon">H3</div>
       <div class="slash-menu-item-info">
-        <div class="slash-menu-item-name">Heading 3</div>
-        <div class="slash-menu-item-desc">Small section heading</div>
+        <div class="slash-menu-item-name" data-i18n="menu.h3">Heading 3</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.h3.desc">Small section heading</div>
       </div>
     </div>
     <div class="slash-menu-item" data-type="image" role="option">
       <div class="slash-menu-item-icon">🖼️</div>
       <div class="slash-menu-item-info">
-        <div class="slash-menu-item-name">Image</div>
-        <div class="slash-menu-item-desc">Upload or embed an image</div>
+        <div class="slash-menu-item-name" data-i18n="menu.image">Image</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.image.desc">Upload or embed an image</div>
       </div>
     </div>
     <div class="slash-menu-item" data-type="divider" role="option">
       <div class="slash-menu-item-icon">—</div>
       <div class="slash-menu-item-info">
-        <div class="slash-menu-item-name">Divider</div>
-        <div class="slash-menu-item-desc">Horizontal line separator</div>
+        <div class="slash-menu-item-name" data-i18n="menu.divider">Divider</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.divider.desc">Horizontal line separator</div>
       </div>
     </div>
   </div>
@@ -167,33 +168,33 @@
   <div class="modal-overlay" id="settings-modal">
     <div class="modal">
       <div class="modal-header">
-        <h2 class="modal-title">Settings</h2>
+        <h2 class="modal-title" data-i18n="settings.title">Settings</h2>
         <button class="modal-close" id="settings-close-btn">×</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label class="form-label" for="github-owner">Repository Owner</label>
+          <label class="form-label" for="github-owner" data-i18n="settings.owner">Repository Owner</label>
           <input type="text" class="form-input" id="github-owner" placeholder="e.g. NexMaker-Fab">
-          <p class="form-hint">GitHub username or organization name</p>
+          <p class="form-hint" data-i18n="settings.owner.hint">GitHub username or organization name</p>
         </div>
         <div class="form-group">
-          <label class="form-label" for="github-repo">Repository Name</label>
+          <label class="form-label" for="github-repo" data-i18n="settings.repo">Repository Name</label>
           <input type="text" class="form-input" id="github-repo" placeholder="e.g. ZWU-2026-2-005">
-          <p class="form-hint">The repository where your content is stored</p>
+          <p class="form-hint" data-i18n="settings.repo.hint">The repository where your content is stored</p>
         </div>
         <div class="form-group">
-          <label class="form-label" for="github-branch">Branch</label>
+          <label class="form-label" for="github-branch" data-i18n="settings.branch">Branch</label>
           <input type="text" class="form-input" id="github-branch" placeholder="main" value="main">
         </div>
         <div class="form-group">
-          <label class="form-label" for="github-token">GitHub Personal Access Token</label>
+          <label class="form-label" for="github-token" data-i18n="settings.token">GitHub Personal Access Token</label>
           <input type="password" class="form-input" id="github-token" placeholder="ghp_xxxxxxxxxxxx">
-          <p class="form-hint">⚠️ Token is stored in session only and cleared when you close the tab. Needs 'repo' scope.</p>
+          <p class="form-hint" data-i18n="settings.token.hint">⚠️ Token is stored in session only and cleared when you close the tab. Needs 'repo' scope.</p>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" id="settings-cancel-btn">Cancel</button>
-        <button class="btn btn-primary" id="settings-save-btn">Save Settings</button>
+        <button class="btn btn-secondary" id="settings-cancel-btn" data-i18n="settings.cancel">Cancel</button>
+        <button class="btn btn-primary" id="settings-save-btn" data-i18n="settings.save">Save Settings</button>
       </div>
     </div>
   </div>

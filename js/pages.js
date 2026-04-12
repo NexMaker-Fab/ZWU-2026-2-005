@@ -1,6 +1,4 @@
-/**
- * Pages Module — Manages multi-page navigation in the sidebar.
- */
+import { t } from './i18n.js';
 
 export class PageManager {
   constructor({ pageListEl, onPageSelect, onPageAdd, onPageDelete }) {
@@ -11,6 +9,10 @@ export class PageManager {
     this.pages = [];
     this.activePageId = null;
     this.searchTerm = '';
+
+    window.addEventListener('language-changed', () => {
+      this.render();
+    });
   }
 
   /** Load pages data and render list */
@@ -57,7 +59,7 @@ export class PageManager {
 
       const name = document.createElement('span');
       name.className = 'page-item-name';
-      name.textContent = page.title || 'Untitled';
+      name.textContent = page.title || t('placeholder.page');
 
       const deleteBtn = document.createElement('button');
       deleteBtn.className = 'page-item-delete';
@@ -72,7 +74,7 @@ export class PageManager {
         item.appendChild(deleteBtn);
         deleteBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          if (confirm(`Delete "${page.title}"?`)) {
+          if (confirm(t('toast.confirm.delete', { title: page.title }))) {
             this.onPageDelete(page.id);
           }
         });

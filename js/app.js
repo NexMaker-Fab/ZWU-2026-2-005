@@ -6,6 +6,7 @@ import { loadContent, saveToLocalStorage, exportAsJson, generateId, getTheme, se
 import { BlockEditor } from './editor.js';
 import { PageManager } from './pages.js';
 import { getGitHubSettings, saveGitHubSettings, isGitHubConfigured, saveToGitHub } from './github.js';
+import { applyTranslations, toggleLanguage, t } from './i18n.js';
 
 class App {
   constructor() {
@@ -18,6 +19,9 @@ class App {
   async init() {
     // Load data
     this.data = await loadContent();
+
+    // Apply default language
+    applyTranslations();
 
     // Apply saved theme
     this._initTheme();
@@ -73,7 +77,7 @@ class App {
     iconBtn.textContent = page.icon || '📄';
 
     // Update breadcrumb
-    document.getElementById('breadcrumb-page').textContent = page.title || 'Untitled';
+    document.getElementById('breadcrumb-page').textContent = page.title || t('placeholder.page');
 
     // Load blocks into editor
     this.editor.load(page.blocks || []);
@@ -92,13 +96,13 @@ class App {
   _addPage() {
     const newPage = {
       id: generateId(),
-      title: 'Untitled',
+      title: t('placeholder.page'),
       icon: '📄',
       blocks: [{
         id: generateId(),
         type: 'heading',
         level: 1,
-        content: 'Untitled Page'
+        content: t('placeholder.page')
       }, {
         id: generateId(),
         type: 'paragraph',
@@ -146,7 +150,7 @@ class App {
 
     // Sync title
     const titleEl = document.getElementById('page-title');
-    page.title = titleEl.textContent || 'Untitled';
+    page.title = titleEl.textContent || t('placeholder.page');
 
     // Sync icon
     const iconBtn = document.getElementById('page-icon-btn');
@@ -159,39 +163,39 @@ class App {
   // ─── Content Update & Save ────────────────────
 
   _onContentUpdate() {
-    this._setSaveStatus('Unsaved changes...');
+    this._setSaveStatus(t('save.status.unsaved'));
 
     clearTimeout(this.saveDebounceTimer);
     this.saveDebounceTimer = setTimeout(() => {
       this._syncCurrentPage();
       saveToLocalStorage(this.data);
-      this._setSaveStatus('Auto-saved locally');
+      this._setSaveStatus(t('save.status.autosaved'));
     }, 1000);
   }
 
   async _saveToLocal() {
     this._syncCurrentPage();
     exportAsJson(this.data);
-    this._showToast('success', 'Content downloaded as content.json');
+    this._showToast('success', t('toast.saved.local'));
   }
 
   async _saveToGitHub() {
     if (!isGitHubConfigured()) {
       this._showSettingsModal();
-      this._showToast('warning', 'Please configure GitHub settings first');
+      this._showToast('warning', t('toast.github.needs.config'));
       return;
     }
 
     this._syncCurrentPage();
-    this._setSaveStatus('Saving to GitHub...');
+    this._setSaveStatus(t('save.status.saving'));
 
     const result = await saveToGitHub(this.data);
 
     if (result.success) {
-      this._setSaveStatus('Saved to GitHub ✓');
-      this._showToast('success', result.message);
+      this._setSaveStatus(t('save.status.saved'));
+      this._showToast('success', t('toast.settings.saved'));
     } else {
-      this._setSaveStatus('Save failed');
+      this._setSaveStatus(t('save.status.failed'));
       this._showToast('error', result.message);
     }
   }
@@ -226,7 +230,10 @@ class App {
     const icon = document.getElementById('theme-icon');
     const label = document.getElementById('theme-label');
     if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-    if (label) label.textContent = theme === 'dark' ? 'Light' : 'Dark';
+    if (label) {
+      label.setAttribute('data-i18n', theme === 'dark' ? 'sidebar.theme.light' : 'sidebar.theme.dark');
+      label.textContent = theme === 'dark' ? t('sidebar.theme.light') : t('sidebar.theme.dark');
+    }
   }
 
   // ─── Icon Picker ──────────────────────────────
@@ -292,7 +299,7 @@ class App {
     };
     saveGitHubSettings(settings);
     this._hideSettingsModal();
-    this._showToast('success', 'GitHub settings saved');
+    this._showToast('success', t('toast.settings.saved'));
   }
 
   // ─── Toast Notifications ──────────────────────
@@ -342,6 +349,9 @@ class App {
   // ─── UI Event Binding ─────────────────────────
 
   _bindUIEvents() {
+    // Language toggle
+    document.getElementById('lang-toggle-btn').addEventListener('click', () => toggleLanguage());
+
     // Save buttons
     document.getElementById('save-local-btn').addEventListener('click', () => this._saveToLocal());
     document.getElementById('save-github-btn').addEventListener('click', () => this._saveToGitHub());
@@ -364,7 +374,7 @@ class App {
     const titleEl = document.getElementById('page-title');
     titleEl.addEventListener('input', () => {
       this._onContentUpdate();
-      document.getElementById('breadcrumb-page').textContent = titleEl.textContent || 'Untitled';
+      document.getElementById('breadcrumb-page').textContent = titleEl.textContent || t('placeholder.page');
     });
     titleEl.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
