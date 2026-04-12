@@ -22,7 +22,7 @@
     <div class="sidebar-header">
       <div class="sidebar-logo">T</div>
       <span class="sidebar-title" id="site-name">TeamFlow Wiki</span>
-      <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="Toggle sidebar">◀</button>
+      <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" data-i18n-title="sidebar.toggle" title="Toggle sidebar">◀</button>
     </div>
 
     <div class="sidebar-search">
@@ -31,7 +31,7 @@
 
     <div class="sidebar-section-label">
       <span data-i18n="sidebar.pages">Pages</span>
-      <button class="btn-icon btn-sm" id="add-page-btn" title="New page">+</button>
+      <button class="btn-icon btn-sm" id="add-page-btn" data-i18n-title="sidebar.new_page" title="New page">+</button>
     </div>
 
     <nav class="sidebar-pages" id="page-list">
@@ -39,11 +39,11 @@
     </nav>
 
     <div class="sidebar-footer">
-      <button class="sidebar-footer-btn" id="theme-toggle-btn" title="Toggle theme">
+      <button class="sidebar-footer-btn" id="theme-toggle-btn" data-i18n-title="sidebar.theme.toggle" title="Toggle theme">
         <span id="theme-icon">🌙</span>
         <span id="theme-label" data-i18n="sidebar.theme.dark">Dark</span>
       </button>
-      <button class="sidebar-footer-btn" id="settings-btn" title="Settings">
+      <button class="sidebar-footer-btn" id="settings-btn" data-i18n-title="sidebar.settings.tooltip" title="Settings">
         <span>⚙️</span>
         <span data-i18n="sidebar.settings">Settings</span>
       </button>
@@ -56,7 +56,7 @@
     <!-- Topbar -->
     <div class="topbar">
       <div class="topbar-left">
-        <button class="topbar-menu-btn" id="topbar-menu-btn" title="Menu">☰</button>
+        <button class="topbar-menu-btn" id="topbar-menu-btn" data-i18n-title="topbar.menu" title="Menu">☰</button>
         <div class="topbar-breadcrumb">
           <span>TeamFlow</span>
           <span>/</span>
@@ -74,7 +74,7 @@
       <div class="editor-wrapper">
         <!-- Page Header -->
         <div class="page-header">
-          <button class="page-icon-btn" id="page-icon-btn" title="Change icon">👋</button>
+          <button class="page-icon-btn" id="page-icon-btn" data-i18n-title="editor.change_icon" title="Change icon">👋</button>
           <div class="page-title" id="page-title" contenteditable="true" data-placeholder="Untitled" role="textbox" aria-label="Page title">Welcome</div>
         </div>
 
@@ -103,14 +103,14 @@
 
   <!-- ===== FLOATING TOOLBAR ===== -->
   <div class="floating-toolbar" id="floating-toolbar" role="toolbar" aria-label="Formatting toolbar">
-    <button class="btn-icon" data-command="bold" title="Bold (Ctrl+B)"><b>B</b></button>
-    <button class="btn-icon" data-command="italic" title="Italic (Ctrl+I)"><i>I</i></button>
-    <button class="btn-icon" data-command="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+    <button class="btn-icon" data-command="bold" data-i18n-title="toolbar.bold" title="Bold (Ctrl+B)"><b>B</b></button>
+    <button class="btn-icon" data-command="italic" data-i18n-title="toolbar.italic" title="Italic (Ctrl+I)"><i>I</i></button>
+    <button class="btn-icon" data-command="underline" data-i18n-title="toolbar.underline" title="Underline (Ctrl+U)"><u>U</u></button>
     <div class="divider"></div>
-    <button class="btn-icon" data-command="heading1" title="Heading 1">H1</button>
-    <button class="btn-icon" data-command="heading2" title="Heading 2">H2</button>
-    <button class="btn-icon" data-command="heading3" title="Heading 3">H3</button>
-    <button class="btn-icon" data-command="paragraph" title="Paragraph">¶</button>
+    <button class="btn-icon" data-command="heading1" data-i18n-title="toolbar.h1" title="Heading 1">H1</button>
+    <button class="btn-icon" data-command="heading2" data-i18n-title="toolbar.h2" title="Heading 2">H2</button>
+    <button class="btn-icon" data-command="heading3" data-i18n-title="toolbar.h3" title="Heading 3">H3</button>
+    <button class="btn-icon" data-command="paragraph" data-i18n-title="toolbar.p" title="Paragraph">¶</button>
   </div>
 
   <!-- ===== SLASH COMMAND MENU ===== -->

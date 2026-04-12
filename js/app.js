@@ -60,7 +60,7 @@ class App {
     }
 
     // Update save status
-    this._setSaveStatus('Ready');
+    this._setSaveStatus(t('save.status.ready'));
   }
 
   // ─── Page Management ──────────────────────────

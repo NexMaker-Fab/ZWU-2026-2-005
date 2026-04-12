@@ -64,6 +64,21 @@ const translations = {
     'toast.confirm.delete': 'Delete "{title}"?',
     'toast.delete_page': 'Delete page',
 
+    // Tooltips
+    'sidebar.toggle': 'Toggle sidebar',
+    'sidebar.new_page': 'New page',
+    'sidebar.theme.toggle': 'Toggle theme',
+    'sidebar.settings.tooltip': 'Settings',
+    'topbar.menu': 'Menu',
+    'editor.change_icon': 'Change icon',
+    'toolbar.bold': 'Bold (Ctrl+B)',
+    'toolbar.italic': 'Italic (Ctrl+I)',
+    'toolbar.underline': 'Underline (Ctrl+U)',
+    'toolbar.h1': 'Heading 1',
+    'toolbar.h2': 'Heading 2',
+    'toolbar.h3': 'Heading 3',
+    'toolbar.p': 'Paragraph',
+
     // Misc
     'btn.undo': 'Undo (Ctrl+Z)',
     'editor.add_block_below': 'Add block below'
@@ -128,6 +143,21 @@ const translations = {
     'toast.settings.saved': 'GitHub 配置已保存',
     'toast.confirm.delete': '确定要删除 "{title}" 吗？',
     'toast.delete_page': '删除页面',
+
+    // Tooltips
+    'sidebar.toggle': '收起/展开侧边栏',
+    'sidebar.new_page': '新建页面',
+    'sidebar.theme.toggle': '切换主题',
+    'sidebar.settings.tooltip': '设置',
+    'topbar.menu': '菜单',
+    'editor.change_icon': '更换图标',
+    'toolbar.bold': '加粗 (Ctrl+B)',
+    'toolbar.italic': '斜体 (Ctrl+I)',
+    'toolbar.underline': '下划线 (Ctrl+U)',
+    'toolbar.h1': '一级标题',
+    'toolbar.h2': '二级标题',
+    'toolbar.h3': '三级标题',
+    'toolbar.p': '正文',
 
     // Misc
     'btn.undo': '撤销 (Ctrl+Z)',
