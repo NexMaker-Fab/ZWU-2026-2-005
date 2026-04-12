@@ -57,6 +57,9 @@
     </div>
   </aside>
 
+  <!-- ===== SIDEBAR RESIZE HANDLE ===== -->
+  <div class="sidebar-resize-handle" id="sidebar-resize-handle"></div>
+
   <!-- ===== MAIN CONTENT ===== -->
   <main class="main-content" id="main-content">
 
@@ -81,7 +84,7 @@
       <div class="editor-wrapper">
         <!-- Page Header -->
         <div class="page-header">
-          <button class="page-icon-btn" id="page-icon-btn" data-i18n-title="editor.change_icon" title="Change icon">👋</button>
+          <div class="page-icon-display" id="page-icon-display">👋</div>
           <div class="page-title" id="page-title" contenteditable="true" data-placeholder="Untitled" role="textbox" aria-label="Page title">Welcome</div>
         </div>
 
@@ -108,6 +111,14 @@
       <div class="trash-list" id="trash-list">
         <!-- Populated by JS -->
       </div>
+    </div>
+
+    <!-- Right-side floating page properties panel -->
+    <div class="page-props-panel" id="page-props-panel">
+      <div class="page-props-handle" id="page-props-handle" title="Drag">⣿</div>
+      <button class="page-props-btn" id="page-icon-btn" data-i18n-title="editor.change_icon" title="Change icon">
+        <span class="page-props-icon-preview" id="page-icon-preview">👋</span>
+      </button>
     </div>
 
     <!-- Save Bar -->
