@@ -76,11 +76,8 @@ export class PageManager {
         item.appendChild(deleteBtn);
         deleteBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          const pageTitle = page.title || tLang('placeholder.page', page.lang || 'en');
-          const msg = t('toast.confirm.delete').replace('{title}', pageTitle);
-          if (window.confirm(msg)) {
-            this.onPageDelete(page.id);
-          }
+          // Confirmation is handled by app.js via custom modal
+          this.onPageDelete(page.id);
         });
       }
 

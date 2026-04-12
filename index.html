@@ -38,6 +38,13 @@
       <!-- Pages populated by JS -->
     </nav>
 
+    <!-- Trash sidebar entry -->
+    <button class="sidebar-trash-btn" id="sidebar-trash-btn">
+      <span>🗑️</span>
+      <span data-i18n="trash.title">回收站</span>
+      <span class="trash-count-badge" id="trash-count-badge" style="display:none"></span>
+    </button>
+
     <div class="sidebar-footer">
       <button class="sidebar-footer-btn" id="theme-toggle-btn" data-i18n-title="sidebar.theme.toggle" title="Toggle theme">
         <span id="theme-icon">🌙</span>
@@ -89,8 +96,17 @@
         <div class="editor" id="editor" role="document">
           <!-- Blocks rendered by JS -->
         </div>
+      </div>
+    </div>
 
-
+    <!-- Trash View (shown instead of editor when viewing trash) -->
+    <div class="trash-view" id="trash-view" style="display:none">
+      <div class="trash-view-header">
+        <h2>🗑️ <span data-i18n="trash.title">回收站</span></h2>
+        <p class="trash-view-hint" data-i18n="trash.hint">页面删除后在此保留 3 天，超期后自动清除。</p>
+      </div>
+      <div class="trash-list" id="trash-list">
+        <!-- Populated by JS -->
       </div>
     </div>
 
@@ -210,6 +226,24 @@
   <!-- ===== ICON PICKER ===== -->
   <div class="icon-picker" id="icon-picker">
     <!-- Populated by JS -->
+  </div>
+
+  <!-- ===== DELETE CONFIRM MODAL ===== -->
+  <div class="modal-overlay" id="delete-confirm-modal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2 class="modal-title">🗑️ <span id="delete-modal-title" data-i18n="trash.confirm.title">删除页面</span></h2>
+        <button class="modal-close" id="delete-modal-close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="delete-modal-desc" class="delete-modal-desc"></p>
+        <div class="delete-modal-meta" id="delete-modal-meta"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="delete-modal-cancel-btn" data-i18n="trash.confirm.cancel">取消</button>
+        <button class="btn btn-danger" id="delete-modal-confirm-btn" data-i18n="trash.confirm.ok">移至回收站</button>
+      </div>
+    </div>
   </div>
 
   <!-- ===== WELCOME MODAL (first-time setup) ===== -->

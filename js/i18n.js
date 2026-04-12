@@ -94,7 +94,23 @@ const translations = {
     'settings.username.hint': 'Shown as author when you create pages.',
     'page.meta.created_by': 'Created by {author}',
     'page.meta.on': 'on',
-    'page.meta.anonymous': 'Anonymous'
+    'page.meta.anonymous': 'Anonymous',
+
+    // Trash / Recycle Bin
+    'trash.title': 'Trash',
+    'trash.hint': 'Deleted pages are kept here for 3 days, then permanently removed.',
+    'trash.empty': 'Trash is empty',
+    'trash.empty.hint': 'Deleted pages will appear here.',
+    'trash.confirm.title': 'Move to Trash?',
+    'trash.confirm.desc': 'This page will be moved to the Trash and automatically deleted after 3 days.',
+    'trash.confirm.cancel': 'Cancel',
+    'trash.confirm.ok': 'Move to Trash',
+    'trash.restore': 'Restore',
+    'trash.delete.forever': 'Delete Forever',
+    'trash.days.left': '{n} day(s) left',
+    'trash.by': 'Deleted by {author}',
+    'trash.on': '·',
+    'trash.forever.confirm': 'Permanently delete "{title}"? This cannot be undone.'
   },
   zh: {
     // Sidebar
@@ -187,7 +203,23 @@ const translations = {
     'settings.username.hint': '新建页面时会作为作者显示。',
     'page.meta.created_by': '由 {author} 创建',
     'page.meta.on': '于',
-    'page.meta.anonymous': '匿名用户'
+    'page.meta.anonymous': '匿名用户',
+
+    // Trash / Recycle Bin
+    'trash.title': '回收站',
+    'trash.hint': '页面删除后在此保留 3 天，超期后自动清除。',
+    'trash.empty': '回收站为空',
+    'trash.empty.hint': '删除的页面将在此显示。',
+    'trash.confirm.title': '移至回收站？',
+    'trash.confirm.desc': '该页面将被移入回收站，3 天后自动永久删除。',
+    'trash.confirm.cancel': '取消',
+    'trash.confirm.ok': '移至回收站',
+    'trash.restore': '还原',
+    'trash.delete.forever': '永久删除',
+    'trash.days.left': '还剩 {n} 天',
+    'trash.by': '由 {author} 删除',
+    'trash.on': '·',
+    'trash.forever.confirm': '永久删除“{title}”？此操作不可撤销。'
   }
 };
 

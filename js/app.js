@@ -26,6 +26,10 @@ class App {
     // Apply saved theme
     this._initTheme();
 
+    // Ensure trash array exists and auto-purge expired items
+    if (!this.data.trash) this.data.trash = [];
+    this._purgExpiredTrash();
+
     // Initialize editor
     this.editor = new BlockEditor({
       editorEl: document.getElementById('editor'),
@@ -81,6 +85,9 @@ class App {
 
     // Update breadcrumb
     document.getElementById('breadcrumb-page').textContent = page.title || tLang('placeholder.page', page.lang || 'en');
+
+    // Exit trash view if open
+    this._exitTrashView();
 
     // Update page meta (author + date)
     this._updatePageMeta(page);
@@ -150,23 +157,38 @@ class App {
   }
 
   _deletePage(pageId) {
+    // Show custom confirmation modal instead of window.confirm
+    this._showDeleteConfirmModal(pageId);
+  }
+
+  _doMoveToTrash(pageId) {
     const idx = this.data.pages.findIndex(p => p.id === pageId);
     if (idx === -1 || this.data.pages.length <= 1) return;
 
-    // Sync current page if we are NOT deleting it
+    // Sync active page if not the one being deleted
     const activeId = this.pageManager.activePageId;
     if (activeId !== pageId) {
       this._syncCurrentPage();
     }
 
-    this.data.pages.splice(idx, 1);
+    // Move page to trash with metadata
+    const [page] = this.data.pages.splice(idx, 1);
+    page.deletedAt = new Date().toISOString();
+    page.deletedBy = this._getUsername();
+    if (!this.data.trash) this.data.trash = [];
+    this.data.trash.unshift(page);
 
-    // Only switch if we deleted the active page, OR just stay on active page
+    // Update trash badge
+    this._updateTrashBadge();
+
+    // Switch to next page or stay
     const nextActiveId = (activeId === pageId) ? this.data.pages[0].id : activeId;
+    this._exitTrashView();
     this.pageManager.load(this.data.pages, nextActiveId);
     this._loadPage(nextActiveId);
-    
     this._onContentUpdate();
+
+    this._showToast('success', t('trash.confirm.ok'));
   }
 
   _syncCurrentPage() {
@@ -233,7 +255,175 @@ class App {
     if (el) el.textContent = text;
   }
 
-  // ─── Theme ────────────────────────────────────
+  // ─── Trash / Recycle Bin ──────────────────────
+
+  _purgExpiredTrash() {
+    const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    const before = this.data.trash.length;
+    this.data.trash = this.data.trash.filter(p => {
+      return now - new Date(p.deletedAt).getTime() < THREE_DAYS;
+    });
+    if (this.data.trash.length !== before) {
+      saveToLocalStorage(this.data);
+    }
+  }
+
+  _updateTrashBadge() {
+    const badge = document.getElementById('trash-count-badge');
+    const count = this.data.trash?.length || 0;
+    if (count > 0) {
+      badge.textContent = count;
+      badge.style.display = '';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  _showDeleteConfirmModal(pageId) {
+    const page = this.data.pages.find(p => p.id === pageId);
+    if (!page) return;
+
+    const modal = document.getElementById('delete-confirm-modal');
+    const descEl = document.getElementById('delete-modal-desc');
+    const metaEl = document.getElementById('delete-modal-meta');
+
+    descEl.textContent = t('trash.confirm.desc');
+
+    const author = page.author ? `<strong>${page.author}</strong>` : `<em>${t('page.meta.anonymous')}</em>`;
+    const date = page.createdAt
+      ? new Date(page.createdAt).toLocaleDateString(page.lang === 'zh' ? 'zh-CN' : 'en-US', { dateStyle: 'long' })
+      : '';
+    metaEl.innerHTML = `
+      <div style="margin-bottom:4px"><strong>${page.title || t('placeholder.page')}</strong></div>
+      <div>${t('page.meta.created_by').replace('{author}', page.author || t('page.meta.anonymous'))}
+      ${date ? `${t('page.meta.on')} ${date}` : ''}</div>
+    `;
+
+    modal.classList.add('visible');
+    applyTranslations();
+
+    // Wire confirm
+    const confirmBtn = document.getElementById('delete-modal-confirm-btn');
+    const cancelBtn = document.getElementById('delete-modal-cancel-btn');
+    const closeBtn = document.getElementById('delete-modal-close-btn');
+
+    const doClose = () => modal.classList.remove('visible');
+    const doConfirm = () => { doClose(); this._doMoveToTrash(pageId); };
+
+    // Replace event listeners (clone to avoid double-binding)
+    const newConfirm = confirmBtn.cloneNode(true);
+    const newCancel = cancelBtn.cloneNode(true);
+    const newClose = closeBtn.cloneNode(true);
+    confirmBtn.replaceWith(newConfirm);
+    cancelBtn.replaceWith(newCancel);
+    closeBtn.replaceWith(newClose);
+
+    newConfirm.addEventListener('click', doConfirm);
+    newCancel.addEventListener('click', doClose);
+    newClose.addEventListener('click', doClose);
+    modal.addEventListener('click', (e) => { if (e.target === modal) doClose(); }, { once: true });
+  }
+
+  _showTrashView() {
+    document.getElementById('editor-container').style.display = 'none';
+    document.getElementById('trash-view').style.display = 'flex';
+    document.getElementById('sidebar-trash-btn').classList.add('active');
+    this.pageManager.render(); // deselect page
+    this._renderTrashList();
+  }
+
+  _exitTrashView() {
+    document.getElementById('editor-container').style.display = '';
+    document.getElementById('trash-view').style.display = 'none';
+    document.getElementById('sidebar-trash-btn').classList.remove('active');
+  }
+
+  _renderTrashList() {
+    const listEl = document.getElementById('trash-list');
+    listEl.innerHTML = '';
+    const trash = this.data.trash || [];
+
+    if (trash.length === 0) {
+      listEl.innerHTML = `
+        <div class="trash-empty">
+          <div class="trash-empty-icon">🗑️</div>
+          <div>${t('trash.empty')}</div>
+          <div style="font-size:0.85em;margin-top:8px;opacity:0.7">${t('trash.empty.hint')}</div>
+        </div>
+      `;
+      return;
+    }
+
+    const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+    const now = Date.now();
+
+    trash.forEach(page => {
+      const deletedMs = new Date(page.deletedAt).getTime();
+      const daysLeft = Math.ceil((THREE_DAYS_MS - (now - deletedMs)) / 86400000);
+      const expiring = daysLeft <= 1;
+
+      const deletedDate = new Date(page.deletedAt).toLocaleDateString(
+        page.lang === 'zh' ? 'zh-CN' : 'en-US', { dateStyle: 'medium' }
+      );
+
+      const item = document.createElement('div');
+      item.className = 'trash-item';
+      item.innerHTML = `
+        <div class="trash-item-icon">${page.icon || '📄'}</div>
+        <div class="trash-item-info">
+          <div class="trash-item-title">${page.title || t('placeholder.page')}</div>
+          <div class="trash-item-meta">
+            ${page.deletedBy ? t('trash.by').replace('{author}', page.deletedBy) + ' ' : ''}
+            ${t('trash.on')} ${deletedDate}
+          </div>
+        </div>
+        <div class="trash-item-days${expiring ? ' expiring' : ''}">
+          ${t('trash.days.left').replace('{n}', daysLeft)}
+        </div>
+        <div class="trash-item-actions">
+          <button class="btn btn-secondary btn-sm" data-action="restore">${t('trash.restore')}</button>
+          <button class="btn btn-danger btn-sm" data-action="delete-forever">${t('trash.delete.forever')}</button>
+        </div>
+      `;
+
+      item.querySelector('[data-action="restore"]').addEventListener('click', () => {
+        this._restoreFromTrash(page.id);
+      });
+      item.querySelector('[data-action="delete-forever"]').addEventListener('click', () => {
+        const msg = t('trash.forever.confirm').replace('{title}', page.title || t('placeholder.page'));
+        if (window.confirm(msg)) {
+          this._deleteForever(page.id);
+        }
+      });
+
+      listEl.appendChild(item);
+    });
+  }
+
+  _restoreFromTrash(pageId) {
+    const idx = this.data.trash.findIndex(p => p.id === pageId);
+    if (idx === -1) return;
+    const [page] = this.data.trash.splice(idx, 1);
+    delete page.deletedAt;
+    delete page.deletedBy;
+    this.data.pages.push(page);
+    this._updateTrashBadge();
+    this.pageManager.load(this.data.pages, page.id);
+    this._exitTrashView();
+    this._loadPage(page.id);
+    this._onContentUpdate();
+    this._showToast('success', `📄 ${page.title || t('placeholder.page')}`);
+  }
+
+  _deleteForever(pageId) {
+    this.data.trash = this.data.trash.filter(p => p.id !== pageId);
+    this._updateTrashBadge();
+    this._renderTrashList();
+    this._onContentUpdate();
+  }
+
+  // ─── Sidebar ────────────────────────────────────
 
   _initTheme() {
     const theme = getTheme();
@@ -485,6 +675,8 @@ class App {
     // Add page
     document.getElementById('add-page-btn').addEventListener('click', () => this._addPage());
 
+    // Trash view
+    document.getElementById('sidebar-trash-btn').addEventListener('click', () => this._showTrashView());
 
     // Page title editing
     const titleEl = document.getElementById('page-title');
