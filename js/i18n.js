@@ -146,7 +146,11 @@ export function setLang(lang) {
 }
 
 export function t(key, params = {}) {
-  let text = translations[currentLang]?.[key] || translations['en']?.[key] || key;
+  return tLang(key, currentLang, params);
+}
+
+export function tLang(key, lang, params = {}) {
+  let text = translations[lang]?.[key] || translations['en']?.[key] || key;
   for (const [k, v] of Object.entries(params)) {
     text = text.replace(`{${k}}`, v);
   }

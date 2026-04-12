@@ -1,4 +1,4 @@
-import { t } from './i18n.js';
+import { t, tLang } from './i18n.js';
 
 export class PageManager {
   constructor({ pageListEl, onPageSelect, onPageAdd, onPageDelete }) {
@@ -59,7 +59,7 @@ export class PageManager {
 
       const name = document.createElement('span');
       name.className = 'page-item-name';
-      name.textContent = page.title || t('placeholder.page');
+      name.textContent = page.title || tLang('placeholder.page', page.lang || 'en');
 
       const deleteBtn = document.createElement('button');
       deleteBtn.className = 'page-item-delete';
@@ -74,7 +74,7 @@ export class PageManager {
         item.appendChild(deleteBtn);
         deleteBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          if (confirm(t('toast.confirm.delete', { title: page.title }))) {
+          if (confirm(tLang('toast.confirm.delete', page.lang || 'en', { title: page.title }))) {
             this.onPageDelete(page.id);
           }
         });

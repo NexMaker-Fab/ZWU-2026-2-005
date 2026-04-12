@@ -4,7 +4,7 @@
  */
 
 import { generateId } from './storage.js';
-import { t } from './i18n.js';
+import { t, tLang } from './i18n.js';
 
 export class BlockEditor {
   constructor({ editorEl, slashMenuEl, floatingToolbarEl, onUpdate }) {
@@ -23,8 +23,9 @@ export class BlockEditor {
   // ─── Public API ───────────────────────────────
 
   /** Load blocks and render */
-  load(blocks) {
+  load(blocks, lang = 'en') {
     this.blocks = blocks || [];
+    this.pageLang = lang;
     this.render();
   }
 
@@ -198,7 +199,7 @@ export class BlockEditor {
         el.contentEditable = 'true';
         el.dataset.type = 'heading';
         el.dataset.level = block.level || 1;
-        el.dataset.placeholder = t('placeholder.heading') + (block.level || 1);
+        el.dataset.placeholder = tLang('placeholder.heading', this.pageLang) + (block.level || 1);
         el.textContent = block.content || '';
         return el;
       }
@@ -207,7 +208,7 @@ export class BlockEditor {
         el.className = 'block-content';
         el.contentEditable = 'true';
         el.dataset.type = 'paragraph';
-        el.dataset.placeholder = t('placeholder.paragraph');
+        el.dataset.placeholder = tLang('placeholder.paragraph', this.pageLang);
         el.textContent = block.content || '';
         return el;
       }
@@ -225,7 +226,7 @@ export class BlockEditor {
           caption.className = 'image-caption';
           caption.contentEditable = 'true';
           caption.textContent = block.caption || '';
-          caption.dataset.placeholder = t('placeholder.caption');
+          caption.dataset.placeholder = tLang('placeholder.caption', this.pageLang);
           caption.addEventListener('input', () => {
             block.caption = caption.textContent;
             this.onUpdate();
@@ -260,9 +261,9 @@ export class BlockEditor {
 
     area.innerHTML = `
       <div class="image-upload-icon">🖼️</div>
-      <div class="image-upload-text">${t('placeholder.image.upload')}</div>
+      <div class="image-upload-text">${tLang('placeholder.image.upload', this.pageLang)}</div>
       <input type="file" class="image-upload-input" accept="image/*">
-      <input type="text" class="image-url-input" placeholder="${t('placeholder.image.url')}">
+      <input type="text" class="image-url-input" placeholder="${tLang('placeholder.image.url', this.pageLang)}">
     `;
 
     const fileInput = area.querySelector('.image-upload-input');

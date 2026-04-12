@@ -6,7 +6,7 @@ import { loadContent, saveToLocalStorage, exportAsJson, generateId, getTheme, se
 import { BlockEditor } from './editor.js';
 import { PageManager } from './pages.js';
 import { getGitHubSettings, saveGitHubSettings, isGitHubConfigured, saveToGitHub } from './github.js';
-import { applyTranslations, toggleLanguage, t } from './i18n.js';
+import { applyTranslations, toggleLanguage, t, tLang, getLang } from './i18n.js';
 
 class App {
   constructor() {
@@ -77,10 +77,10 @@ class App {
     iconBtn.textContent = page.icon || '📄';
 
     // Update breadcrumb
-    document.getElementById('breadcrumb-page').textContent = page.title || t('placeholder.page');
+    document.getElementById('breadcrumb-page').textContent = page.title || tLang('placeholder.page', page.lang || 'en');
 
     // Load blocks into editor
-    this.editor.load(page.blocks || []);
+    this.editor.load(page.blocks || [], page.lang || 'en');
   }
 
   _switchPage(pageId) {
@@ -94,15 +94,17 @@ class App {
   }
 
   _addPage() {
+    const lang = getLang();
     const newPage = {
       id: generateId(),
-      title: t('placeholder.page'),
+      title: tLang('placeholder.page', lang),
       icon: '📄',
+      lang: lang,
       blocks: [{
         id: generateId(),
         type: 'heading',
         level: 1,
-        content: t('placeholder.page')
+        content: tLang('placeholder.page', lang)
       }, {
         id: generateId(),
         type: 'paragraph',
@@ -150,7 +152,7 @@ class App {
 
     // Sync title
     const titleEl = document.getElementById('page-title');
-    page.title = titleEl.textContent || t('placeholder.page');
+    page.title = titleEl.textContent || tLang('placeholder.page', page.lang || 'en');
 
     // Sync icon
     const iconBtn = document.getElementById('page-icon-btn');
@@ -374,7 +376,9 @@ class App {
     const titleEl = document.getElementById('page-title');
     titleEl.addEventListener('input', () => {
       this._onContentUpdate();
-      document.getElementById('breadcrumb-page').textContent = titleEl.textContent || t('placeholder.page');
+      const page = this.pageManager.getActivePage();
+      const lang = page ? (page.lang || 'en') : 'en';
+      document.getElementById('breadcrumb-page').textContent = titleEl.textContent || tLang('placeholder.page', lang);
     });
     titleEl.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
