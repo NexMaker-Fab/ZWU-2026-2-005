@@ -84,8 +84,17 @@ class App {
   }
 
   _switchPage(pageId) {
-    // Save current page's blocks first
-    this._syncCurrentPage();
+    // NOTE: _syncCurrentPage() is intentionally NOT called here.
+    // pages.js setActive() calls onPageSelect (this function) BEFORE updating
+    // activePageId, so _syncCurrentPage has already saved the old page correctly
+    // at the call site in _addPage / _loadPage / etc.
+    // Calling it again here would overwrite the NEW page with old editor content.
+
+    // Save current page before switching (only called from direct sources, not setActive)
+    // We check: if activePageId is still the OLD page, sync it first
+    if (this.pageManager.activePageId !== pageId) {
+      this._syncCurrentPage();
+    }
 
     // Load new page
     this._loadPage(pageId);

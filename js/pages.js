@@ -29,9 +29,11 @@ export class PageManager {
 
   /** Set active page */
   setActive(pageId) {
+    // IMPORTANT: call onPageSelect FIRST so _syncCurrentPage saves to the OLD page,
+    // then update activePageId and re-render.
+    this.onPageSelect(pageId);
     this.activePageId = pageId;
     this.render();
-    this.onPageSelect(pageId);
   }
 
   /** Filter pages by search */
@@ -74,14 +76,19 @@ export class PageManager {
         item.appendChild(deleteBtn);
         deleteBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          if (confirm(tLang('toast.confirm.delete', page.lang || 'en', { title: page.title }))) {
+          const pageTitle = page.title || tLang('placeholder.page', page.lang || 'en');
+          const msg = t('toast.confirm.delete').replace('{title}', pageTitle);
+          if (window.confirm(msg)) {
             this.onPageDelete(page.id);
           }
         });
       }
 
-      item.addEventListener('click', () => {
-        this.setActive(page.id);
+      item.addEventListener('click', (e) => {
+        // Only switch if not clicking the delete button
+        if (!e.target.closest('.page-item-delete')) {
+          this.setActive(page.id);
+        }
       });
 
       this.pageListEl.appendChild(item);
