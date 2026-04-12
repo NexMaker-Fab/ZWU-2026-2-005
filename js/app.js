@@ -134,12 +134,19 @@ class App {
     const idx = this.data.pages.findIndex(p => p.id === pageId);
     if (idx === -1 || this.data.pages.length <= 1) return;
 
+    // Sync current page if we are NOT deleting it
+    const activeId = this.pageManager.activePageId;
+    if (activeId !== pageId) {
+      this._syncCurrentPage();
+    }
+
     this.data.pages.splice(idx, 1);
 
-    // Switch to first page
-    const newActiveId = this.data.pages[0].id;
-    this.pageManager.load(this.data.pages, newActiveId);
-    this._loadPage(newActiveId);
+    // Only switch if we deleted the active page, OR just stay on active page
+    const nextActiveId = (activeId === pageId) ? this.data.pages[0].id : activeId;
+    this.pageManager.load(this.data.pages, nextActiveId);
+    this._loadPage(nextActiveId);
+    
     this._onContentUpdate();
   }
 
@@ -364,13 +371,6 @@ class App {
     // Add page
     document.getElementById('add-page-btn').addEventListener('click', () => this._addPage());
 
-    // Add block at end
-    document.getElementById('editor-add-block').addEventListener('click', () => {
-      const page = this.pageManager.getActivePage();
-      if (!page) return;
-      const lastBlockId = page.blocks.length > 0 ? page.blocks[page.blocks.length - 1].id : null;
-      this.editor.addBlockAfter(lastBlockId, 'paragraph');
-    });
 
     // Page title editing
     const titleEl = document.getElementById('page-title');

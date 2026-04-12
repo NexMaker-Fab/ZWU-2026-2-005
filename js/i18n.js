@@ -62,9 +62,11 @@ const translations = {
     'toast.github.needs.config': 'Please configure GitHub settings first',
     'toast.settings.saved': 'GitHub settings saved',
     'toast.confirm.delete': 'Delete "{title}"?',
+    'toast.delete_page': 'Delete page',
 
     // Misc
-    'btn.undo': 'Undo (Ctrl+Z)'
+    'btn.undo': 'Undo (Ctrl+Z)',
+    'editor.add_block_below': 'Add block below'
   },
   zh: {
     // Sidebar
@@ -125,9 +127,11 @@ const translations = {
     'toast.github.needs.config': '请先完成 GitHub 同步设置',
     'toast.settings.saved': 'GitHub 配置已保存',
     'toast.confirm.delete': '确定要删除 "{title}" 吗？',
+    'toast.delete_page': '删除页面',
 
     // Misc
-    'btn.undo': '撤销 (Ctrl+Z)'
+    'btn.undo': '撤销 (Ctrl+Z)',
+    'editor.add_block_below': '在下方添加块'
   }
 };
 

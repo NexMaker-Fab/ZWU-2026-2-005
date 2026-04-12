@@ -64,7 +64,7 @@ export class PageManager {
       const deleteBtn = document.createElement('button');
       deleteBtn.className = 'page-item-delete';
       deleteBtn.innerHTML = '×';
-      deleteBtn.title = 'Delete page';
+      deleteBtn.title = t('toast.delete_page');
 
       item.appendChild(icon);
       item.appendChild(name);
