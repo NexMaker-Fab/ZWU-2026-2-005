@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "sessions": {
+    "1478f7e835e34fed83daad6d1091d692": [
+      {
+        "expertId": "SeniorDeveloper",
+        "name": "Will",
+        "profession": "高级开发工程师",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/02-Engineering/SeniorDeveloper/SeniorDeveloper.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/02-Engineering/SeniorDeveloper/SeniorDeveloper_zh.md",
+        "usedAt": 1776011947227,
+        "industryId": "all"
+      },
+      {
+        "expertId": "PrivateDomainMarketingExpert",
+        "name": "Magic",
+        "profession": "私域营销专家",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/03-Marketing/PrivateDomainMarketingExpert/PrivateDomainMarketingExpert.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/03-Marketing/PrivateDomainMarketingExpert/PrivateDomainMarketingExpert_zh.md",
+        "usedAt": 1776009143972,
+        "industryId": "all"
+      }
+    ]
+  },
+  "lastUpdated": 1776013608096
+}

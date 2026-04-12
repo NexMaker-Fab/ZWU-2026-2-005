@@ -173,10 +173,17 @@ button {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  transition: transform var(--transition-slow), background var(--transition-slow), width var(--transition-slow), opacity var(--transition-fast);
+  will-change: width;
+  transition: transform var(--transition-slow), background var(--transition-slow),
+              width 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity var(--transition-fast);
   z-index: 100;
   position: relative;
   overflow: hidden;
+}
+
+/* Disable width transition during drag to prevent lag */
+.sidebar.resizing {
+  transition: transform var(--transition-slow), background var(--transition-slow), opacity var(--transition-fast);
 }
 
 .sidebar.collapsed {

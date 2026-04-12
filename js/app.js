@@ -159,11 +159,6 @@ class App {
       updatedAt: now,
       blocks: [{
         id: generateId(),
-        type: 'heading',
-        level: 1,
-        content: title
-      }, {
-        id: generateId(),
         type: 'paragraph',
         content: ''
       }]
@@ -775,6 +770,7 @@ class App {
     const resizeHandle = document.getElementById('sidebar-resize-handle');
     const sidebar = document.getElementById('sidebar');
     let isResizing = false, resizeStartX = 0, resizeStartWidth = 0;
+    let rafPending = false;
 
     const savedWidth = localStorage.getItem('teamflow_sidebar_width');
     if (savedWidth && sidebar) sidebar.style.width = savedWidth + 'px';
@@ -784,18 +780,26 @@ class App {
       resizeStartX = e.clientX;
       resizeStartWidth = sidebar.getBoundingClientRect().width;
       resizeHandle.classList.add('dragging');
+      sidebar.classList.add('resizing');        // disable width transition while dragging
       document.body.style.cursor = 'col-resize';
       document.body.style.userSelect = 'none';
+      e.preventDefault();
     });
     document.addEventListener('mousemove', (e) => {
-      if (!isResizing) return;
-      const w = Math.min(480, Math.max(160, resizeStartWidth + e.clientX - resizeStartX));
-      sidebar.style.width = w + 'px';
+      if (!isResizing || rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(() => {
+        rafPending = false;
+        const w = Math.min(480, Math.max(160, resizeStartWidth + e.clientX - resizeStartX));
+        sidebar.style.width = w + 'px';
+      });
     });
     document.addEventListener('mouseup', () => {
       if (!isResizing) return;
       isResizing = false;
+      rafPending = false;
       resizeHandle.classList.remove('dragging');
+      sidebar.classList.remove('resizing');    // re-enable smooth transition
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
       localStorage.setItem('teamflow_sidebar_width', sidebar.getBoundingClientRect().width);
