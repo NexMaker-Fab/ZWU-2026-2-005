@@ -68,6 +68,19 @@ class App {
 
     // Init user identity
     this._initUser();
+
+    // Re-render trash list when language changes (keeps empty text in sync)
+    window.addEventListener('language-changed', () => {
+      const trashView = document.getElementById('trash-view');
+      if (trashView && trashView.style.display !== 'none') {
+        this._renderTrashList();
+      }
+      // Also update sidebar user anonymous label if no name set
+      this._updateTrashBadge();
+    });
+
+    // Update trash badge on load
+    this._updateTrashBadge();
   }
 
   // ─── Page Management ──────────────────────────
