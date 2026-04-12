@@ -426,7 +426,7 @@ button {
   transition: all var(--transition-fast);
 }
 
-.sidebar.collapsed + .main-content .topbar-menu-btn {
+.sidebar.collapsed ~ .main-content .topbar-menu-btn {
   display: flex;
 }
 
