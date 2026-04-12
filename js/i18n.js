@@ -80,8 +80,6 @@ const translations = {
     'toolbar.p': 'Paragraph',
 
     // Misc
-    'btn.undo': 'Undo (Ctrl+Z)',
-    'editor.add_block_below': 'Add block below',
 
     // Author / Identity
     'welcome.title': '👋 Welcome to TeamFlow Wiki',
@@ -189,8 +187,6 @@ const translations = {
     'toolbar.p': '正文',
 
     // Misc
-    'btn.undo': '撤销 (Ctrl+Z)',
-    'editor.add_block_below': '在下方添加块',
 
     // Author / Identity
     'welcome.title': '👋 欢迎使用 TeamFlow Wiki',
