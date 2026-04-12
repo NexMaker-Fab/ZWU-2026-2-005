@@ -93,8 +93,11 @@ class App {
     const titleEl = document.getElementById('page-title');
     titleEl.textContent = page.title || '';
 
-    const iconBtn = document.getElementById('page-icon-btn');
-    iconBtn.textContent = page.icon || '📄';
+    // Update icon display (header) and right panel preview
+    const iconDisplay = document.getElementById('page-icon-display');
+    const iconPreview = document.getElementById('page-icon-preview');
+    if (iconDisplay) iconDisplay.textContent = page.icon || '📄';
+    if (iconPreview) iconPreview.textContent = page.icon || '📄';
 
     // Update breadcrumb
     document.getElementById('breadcrumb-page').textContent = page.title || tLang('placeholder.page', page.lang || 'en');
@@ -128,12 +131,27 @@ class App {
     this.pageManager.render();
   }
 
+  _getNextPageTitle(lang) {
+    const prefix = lang === 'zh' ? '新页面' : 'New Page';
+    const usedNums = new Set(
+      this.data.pages
+        .map(p => p.title)
+        .filter(t => t && t.startsWith(prefix + ' '))
+        .map(t => parseInt(t.replace(prefix + ' ', ''), 10))
+        .filter(n => !isNaN(n))
+    );
+    let n = 1;
+    while (usedNums.has(n)) n++;
+    return `${prefix} ${n}`;
+  }
+
   _addPage() {
     const lang = getLang();
     const now = new Date().toISOString();
+    const title = this._getNextPageTitle(lang);
     const newPage = {
       id: generateId(),
-      title: tLang('placeholder.page', lang),
+      title,
       icon: '📄',
       lang: lang,
       author: this._getUsername(),
@@ -143,7 +161,7 @@ class App {
         id: generateId(),
         type: 'heading',
         level: 1,
-        content: tLang('placeholder.page', lang)
+        content: title
       }, {
         id: generateId(),
         type: 'paragraph',
@@ -215,9 +233,9 @@ class App {
     const titleEl = document.getElementById('page-title');
     page.title = titleEl.textContent || tLang('placeholder.page', page.lang || 'en');
 
-    // Sync icon
-    const iconBtn = document.getElementById('page-icon-btn');
-    page.icon = iconBtn.textContent || '📄';
+    // Sync icon from right panel preview
+    const iconPreview = document.getElementById('page-icon-preview');
+    page.icon = iconPreview ? iconPreview.textContent.trim() : '📄';
 
     // Update sidebar
     this.pageManager.render();
@@ -476,10 +494,9 @@ class App {
       return;
     }
 
-    // Populate icons
     const icons = ['📄', '📝', '📖', '🎯', '🚀', '💡', '🔧', '📊', '🎨', '🌟',
       '👋', '🏠', '📚', '⭐', '🎮', '🎵', '📸', '🌍', '❤️', '🔥',
-      '💻', '📱', '🎬', '🍕', '🌈', '🦄', '🐱', '🌸', '⚡', '🔮'];
+      '💻', '📱', '🎥', '🍕', '🌈', '🦄', '🐱', '🌸', '⚡', '🔮'];
 
     picker.innerHTML = '';
     icons.forEach(emoji => {
@@ -487,19 +504,22 @@ class App {
       item.className = 'icon-picker-item';
       item.textContent = emoji;
       item.addEventListener('click', () => {
-        const iconBtn = document.getElementById('page-icon-btn');
-        iconBtn.textContent = emoji;
+        const iconPreview = document.getElementById('page-icon-preview');
+        const iconDisplay = document.getElementById('page-icon-display');
+        if (iconPreview) iconPreview.textContent = emoji;
+        if (iconDisplay) iconDisplay.textContent = emoji;
         picker.classList.remove('visible');
         this._onContentUpdate();
       });
       picker.appendChild(item);
     });
 
-    // Position below the icon button
+    // Position to the left of the right panel button
     const iconBtn = document.getElementById('page-icon-btn');
     const rect = iconBtn.getBoundingClientRect();
-    picker.style.top = `${rect.bottom + 4}px`;
-    picker.style.left = `${rect.left}px`;
+    picker.style.top = `${Math.max(8, rect.top)}px`;
+    picker.style.left = `${Math.max(8, rect.left - 220)}px`;
+    picker.style.right = 'auto';
     picker.classList.add('visible');
   }
 
@@ -738,18 +758,77 @@ class App {
     document.addEventListener('click', (e) => {
       const picker = document.getElementById('icon-picker');
       const iconBtn = document.getElementById('page-icon-btn');
-      if (!picker.contains(e.target) && e.target !== iconBtn) {
+      if (!picker.contains(e.target) && !iconBtn.contains(e.target)) {
         picker.classList.remove('visible');
       }
     });
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
-      // Ctrl+S to save locally
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault();
         this._saveToLocal();
       }
+    });
+
+    // ─── Sidebar resize ───────────────────────────
+    const resizeHandle = document.getElementById('sidebar-resize-handle');
+    const sidebar = document.getElementById('sidebar');
+    let isResizing = false, resizeStartX = 0, resizeStartWidth = 0;
+
+    const savedWidth = localStorage.getItem('teamflow_sidebar_width');
+    if (savedWidth && sidebar) sidebar.style.width = savedWidth + 'px';
+
+    resizeHandle.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      resizeStartX = e.clientX;
+      resizeStartWidth = sidebar.getBoundingClientRect().width;
+      resizeHandle.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      const w = Math.min(480, Math.max(160, resizeStartWidth + e.clientX - resizeStartX));
+      sidebar.style.width = w + 'px';
+    });
+    document.addEventListener('mouseup', () => {
+      if (!isResizing) return;
+      isResizing = false;
+      resizeHandle.classList.remove('dragging');
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      localStorage.setItem('teamflow_sidebar_width', sidebar.getBoundingClientRect().width);
+    });
+
+    // ─── Right panel drag ─────────────────────────
+    const propsPanel = document.getElementById('page-props-panel');
+    const propsHandle = document.getElementById('page-props-handle');
+    let isDraggingPanel = false, panelOffsetX = 0, panelOffsetY = 0;
+
+    propsHandle.addEventListener('mousedown', (e) => {
+      isDraggingPanel = true;
+      const rect = propsPanel.getBoundingClientRect();
+      panelOffsetX = e.clientX - rect.left;
+      panelOffsetY = e.clientY - rect.top;
+      propsPanel.classList.add('dragging');
+      propsPanel.style.transform = 'none';
+      document.body.style.userSelect = 'none';
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!isDraggingPanel) return;
+      const x = Math.max(0, Math.min(window.innerWidth - 60, e.clientX - panelOffsetX));
+      const y = Math.max(0, Math.min(window.innerHeight - 80, e.clientY - panelOffsetY));
+      propsPanel.style.left = x + 'px';
+      propsPanel.style.top = y + 'px';
+      propsPanel.style.right = 'auto';
+    });
+    document.addEventListener('mouseup', () => {
+      if (!isDraggingPanel) return;
+      isDraggingPanel = false;
+      propsPanel.classList.remove('dragging');
+      document.body.style.userSelect = '';
     });
   }
 }
