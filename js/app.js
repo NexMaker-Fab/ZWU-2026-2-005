@@ -676,14 +676,27 @@ class App {
   _toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
-    
+
     if (window.innerWidth <= 768) {
-      // Mobile behavior
+      // Mobile: use open class + overlay
       sidebar.classList.toggle('open');
       overlay.classList.toggle('visible');
     } else {
-      // Desktop behavior
-      sidebar.classList.toggle('collapsed');
+      const isCollapsed = sidebar.classList.contains('collapsed');
+      if (isCollapsed) {
+        // Expanding: restore saved width first, then remove collapsed class
+        const savedWidth = localStorage.getItem('teamflow_sidebar_width');
+        if (savedWidth) {
+          sidebar.style.width = savedWidth + 'px';
+        } else {
+          sidebar.style.width = ''; // fall back to CSS variable default
+        }
+        sidebar.classList.remove('collapsed');
+      } else {
+        // Collapsing: clear inline width so CSS class can set width: 0
+        sidebar.style.width = '';
+        sidebar.classList.add('collapsed');
+      }
     }
   }
 
