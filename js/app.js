@@ -93,11 +93,9 @@ class App {
     const titleEl = document.getElementById('page-title');
     titleEl.textContent = page.title || '';
 
-    // Update icon display (header) and right panel preview
+    // Update icon display in page header
     const iconDisplay = document.getElementById('page-icon-display');
-    const iconPreview = document.getElementById('page-icon-preview');
     if (iconDisplay) iconDisplay.textContent = page.icon || '📄';
-    if (iconPreview) iconPreview.textContent = page.icon || '📄';
 
     // Update breadcrumb
     document.getElementById('breadcrumb-page').textContent = page.title || tLang('placeholder.page', page.lang || 'en');
@@ -228,9 +226,9 @@ class App {
     const titleEl = document.getElementById('page-title');
     page.title = titleEl.textContent || tLang('placeholder.page', page.lang || 'en');
 
-    // Sync icon from right panel preview
-    const iconPreview = document.getElementById('page-icon-preview');
-    page.icon = iconPreview ? iconPreview.textContent.trim() : '📄';
+    // Sync icon from page header display
+    const iconDisplay = document.getElementById('page-icon-display');
+    page.icon = iconDisplay ? iconDisplay.textContent.trim() : '📄';
 
     // Update sidebar
     this.pageManager.render();
@@ -499,9 +497,7 @@ class App {
       item.className = 'icon-picker-item';
       item.textContent = emoji;
       item.addEventListener('click', () => {
-        const iconPreview = document.getElementById('page-icon-preview');
         const iconDisplay = document.getElementById('page-icon-display');
-        if (iconPreview) iconPreview.textContent = emoji;
         if (iconDisplay) iconDisplay.textContent = emoji;
         picker.classList.remove('visible');
         this._onContentUpdate();
@@ -509,11 +505,11 @@ class App {
       picker.appendChild(item);
     });
 
-    // Position to the left of the right panel button
-    const iconBtn = document.getElementById('page-icon-btn');
-    const rect = iconBtn.getBoundingClientRect();
-    picker.style.top = `${Math.max(8, rect.top)}px`;
-    picker.style.left = `${Math.max(8, rect.left - 220)}px`;
+    // Position picker below the page icon in the header
+    const iconEl = document.getElementById('page-icon-display');
+    const rect = iconEl.getBoundingClientRect();
+    picker.style.top = `${rect.bottom + 6}px`;
+    picker.style.left = `${rect.left}px`;
     picker.style.right = 'auto';
     picker.classList.add('visible');
   }
@@ -736,8 +732,11 @@ class App {
       }
     });
 
-    // Icon picker
-    document.getElementById('page-icon-btn').addEventListener('click', () => this._toggleIconPicker());
+    // Icon picker — triggered by clicking the page icon in the header
+    document.getElementById('page-icon-display').addEventListener('click', () => this._toggleIconPicker());
+    document.getElementById('page-icon-display').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this._toggleIconPicker(); }
+    });
 
     // Settings modal
     document.getElementById('settings-btn').addEventListener('click', () => this._showSettingsModal());
@@ -765,8 +764,8 @@ class App {
     // Close icon picker on outside click
     document.addEventListener('click', (e) => {
       const picker = document.getElementById('icon-picker');
-      const iconBtn = document.getElementById('page-icon-btn');
-      if (!picker.contains(e.target) && !iconBtn.contains(e.target)) {
+      const iconEl = document.getElementById('page-icon-display');
+      if (!picker.contains(e.target) && !iconEl.contains(e.target)) {
         picker.classList.remove('visible');
       }
     });
@@ -816,36 +815,6 @@ class App {
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
       localStorage.setItem('teamflow_sidebar_width', sidebar.getBoundingClientRect().width);
-    });
-
-    // ─── Right panel drag ─────────────────────────
-    const propsPanel = document.getElementById('page-props-panel');
-    const propsHandle = document.getElementById('page-props-handle');
-    let isDraggingPanel = false, panelOffsetX = 0, panelOffsetY = 0;
-
-    propsHandle.addEventListener('mousedown', (e) => {
-      isDraggingPanel = true;
-      const rect = propsPanel.getBoundingClientRect();
-      panelOffsetX = e.clientX - rect.left;
-      panelOffsetY = e.clientY - rect.top;
-      propsPanel.classList.add('dragging');
-      propsPanel.style.transform = 'none';
-      document.body.style.userSelect = 'none';
-      e.preventDefault();
-    });
-    document.addEventListener('mousemove', (e) => {
-      if (!isDraggingPanel) return;
-      const x = Math.max(0, Math.min(window.innerWidth - 60, e.clientX - panelOffsetX));
-      const y = Math.max(0, Math.min(window.innerHeight - 80, e.clientY - panelOffsetY));
-      propsPanel.style.left = x + 'px';
-      propsPanel.style.top = y + 'px';
-      propsPanel.style.right = 'auto';
-    });
-    document.addEventListener('mouseup', () => {
-      if (!isDraggingPanel) return;
-      isDraggingPanel = false;
-      propsPanel.classList.remove('dragging');
-      document.body.style.userSelect = '';
     });
   }
 }

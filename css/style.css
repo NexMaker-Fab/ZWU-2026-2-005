@@ -1564,70 +1564,20 @@ button {
   background: var(--accent);
 }
 
-/* ===== PAGE ICON DISPLAY (read-only in header, clickable via right panel) ===== */
+/* ===== PAGE ICON DISPLAY (clickable in page header) ===== */
 .page-icon-display {
   font-size: 2.5rem;
   line-height: 1;
   margin-bottom: 8px;
-  cursor: default;
-  user-select: none;
-}
-
-/* ===== RIGHT-SIDE FLOATING PAGE PROPERTIES PANEL ===== */
-.page-props-panel {
-  position: fixed;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 6px;
-  z-index: 200;
-  user-select: none;
-  min-width: 44px;
-}
-.page-props-panel.dragging {
-  opacity: 0.85;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-.page-props-handle {
-  cursor: grab;
-  color: var(--text-placeholder);
-  font-size: 12px;
-  letter-spacing: -2px;
-  padding: 2px 4px;
-  border-radius: 4px;
-  line-height: 1;
-  transition: color 0.15s;
-}
-.page-props-handle:hover {
-  color: var(--text-secondary);
-}
-.page-props-handle:active {
-  cursor: grabbing;
-}
-
-.page-props-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-md);
-  border: none;
-  background: none;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
+  user-select: none;
+  border-radius: var(--radius-md);
+  padding: 4px 6px;
   transition: background var(--transition-fast), transform 0.15s;
+  display: inline-block;
 }
-.page-props-btn:hover {
+.page-icon-display:hover {
   background: var(--bg-hover);
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
+
