@@ -5,21 +5,13 @@
 const GITHUB_SETTINGS_KEY = 'teamflow_github';
 
 /**
- * Get saved GitHub settings from sessionStorage
+ * Get saved GitHub settings from localStorage
  */
 export function getGitHubSettings() {
-  const saved = sessionStorage.getItem(GITHUB_SETTINGS_KEY);
+  const saved = localStorage.getItem(GITHUB_SETTINGS_KEY);
   if (saved) {
     try {
       return JSON.parse(saved);
-    } catch (e) { /* ignore */ }
-  }
-
-  // Also check localStorage for non-token settings
-  const persisted = localStorage.getItem(GITHUB_SETTINGS_KEY + '_config');
-  if (persisted) {
-    try {
-      return { ...JSON.parse(persisted), token: '' };
     } catch (e) { /* ignore */ }
   }
 
@@ -27,17 +19,12 @@ export function getGitHubSettings() {
 }
 
 /**
- * Save GitHub settings
- * Token goes to sessionStorage only; owner/repo/branch persist in localStorage
+ * Save GitHub settings (now stores config AND token locally)
  */
 export function saveGitHubSettings(settings) {
-  // Token in session only
-  sessionStorage.setItem(GITHUB_SETTINGS_KEY, JSON.stringify(settings));
-
-  // Persist non-sensitive settings
-  const { token, ...config } = settings;
-  localStorage.setItem(GITHUB_SETTINGS_KEY + '_config', JSON.stringify(config));
+  localStorage.setItem(GITHUB_SETTINGS_KEY, JSON.stringify(settings));
 }
+
 
 /**
  * Check if GitHub is configured (has token + repo info)

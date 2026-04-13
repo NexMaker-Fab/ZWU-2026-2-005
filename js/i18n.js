@@ -30,7 +30,7 @@ const translations = {
     'settings.repo.hint': 'The repository where your content is stored',
     'settings.branch': 'Branch',
     'settings.token': 'GitHub Personal Access Token',
-    'settings.token.hint': '⚠️ Token is stored in session only and cleared when you close the tab. Needs \'repo\' scope.',
+    'settings.token.hint': '⚠️ Token represents full access. Stored in localStorage. Needs \'repo\' scope.',
     'settings.cancel': 'Cancel',
     'settings.save': 'Save Settings',
 
@@ -137,7 +137,7 @@ const translations = {
     'settings.repo.hint': '存储内容的 Github 仓库名',
     'settings.branch': '分支 (Branch)',
     'settings.token': 'GitHub 个人访问令牌 (PAT)',
-    'settings.token.hint': '⚠️ Token 仅存放在当前会话(Session)中，关闭标签页即焚。需要包含 \'repo\' 权限。',
+    'settings.token.hint': '⚠️ Token 代表该仓库完整权限。已升级为保存在本地(localStorage)中长期生效。需要包含 \'repo\' 权限。',
     'settings.cancel': '取消',
     'settings.save': '保存设置',
 

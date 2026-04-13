@@ -534,13 +534,27 @@ class App {
     document.getElementById('settings-username').value = this._getUsername();
   }
 
-  _saveGitHubSettingsFromForm() {
-    // Save username
+  _onSettingsSaveClick() {
+    // Save username immediately
     const username = document.getElementById('settings-username').value.trim();
     if (username) {
       localStorage.setItem('teamflow_username', username);
       this._updateSidebarUser();
     }
+
+    const token = document.getElementById('github-token').value.trim();
+    if (token) {
+      // Show security warning modal if saving a token
+      document.getElementById('settings-modal').classList.remove('visible');
+      document.getElementById('token-security-modal').classList.add('visible');
+    } else {
+      // No token, save immediately
+      this._continueSavingGitHubSettings();
+      this._hideSettingsModal();
+    }
+  }
+
+  _continueSavingGitHubSettings() {
     const settings = {
       owner: document.getElementById('github-owner').value.trim(),
       repo: document.getElementById('github-repo').value.trim(),
@@ -548,8 +562,8 @@ class App {
       token: document.getElementById('github-token').value.trim()
     };
     saveGitHubSettings(settings);
-    this._hideSettingsModal();
-    this._showToast('success', t('toast.settings.saved'));
+    document.getElementById('token-security-modal').classList.remove('visible');
+    this._showToast('success', t('toast.settings.saved', 'Settings saved!'));
   }
 
   // ─── Toast Notifications ──────────────────────
@@ -742,7 +756,15 @@ class App {
     document.getElementById('settings-btn').addEventListener('click', () => this._showSettingsModal());
     document.getElementById('settings-close-btn').addEventListener('click', () => this._hideSettingsModal());
     document.getElementById('settings-cancel-btn').addEventListener('click', () => this._hideSettingsModal());
-    document.getElementById('settings-save-btn').addEventListener('click', () => this._saveGitHubSettingsFromForm());
+    document.getElementById('settings-save-btn').addEventListener('click', () => this._onSettingsSaveClick());
+
+    // Token security modal
+    document.getElementById('token-security-cancel-btn').addEventListener('click', () => {
+      document.getElementById('token-security-modal').classList.remove('visible');
+    });
+    document.getElementById('token-security-confirm-btn').addEventListener('click', () => {
+      this._continueSavingGitHubSettings();
+    });
 
     // Close modal on overlay click
     document.getElementById('settings-modal').addEventListener('click', (e) => {
