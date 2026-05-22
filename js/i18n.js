@@ -7,6 +7,7 @@ const translations = {
     // Sidebar
     'search.placeholder': 'Search pages...',
     'sidebar.pages': 'Pages',
+    'sidebar.add_subpage': 'Add sub-page',
     'sidebar.theme.dark': 'Dark',
     'sidebar.theme.light': 'Light',
     'sidebar.settings': 'Settings',
@@ -108,12 +109,16 @@ const translations = {
     'trash.days.left': '{n} day(s) left',
     'trash.by': 'Deleted by {author}',
     'trash.on': '·',
-    'trash.forever.confirm': 'Permanently delete "{title}"? This cannot be undone.'
+    'trash.forever.confirm': 'Permanently delete "{title}"? This cannot be undone.',
+
+    // Nested pages
+    'toast.subpage_created': 'Sub-page created'
   },
   zh: {
     // Sidebar
     'search.placeholder': '搜索页面...',
     'sidebar.pages': '所有页面',
+    'sidebar.add_subpage': '添加子页面',
     'sidebar.theme.dark': '深色',
     'sidebar.theme.light': '浅色',
     'sidebar.settings': '设置',
@@ -215,7 +220,10 @@ const translations = {
     'trash.days.left': '还剩 {n} 天',
     'trash.by': '由 {author} 删除',
     'trash.on': '·',
-    'trash.forever.confirm': '永久删除“{title}”？此操作不可撤销。'
+    'trash.forever.confirm': '永久删除“{title}”？此操作不可撤销。',
+
+    // Nested pages
+    'toast.subpage_created': '子页面已创建'
   }
 };
 

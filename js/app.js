@@ -43,7 +43,8 @@ class App {
       pageListEl: document.getElementById('page-list'),
       onPageSelect: (pageId) => this._switchPage(pageId),
       onPageAdd: () => {},
-      onPageDelete: (pageId) => this._deletePage(pageId)
+      onPageDelete: (pageId) => this._deletePage(pageId),
+      onSubPageAdd: (parentId) => this._addPage(parentId)
     });
 
     // Load pages
@@ -97,8 +98,8 @@ class App {
     const iconDisplay = document.getElementById('page-icon-display');
     if (iconDisplay) iconDisplay.textContent = page.icon || '📄';
 
-    // Update breadcrumb
-    document.getElementById('breadcrumb-page').textContent = page.title || tLang('placeholder.page', page.lang || 'en');
+    // Update breadcrumb with ancestor chain
+    this._updateBreadcrumb(page);
 
     // Exit trash view if open
     this._exitTrashView();
@@ -108,6 +109,45 @@ class App {
 
     // Load blocks into editor
     this.editor.load(page.blocks || [], page.lang || 'en');
+  }
+
+  _updateBreadcrumb(page) {
+    const breadcrumb = document.getElementById('breadcrumb');
+    // Keep only the root link
+    const root = document.getElementById('breadcrumb-root');
+    breadcrumb.innerHTML = '';
+    breadcrumb.appendChild(root);
+
+    // Build ancestor chain
+    const ancestors = this.pageManager.getAncestors(page.id);
+
+    // Render ancestor links
+    ancestors.forEach(ancestor => {
+      const sep = document.createElement('span');
+      sep.className = 'breadcrumb-sep';
+      sep.textContent = '/';
+      breadcrumb.appendChild(sep);
+
+      const link = document.createElement('span');
+      link.className = 'breadcrumb-link';
+      link.textContent = ancestor.title || tLang('placeholder.page', ancestor.lang || 'en');
+      link.addEventListener('click', () => {
+        this.pageManager.setActive(ancestor.id);
+      });
+      breadcrumb.appendChild(link);
+    });
+
+    // Current page (not clickable)
+    const sep = document.createElement('span');
+    sep.className = 'breadcrumb-sep';
+    sep.textContent = '/';
+    breadcrumb.appendChild(sep);
+
+    const current = document.createElement('span');
+    current.className = 'breadcrumb-link breadcrumb-current';
+    current.id = 'breadcrumb-page';
+    current.textContent = page.title || tLang('placeholder.page', page.lang || 'en');
+    breadcrumb.appendChild(current);
   }
 
   _switchPage(pageId) {
@@ -143,12 +183,13 @@ class App {
     return `${prefix} ${n}`;
   }
 
-  _addPage() {
+  _addPage(parentId = null) {
     const lang = getLang();
     const now = new Date().toISOString();
     const title = this._getNextPageTitle(lang);
     const newPage = {
       id: generateId(),
+      parentId: parentId || null,
       title,
       icon: '📄',
       lang: lang,
@@ -167,6 +208,10 @@ class App {
     this._loadPage(newPage.id);
     this._onContentUpdate();
 
+    if (parentId) {
+      this._showToast('success', t('toast.subpage_created'));
+    }
+
     // Focus page title
     requestAnimationFrame(() => {
       const titleEl = document.getElementById('page-title');
@@ -178,6 +223,12 @@ class App {
       sel.removeAllRanges();
       sel.addRange(range);
     });
+  }
+
+  /** Recursively get all descendant pages */
+  _getDescendants(pageId) {
+    const children = this.data.pages.filter(p => p.parentId === pageId);
+    return children.flatMap(c => [c, ...this._getDescendants(c.id)]);
   }
 
   _deletePage(pageId) {
@@ -195,18 +246,32 @@ class App {
       this._syncCurrentPage();
     }
 
-    // Move page to trash with metadata
-    const [page] = this.data.pages.splice(idx, 1);
-    page.deletedAt = new Date().toISOString();
-    page.deletedBy = this._getUsername();
+    // Collect the page + all descendants for cascading delete
+    const descendants = this._getDescendants(pageId);
+    const allToDelete = [this.data.pages[idx], ...descendants];
+    const allToDeleteIds = new Set(allToDelete.map(p => p.id));
+
+    // Remove from pages array
+    this.data.pages = this.data.pages.filter(p => !allToDeleteIds.has(p.id));
+
+    // Move all to trash with metadata
+    const now = new Date().toISOString();
+    const deletedBy = this._getUsername();
     if (!this.data.trash) this.data.trash = [];
-    this.data.trash.unshift(page);
+    allToDelete.forEach(page => {
+      page.deletedAt = now;
+      page.deletedBy = deletedBy;
+      this.data.trash.unshift(page);
+    });
 
     // Update trash badge
     this._updateTrashBadge();
 
-    // Switch to next page or stay
-    const nextActiveId = (activeId === pageId) ? this.data.pages[0].id : activeId;
+    // Switch to next page — check if active page was part of deleted subtree
+    let nextActiveId = activeId;
+    if (allToDeleteIds.has(activeId)) {
+      nextActiveId = this.data.pages[0]?.id;
+    }
     this._exitTrashView();
     this.pageManager.load(this.data.pages, nextActiveId);
     this._loadPage(nextActiveId);
@@ -431,6 +496,12 @@ class App {
     const [page] = this.data.trash.splice(idx, 1);
     delete page.deletedAt;
     delete page.deletedBy;
+
+    // If parent no longer exists in active pages, restore to root
+    if (page.parentId && !this.data.pages.some(p => p.id === page.parentId)) {
+      page.parentId = null;
+    }
+
     this.data.pages.push(page);
     this._updateTrashBadge();
     this.pageManager.load(this.data.pages, page.id);
