@@ -190,7 +190,7 @@ const translations = {
     'save.status.autosaved': '已自动保存到本地',
 
     // Modal
-    'settings.title': '设置 GitHub',
+    'settings.title': '设置',
     'settings.owner': '仓库所有者 (Owner)',
     'settings.owner.hint': '您的 GitHub 用户名或组织名',
     'settings.repo': '仓库名称 (Repo)',
