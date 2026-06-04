@@ -974,29 +974,169 @@ class App {
     document.getElementById('import-file-input')?.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const imported = JSON.parse(ev.target.result);
-          if (!imported || !Array.isArray(imported.pages) || imported.pages.length === 0) {
-            throw new Error('Invalid import file: missing or empty pages array');
-          }
-          imported.trash = Array.isArray(imported.trash) ? imported.trash : [];
-          imported.team = Array.isArray(imported.team) ? imported.team : [];
+      const fileName = file.name;
+      const isJson = fileName.toLowerCase().endsWith('.json');
+      const isMd = fileName.toLowerCase().endsWith('.md');
+      const isImage = file.type.startsWith('image/');
 
-          this.data = imported;
-          const firstPageId = this.data.pages[0].id;
-          this.pageManager.load(this.data.pages, firstPageId);
-          this._loadPage(firstPageId);
-          saveToLocalStorage(this.data);
-          this._updatePageCount();
-          this._updateTrashBadge();
-          this._showToast('success', t('toast.import.success'));
-        } catch (err) {
-          this._showToast('error', t('toast.import.failed', { message: err.message }));
+      const parseMarkdownToBlocks = (text) => {
+        const lines = text.split(/\r?\n/);
+        const blocks = [];
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed) continue;
+          if (trimmed.startsWith('# ')) {
+            blocks.push({
+              id: generateId(),
+              type: 'heading',
+              level: 1,
+              content: trimmed.substring(2).trim()
+            });
+          } else if (trimmed.startsWith('## ')) {
+            blocks.push({
+              id: generateId(),
+              type: 'heading',
+              level: 2,
+              content: trimmed.substring(3).trim()
+            });
+          } else if (trimmed.startsWith('### ')) {
+            blocks.push({
+              id: generateId(),
+              type: 'heading',
+              level: 3,
+              content: trimmed.substring(4).trim()
+            });
+          } else if (trimmed === '---') {
+            blocks.push({
+              id: generateId(),
+              type: 'divider'
+            });
+          } else {
+            const imgMatch = trimmed.match(/^!\[(.*?)\]\((.*?)\)$/);
+            if (imgMatch) {
+              blocks.push({
+                id: generateId(),
+                type: 'image',
+                src: imgMatch[2],
+                caption: imgMatch[1]
+              });
+            } else {
+              blocks.push({
+                id: generateId(),
+                type: 'paragraph',
+                content: trimmed
+              });
+            }
+          }
         }
+        if (blocks.length === 0) {
+          blocks.push({
+            id: generateId(),
+            type: 'paragraph',
+            content: ''
+          });
+        }
+        return blocks;
       };
-      reader.readAsText(file);
+
+      const reader = new FileReader();
+
+      if (isJson) {
+        reader.onload = (ev) => {
+          try {
+            const imported = JSON.parse(ev.target.result);
+            if (!imported || !Array.isArray(imported.pages) || imported.pages.length === 0) {
+              throw new Error('Invalid import file: missing or empty pages array');
+            }
+            imported.trash = Array.isArray(imported.trash) ? imported.trash : [];
+            imported.team = Array.isArray(imported.team) ? imported.team : [];
+
+            this.data = imported;
+            const firstPageId = this.data.pages[0].id;
+            this.pageManager.load(this.data.pages, firstPageId);
+            this._loadPage(firstPageId);
+            saveToLocalStorage(this.data);
+            this._updatePageCount();
+            this._updateTrashBadge();
+            this._showToast('success', t('toast.import.success'));
+          } catch (err) {
+            this._showToast('error', t('toast.import.failed', { message: err.message }));
+          }
+        };
+        reader.readAsText(file);
+      } else if (isMd) {
+        reader.onload = (ev) => {
+          try {
+            const text = ev.target.result;
+            const blocks = parseMarkdownToBlocks(text);
+            const title = file.name.replace(/\.md$/i, '') || 'Untitled Markdown';
+            const now = new Date().toISOString();
+            const newPage = {
+              id: generateId(),
+              parentId: null,
+              title,
+              icon: '📄',
+              lang: getLang(),
+              author: this._getUsername(),
+              createdAt: now,
+              updatedAt: now,
+              blocks: blocks
+            };
+            this.data.pages.push(newPage);
+            this.pageManager.load(this.data.pages, newPage.id);
+            this._switchPage(newPage.id);
+            saveToLocalStorage(this.data);
+            this._updatePageCount();
+            this._showToast('success', t('toast.import.success'));
+          } catch (err) {
+            this._showToast('error', t('toast.import.failed', { message: err.message }));
+          }
+        };
+        reader.readAsText(file);
+      } else if (isImage) {
+        reader.onload = (ev) => {
+          try {
+            const dataUrl = ev.target.result;
+            const title = file.name.replace(/\.[^/.]+$/, "") || 'Untitled Image';
+            const now = new Date().toISOString();
+            const imageBlock = {
+              id: generateId(),
+              type: 'image',
+              src: dataUrl,
+              caption: title
+            };
+            const newPage = {
+              id: generateId(),
+              parentId: null,
+              title,
+              icon: '🖼️',
+              lang: getLang(),
+              author: this._getUsername(),
+              createdAt: now,
+              updatedAt: now,
+              blocks: [
+                imageBlock,
+                {
+                  id: generateId(),
+                  type: 'paragraph',
+                  content: ''
+                }
+              ]
+            };
+            this.data.pages.push(newPage);
+            this.pageManager.load(this.data.pages, newPage.id);
+            this._switchPage(newPage.id);
+            saveToLocalStorage(this.data);
+            this._updatePageCount();
+            this._showToast('success', t('toast.import.success'));
+          } catch (err) {
+            this._showToast('error', t('toast.import.failed', { message: err.message }));
+          }
+        };
+        reader.readAsDataURL(file);
+      } else {
+        this._showToast('error', 'Unsupported file type.');
+      }
       e.target.value = '';
     });
 
