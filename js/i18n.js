@@ -111,6 +111,18 @@ const translations = {
     'trash.on': '·',
     'trash.forever.confirm': 'Permanently delete "{title}"? This cannot be undone.',
 
+    // Sidebar layout
+    'sidebar.favorites': 'Favorites',
+    'sidebar.quick.new': 'New Page',
+    'sidebar.quick.import': 'Import',
+    'sidebar.role': 'Admin',
+    'search.clear': 'Clear',
+    'status.pages': '{n} pages',
+    'status.last_saved': 'Last saved: {time}',
+    'status.last_saved.just': 'just now',
+    'status.last_saved.min': '{n} min ago',
+    'status.last_saved.hour': '{n} hr ago',
+
     // Nested pages
     'toast.subpage_created': 'Sub-page created'
   },
@@ -221,6 +233,18 @@ const translations = {
     'trash.by': '由 {author} 删除',
     'trash.on': '·',
     'trash.forever.confirm': '永久删除“{title}”？此操作不可撤销。',
+
+    // Sidebar layout
+    'sidebar.favorites': '收藏页面',
+    'sidebar.quick.new': '新页面',
+    'sidebar.quick.import': '导入',
+    'sidebar.role': '管理员',
+    'search.clear': '清除',
+    'status.pages': '共 {n} 个页面',
+    'status.last_saved': '最后保存: {time}',
+    'status.last_saved.just': '刚刚',
+    'status.last_saved.min': '{n} 分钟前',
+    'status.last_saved.hour': '{n} 小时前',
 
     // Nested pages
     'toast.subpage_created': '子页面已创建'

@@ -345,12 +345,50 @@ export class BlockEditor {
       this._handleSelectionChange();
     });
 
-    // Slash menu item clicks
-    this.slashMenuEl.addEventListener('click', (e) => {
+    // Slash menu item clicks — use mousedown to fire before the document click handler
+    this.slashMenuEl.addEventListener('mousedown', (e) => {
       const item = e.target.closest('.slash-menu-item');
       if (!item) return;
+      e.preventDefault(); // Prevent blur and document click from firing first
+      e.stopPropagation();
       const type = item.dataset.type;
       this._executeSlashCommand(type);
+    });
+
+    // Keyboard navigation within slash menu
+    document.addEventListener('keydown', (e) => {
+      if (!this._isSlashMenuVisible()) return;
+
+      const items = Array.from(this.slashMenuEl.querySelectorAll('.slash-menu-item'));
+      if (items.length === 0) return;
+
+      const activeIdx = items.findIndex(i => i.classList.contains('active'));
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        e.stopPropagation();
+        const nextIdx = (activeIdx + 1) % items.length;
+        items.forEach(i => i.classList.remove('active'));
+        items[nextIdx].classList.add('active');
+        items[nextIdx].scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        e.stopPropagation();
+        const prevIdx = activeIdx <= 0 ? items.length - 1 : activeIdx - 1;
+        items.forEach(i => i.classList.remove('active'));
+        items[prevIdx].classList.add('active');
+        items[prevIdx].scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
+        const activeItem = items[activeIdx >= 0 ? activeIdx : 0];
+        if (activeItem) {
+          this._executeSlashCommand(activeItem.dataset.type);
+        }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        this._hideSlashMenu();
+      }
     });
 
     // Floating toolbar button clicks
@@ -374,6 +412,20 @@ export class BlockEditor {
     const blockEl = e.target.closest('.block');
     if (!blockEl) return;
     const blockId = blockEl.dataset.id;
+
+    // Slash command detection — trigger on '/' at the start of empty block
+    if (e.key === '/' && e.target.textContent === '') {
+      e.preventDefault();
+      this.slashMenuTarget = blockId;
+      this._showSlashMenu(e.target);
+      return; // Don't process further to avoid conflicts
+    }
+
+    // If slash menu is visible, let the dedicated slash menu keyboard handler deal with it
+    // MUST be checked before Enter/Arrow handling to prevent creating new blocks
+    if (this._isSlashMenuVisible()) {
+      return;
+    }
 
     // Enter — create new block below
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -410,13 +462,6 @@ export class BlockEditor {
           });
         }
       }
-    }
-
-    // Slash command detection
-    if (e.key === '/' && e.target.textContent === '') {
-      e.preventDefault();
-      this.slashMenuTarget = blockId;
-      this._showSlashMenu(e.target);
     }
 
     // Escape — close menus
@@ -460,6 +505,10 @@ export class BlockEditor {
 
   // ─── Slash Command Menu ───────────────────────
 
+  _isSlashMenuVisible() {
+    return this.slashMenuEl.classList.contains('visible');
+  }
+
   _showSlashMenu(anchorEl) {
     const rect = anchorEl.getBoundingClientRect();
     this.slashMenuEl.style.top = `${rect.bottom + 4}px`;
@@ -478,10 +527,12 @@ export class BlockEditor {
   }
 
   _executeSlashCommand(type) {
-    this._hideSlashMenu();
-    if (!this.slashMenuTarget) return;
-
+    // IMPORTANT: Save the target block ID BEFORE hiding the menu,
+    // because _hideSlashMenu sets slashMenuTarget to null.
     const blockId = this.slashMenuTarget;
+    this._hideSlashMenu();
+    if (!blockId) return;
+
     switch (type) {
       case 'paragraph':
         this.changeBlockType(blockId, 'paragraph');

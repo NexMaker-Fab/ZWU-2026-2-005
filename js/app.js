@@ -82,6 +82,9 @@ class App {
 
     // Update trash badge on load
     this._updateTrashBadge();
+    this._updatePageCount();
+    // Refresh last-saved display every 30s
+    setInterval(() => this._refreshLastSavedDisplay(), 30000);
   }
 
   // ─── Page Management ──────────────────────────
@@ -309,6 +312,8 @@ class App {
       this._syncCurrentPage();
       saveToLocalStorage(this.data);
       this._setSaveStatus(t('save.status.autosaved'));
+      this._updateLastSaved();
+      this._updatePageCount();
     }, 1000);
   }
 
@@ -342,6 +347,34 @@ class App {
   _setSaveStatus(text) {
     const el = document.getElementById('save-status');
     if (el) el.textContent = text;
+  }
+
+  _updatePageCount() {
+    const el = document.getElementById('page-count');
+    if (el) {
+      const n = this.data.pages?.length || 0;
+      el.textContent = t('status.pages', { n });
+    }
+  }
+
+  _updateLastSaved() {
+    this._lastSavedAt = Date.now();
+    this._refreshLastSavedDisplay();
+  }
+
+  _refreshLastSavedDisplay() {
+    const el = document.getElementById('last-saved');
+    if (!el || !this._lastSavedAt) return;
+    const diff = Math.floor((Date.now() - this._lastSavedAt) / 1000);
+    let timeStr;
+    if (diff < 60) {
+      timeStr = t('status.last_saved.just');
+    } else if (diff < 3600) {
+      timeStr = t('status.last_saved.min', { n: Math.floor(diff / 60) });
+    } else {
+      timeStr = t('status.last_saved.hour', { n: Math.floor(diff / 3600) });
+    }
+    el.textContent = t('status.last_saved', { time: timeStr });
   }
 
   // ─── Trash / Recycle Bin ──────────────────────
@@ -708,24 +741,21 @@ class App {
 
   _updateSidebarUser() {
     const username = this._getUsername();
-    let userBtn = document.getElementById('sidebar-user-btn');
+    const avatarEl = document.getElementById('sidebar-user-avatar');
+    const nameEl = document.getElementById('sidebar-user-name');
+    const userBtn = document.getElementById('sidebar-user-btn');
 
-    if (!userBtn) {
-      // Insert user widget into sidebar footer (before theme button)
-      const footer = document.querySelector('.sidebar-footer');
-      userBtn = document.createElement('button');
-      userBtn.id = 'sidebar-user-btn';
-      userBtn.className = 'sidebar-user';
-      footer.insertBefore(userBtn, footer.firstChild);
-      userBtn.addEventListener('click', () => this._showSettingsModal());
+    if (avatarEl) {
+      avatarEl.textContent = username ? username[0].toUpperCase() : '?';
     }
-
-    const initial = username ? username[0].toUpperCase() : '?';
-    userBtn.innerHTML = `
-      <div class="sidebar-user-avatar">${initial}</div>
-      <span class="sidebar-user-name">${username || t('page.meta.anonymous')}</span>
-      <span class="sidebar-user-edit">✏️</span>
-    `;
+    if (nameEl) {
+      nameEl.textContent = username || t('page.meta.anonymous');
+    }
+    // Ensure click to open settings
+    if (userBtn && !userBtn._bound) {
+      userBtn.addEventListener('click', () => this._showSettingsModal());
+      userBtn._bound = true;
+    }
   }
 
   _updatePageMeta(page) {
@@ -799,6 +829,49 @@ class App {
 
     // Trash view
     document.getElementById('sidebar-trash-btn').addEventListener('click', () => this._showTrashView());
+
+    // Quick add page button
+    document.getElementById('quick-add-page-btn')?.addEventListener('click', () => this._addPage());
+
+    // Quick import button
+    document.getElementById('quick-import-btn')?.addEventListener('click', () => {
+      document.getElementById('import-file-input')?.click();
+    });
+
+    // Import file handler
+    document.getElementById('import-file-input')?.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          if (imported.pages) {
+            this.data = imported;
+            const firstPageId = this.data.pages[0]?.id;
+            this.pageManager.load(this.data.pages, firstPageId);
+            this._loadPage(firstPageId);
+            saveToLocalStorage(this.data);
+            this._updatePageCount();
+            this._updateTrashBadge();
+            this._showToast('success', '✅ 导入成功');
+          }
+        } catch (err) {
+          this._showToast('error', '导入失败: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    // Search clear button
+    document.getElementById('search-clear-btn')?.addEventListener('click', () => {
+      const searchInput = document.getElementById('page-search');
+      if (searchInput) {
+        searchInput.value = '';
+        this.pageManager.search('');
+      }
+    });
 
     // Page title editing
     const titleEl = document.getElementById('page-title');

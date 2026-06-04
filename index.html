@@ -26,11 +26,34 @@
     </div>
 
     <div class="sidebar-search">
-      <input type="text" class="sidebar-search-input" id="page-search" data-i18n-placeholder="search.placeholder" placeholder="Search pages...">
+      <div class="sidebar-search-wrapper">
+        <input type="text" class="sidebar-search-input" id="page-search" data-i18n-placeholder="search.placeholder" placeholder="Search pages...">
+        <button class="sidebar-search-clear" id="search-clear-btn" data-i18n-title="search.clear" title="Clear">✕</button>
+      </div>
+    </div>
+
+    <div class="sidebar-quick-actions">
+      <button class="sidebar-quick-btn" id="quick-add-page-btn">
+        <span>+</span>
+        <span data-i18n="sidebar.quick.new">新页面</span>
+      </button>
+      <button class="sidebar-quick-btn" id="quick-import-btn">
+        <span>📁</span>
+        <span data-i18n="sidebar.quick.import">导入</span>
+      </button>
     </div>
 
     <div class="sidebar-section-label">
-      <span data-i18n="sidebar.pages">Pages</span>
+      <span data-i18n="sidebar.favorites">收藏页面</span>
+      <button class="btn-icon btn-sm" id="add-fav-btn" title="+">+</button>
+    </div>
+
+    <nav class="sidebar-pages sidebar-pages-favorites" id="fav-page-list">
+      <!-- Favorite pages populated by JS -->
+    </nav>
+
+    <div class="sidebar-section-label">
+      <span data-i18n="sidebar.pages">所有页面</span>
       <button class="btn-icon btn-sm" id="add-page-btn" data-i18n-title="sidebar.new_page" title="New page">+</button>
     </div>
 
@@ -46,14 +69,21 @@
     </button>
 
     <div class="sidebar-footer">
-      <button class="sidebar-footer-btn" id="theme-toggle-btn" data-i18n-title="sidebar.theme.toggle" title="Toggle theme">
-        <span id="theme-icon">🌙</span>
-        <span id="theme-label" data-i18n="sidebar.theme.dark">Dark</span>
-      </button>
-      <button class="sidebar-footer-btn" id="settings-btn" data-i18n-title="sidebar.settings.tooltip" title="Settings">
-        <span>⚙️</span>
-        <span data-i18n="sidebar.settings">Settings</span>
-      </button>
+      <div class="sidebar-user-info" id="sidebar-user-btn">
+        <div class="sidebar-user-avatar" id="sidebar-user-avatar">?</div>
+        <div class="sidebar-user-details">
+          <span class="sidebar-user-name" id="sidebar-user-name">Anonymous</span>
+          <span class="sidebar-user-role" id="sidebar-user-role" data-i18n="sidebar.role">管理员</span>
+        </div>
+      </div>
+      <div class="sidebar-footer-icons">
+        <button class="sidebar-icon-btn" id="theme-toggle-btn" data-i18n-title="sidebar.theme.toggle" title="Toggle theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+        <button class="sidebar-icon-btn" id="settings-btn" data-i18n-title="sidebar.settings.tooltip" title="Settings">
+          <span>⚙️</span>
+        </button>
+      </div>
     </div>
   </aside>
 
@@ -75,6 +105,14 @@
       </div>
       <div class="topbar-actions">
         <button class="btn btn-ghost btn-sm btn-lang" id="lang-toggle-btn" title="English / 中文" style="font-weight: 600;">EN/中</button>
+        <button class="btn btn-secondary btn-sm" id="save-local-btn">
+          <span>💾</span>
+          <span class="btn-label" data-i18n="save.local">Save to Local</span>
+        </button>
+        <button class="btn btn-primary btn-sm" id="save-github-btn">
+          <span>🔄</span>
+          <span class="btn-label" data-i18n="save.github">Save to GitHub</span>
+        </button>
       </div>
     </div>
 
@@ -114,17 +152,17 @@
     </div>
 
 
-    <!-- Save Bar -->
-    <div class="save-bar">
-      <span class="save-status" id="save-status" data-i18n="save.status.ready">Ready</span>
-      <button class="btn btn-secondary" id="save-local-btn">
-        <span>📥</span>
-        <span class="btn-label" data-i18n="save.local">Save to Local</span>
-      </button>
-      <button class="btn btn-primary" id="save-github-btn">
-        <span>📤</span>
-        <span class="btn-label" data-i18n="save.github">Save to GitHub</span>
-      </button>
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <div class="status-bar-left">
+        <span class="status-dot"></span>
+        <span class="save-status" id="save-status" data-i18n="save.status.ready">Ready</span>
+        <span class="status-sep">·</span>
+        <span class="page-count" id="page-count">共 0 个页面</span>
+      </div>
+      <div class="status-bar-right">
+        <span class="last-saved" id="last-saved"></span>
+      </div>
     </div>
   </main>
 
@@ -290,6 +328,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Import file input (hidden) -->
+  <input type="file" id="import-file-input" accept=".json" style="display:none">
 
   <!-- ===== SCRIPTS ===== -->
   <script type="module" src="js/app.js"></script>
