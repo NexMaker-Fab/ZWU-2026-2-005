@@ -717,7 +717,9 @@ class App {
     this.data.team.push({ id: Date.now().toString(36), name, role: role || '' });
     saveToLocalStorage(this.data);
     this._renderTeamList();
-    this._showToast('success', `👥 ${name}`);
+    const escapeMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+    const safeName = name.replace(/[&<>"']/g, c => escapeMap[c]);
+    this._showToast('success', `👥 ${safeName}`);
   }
 
   _removeTeamMember(id) {
