@@ -265,6 +265,8 @@ button {
 
 .sidebar-search-input {
   flex: 1;
+  min-width: 0;
+  width: 100%;
   padding: var(--space-sm) var(--space-md);
   border: none;
   background: transparent;
