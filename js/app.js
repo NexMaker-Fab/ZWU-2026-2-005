@@ -58,6 +58,12 @@ class App {
     // Load GitHub settings into form
     this._loadGitHubSettings();
 
+    // Check URL parameters to see if we should open settings on load
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('open') === 'settings') {
+      this._showSettingsView('sync');
+    }
+
     // Set site name
     const siteName = document.getElementById('site-name');
     if (siteName && this.data.site?.name) {
@@ -935,45 +941,13 @@ class App {
   // ─── UI Event Binding ─────────────────────────
 
   _bindUIEvents() {
-    // Landing Page Actions
-    document.getElementById('enter-wiki-btn')?.addEventListener('click', () => {
-      const landing = document.getElementById('landing-page');
-      if (landing) {
-        landing.classList.add('fade-out');
-        setTimeout(() => landing.style.display = 'none', 300);
-      }
-    });
-
-    document.getElementById('landing-settings-btn')?.addEventListener('click', () => {
-      const landing = document.getElementById('landing-page');
-      if (landing) {
-        landing.classList.add('fade-out');
-        setTimeout(() => {
-          landing.style.display = 'none';
-          this._showSettingsView('sync');
-        }, 300);
-      }
-    });
-
-    // Site Name and Breadcrumb Root click to show landing page again
+    // Site Name and Breadcrumb Root click to return to landing page
     document.getElementById('site-name')?.addEventListener('click', () => {
-      const landing = document.getElementById('landing-page');
-      if (landing) {
-        landing.style.display = '';
-        // Force reflow to ensure display is applied before removing fade-out for smooth transition
-        landing.offsetHeight;
-        landing.classList.remove('fade-out');
-      }
+      window.location.href = 'landing.html';
     });
 
     document.getElementById('breadcrumb-root')?.addEventListener('click', () => {
-      const landing = document.getElementById('landing-page');
-      if (landing) {
-        landing.style.display = '';
-        // Force reflow to ensure display is applied before removing fade-out for smooth transition
-        landing.offsetHeight;
-        landing.classList.remove('fade-out');
-      }
+      window.location.href = 'landing.html';
     });
 
     // Save buttons

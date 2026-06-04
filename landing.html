@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeamFlow Wiki — Presentation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+  <meta name="description" content="Welcome to TeamFlow Wiki. A lightweight modular collaboration knowledge base.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
+
+  <!-- Dynamic Interaction Background -->
+  <canvas class="landing-canvas" id="landing-canvas"></canvas>
+
+  <!-- Ambient Light Orbs -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+  <div class="ambient-orb orb-3"></div>
+
+  <!-- Header Navigation -->
+  <header class="landing-header">
+    <div class="brand">
+      <span class="brand-logo">🚀</span>
+      <span class="brand-title">TeamFlow Wiki</span>
+    </div>
+    <div class="header-actions">
+      <!-- Theme Switch Button -->
+      <button class="icon-btn" id="theme-toggle-btn" title="Toggle Theme">
+        <span id="theme-icon">🌙</span>
+      </button>
+      <!-- Language Selection -->
+      <button class="lang-toggle-btn" id="lang-toggle-btn">
+        <span class="lang-icon">🌐</span>
+        <span id="lang-label">English / 中文</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="landing-container">
+    
+    <!-- Hero Block -->
+    <section class="hero-section">
+      <div class="badge-wrapper">
+        <span class="version-badge" data-i18n="landing.badge">✨ TeamFlow Wiki v1.2</span>
+      </div>
+      <h1 class="hero-title-shimmer">TeamFlow Wiki</h1>
+      <p class="hero-subtitle" data-i18n="landing.subtitle">为现代开发团队打造的轻量级、卡片模块化协作知识库</p>
+      
+      <div class="action-buttons">
+        <a href="app.html" class="btn btn-primary btn-glow" id="enter-project-btn">
+          <span class="btn-icon">⚡</span>
+          <span data-i18n="landing.action.enter">进入项目</span>
+        </a>
+        <a href="app.html?open=settings" class="btn btn-secondary" id="configure-sync-btn">
+          <span class="btn-icon">⚙️</span>
+          <span data-i18n="landing.action.settings">配置同步</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+      
+      <!-- Card: Team Members -->
+      <div class="info-card glass-card team-card">
+        <div class="card-header">
+          <span class="card-icon">👥</span>
+          <h3 data-i18n="landing.team.title">项目构建成员</h3>
+        </div>
+        <p class="card-description" data-i18n="landing.team.desc">感谢为 TeamFlow Wiki 项目付出心血的开发与设计小组成员：</p>
+        
+        <div class="team-grid">
+          <div class="team-member">
+            <div class="avatar avatar-purple">X</div>
+            <div class="member-detail">
+              <span class="member-name">Xiping Chen</span>
+              <span class="member-role" data-i18n="landing.team.role.lead">项目负责人 / 核心开发</span>
+            </div>
+          </div>
+          
+          <div class="team-member">
+            <div class="avatar avatar-blue">P</div>
+            <div class="member-detail">
+              <span class="member-name">Purple Zhou</span>
+              <span class="member-role" data-i18n="landing.team.role.frontend">前端架构师</span>
+            </div>
+          </div>
+          
+          <div class="team-member">
+            <div class="avatar avatar-green">X</div>
+            <div class="member-detail">
+              <span class="member-name">Xiaoyuan Zhang</span>
+              <span class="member-role" data-i18n="landing.team.role.designer">UI / 交互设计师</span>
+            </div>
+          </div>
+          
+          <div class="team-member">
+            <div class="avatar avatar-orange">X</div>
+            <div class="member-detail">
+              <span class="member-name">Xiping Chen</span>
+              <span class="member-role" data-i18n="landing.team.role.ai">AI 配对程序员</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Steps Guide -->
+      <div class="info-card glass-card guide-card">
+        <div class="card-header">
+          <span class="card-icon">📖</span>
+          <h3 data-i18n="landing.guide.title">使用指南</h3>
+        </div>
+        <p class="card-description" data-i18n="landing.guide.desc">快速掌握 TeamFlow Wiki 的核心协作工作流：</p>
+        
+        <div class="guide-steps">
+          <div class="step-item">
+            <div class="step-badge">1</div>
+            <div class="step-info">
+              <h4 data-i18n="landing.guide.step1.title">模块化块级编辑</h4>
+              <p data-i18n="landing.guide.step1.desc">点击任意文本块即可直接编辑，按 Enter 键换行。每一行都是独立积木，可自由修改。</p>
+            </div>
+          </div>
+          
+          <div class="step-item">
+            <div class="step-badge">2</div>
+            <div class="step-info">
+              <h4 data-i18n="landing.guide.step2.title">斜杠命令 (Slash Command)</h4>
+              <p data-i18n="landing.guide.step2.desc">在新行输入 / 即可呼出快捷菜单，一键插入标题、分隔线、图片或普通段落。</p>
+            </div>
+          </div>
+          
+          <div class="step-item">
+            <div class="step-badge">3</div>
+            <div class="step-info">
+              <h4 data-i18n="landing.guide.step3.title">拖拽手柄排序</h4>
+              <p data-i18n="landing.guide.step3.desc">悬停于每一行左侧可显现 ⠿ 手柄，长按即可上下拖拽块重新排布内容顺序。</p>
+            </div>
+          </div>
+          
+          <div class="step-item">
+            <div class="step-badge">4</div>
+            <div class="step-info">
+              <h4 data-i18n="landing.guide.step4.title">GitHub 自动云同步</h4>
+              <p data-i18n="landing.guide.step4.desc">在设置 (⚙️) 中输入 GitHub Token 及仓库信息后，即可免安装 Git，一键向远端推送更新。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Page Footer -->
+    <footer class="landing-footer">
+      <p class="footer-text">Made by ZWU-2026-2-005 2026</p>
+    </footer>
+  </div>
+
+  <script type="module" src="js/landing.js"></script>
+</body>
+</html>
