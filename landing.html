@@ -152,6 +152,94 @@
         </div>
       </div>
 
+      <!-- Card: Sync Configuration Guide -->
+      <div class="info-card glass-card sync-guide-card">
+        <div class="card-header">
+          <span class="card-icon">🔄</span>
+          <h3 data-i18n="landing.sync_guide.title">云端协作配置向导</h3>
+        </div>
+        <p class="card-description" data-i18n="landing.sync_guide.desc">只需 3 步，即可在团队中建立共同的 GitHub 云端数据同步闭环，实现免安装协同：</p>
+        
+        <div class="sync-steps-grid">
+          <div class="sync-step-item">
+            <div class="sync-step-badge">1</div>
+            <div class="sync-step-info">
+              <h4 data-i18n="landing.sync_guide.step1.title">1. 共同建库</h4>
+              <p data-i18n="landing.sync_guide.step1.desc">团队主导者在 GitHub 上新建仓库（推荐初始化 README.md），并在 Settings -> Collaborators 中将团队成员添加为协作者（私有库必须），使大家获得写入权限。</p>
+            </div>
+          </div>
+          
+          <div class="sync-step-item">
+            <div class="sync-step-badge">2</div>
+            <div class="sync-step-info">
+              <h4 data-i18n="landing.sync_guide.step2.title">2. 创建 Access Token</h4>
+              <p data-i18n="landing.sync_guide.step2.desc">每个成员在个人 GitHub 设置中生成 Token。Classic 令牌需勾选 repo 权限；Fine-grained 令牌需授予该仓库 Contents 属性的 Read and write 读写权限。</p>
+            </div>
+          </div>
+          
+          <div class="sync-step-item">
+            <div class="sync-step-badge">3</div>
+            <div class="sync-step-info">
+              <h4 data-i18n="landing.sync_guide.step3.title">3. 同步配置与提交</h4>
+              <p data-i18n="landing.sync_guide.step3.desc">进入 Wiki 点击 ⚙️ 设置，填入相同的 Owner、Repo 与个人的 Token 保存。点击顶部“同步到 GitHub”，即可推送本地修改并实时拉取同步，完成闭环！</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Troubleshooting Accordion -->
+        <div class="troubleshooting-section">
+          <h4 class="section-subtitle">
+            <span class="card-icon" style="font-size: 1.1rem; margin-right: 2px;">⚠️</span>
+            <span data-i18n="landing.sync_guide.trouble.title">常见错误与故障排查</span>
+          </h4>
+          <div class="accordion-container">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span class="error-badge">404</span>
+                <span data-i18n="landing.sync_guide.err404.title">GitHub API Error: Not Found (404 错误)</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p data-i18n="landing.sync_guide.err404.desc"><strong>可能原因：</strong>仓库所有者 (Owner) 或仓库名称 (Repo) 拼写错误；或者 Token 没有访问该仓库的权限；或者协作者尚未接受仓库的合作邀请。<br><strong>解决方案：</strong>仔细核对 Owner 和 Repo 拼写；检查 Token 作用范围是否包含该仓库；协作者需先访问 <code>https://github.com/用户名/仓库名/invitations</code> 接受邀请。</p>
+              </div>
+            </div>
+            
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span class="error-badge">401</span>
+                <span data-i18n="landing.sync_guide.err401.title">GitHub API Error: Bad credentials (401 错误)</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p data-i18n="landing.sync_guide.err401.desc"><strong>可能原因：</strong>输入的 Personal Access Token（个人访问令牌）不正确、已失效或已过期。<br><strong>解决方案：</strong>前往 GitHub 开发者设置重新生成 Token，复制并完整填入，确保没有复制多余的空格或换行符。</p>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span class="error-badge">403</span>
+                <span data-i18n="landing.sync_guide.err403.title">GitHub API Error: Write access denied / Blocked by branch protection (403 错误)</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p data-i18n="landing.sync_guide.err403.desc"><strong>可能原因：</strong>Token 校验成功但没有写入权限（Classic 令牌未勾选 repo，或 Fine-grained 令牌未在 Contents 中赋予 Read and write）；或者主分支设置了分支保护规则，阻止了直接推送。<br><strong>解决方案：</strong>在 GitHub 修改该 Token 的权限，确保选中 repo 写入或 Contents 读写；或在仓库设置中暂时调整分支保护规则。</p>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span class="error-badge">Network</span>
+                <span data-i18n="landing.sync_guide.errnet.title">SSL / Connection Timeout / 网络连接失败</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p data-i18n="landing.sync_guide.errnet.desc"><strong>可能原因：</strong>本地网络访问 GitHub API 失败或超时；或者是 SSL 证书验证在部分本地中继代理中出错。<br><strong>解决方案：</strong>检查本地网络。如果使用了代理客户端，请确保其处于全局/规则代理状态并能正常连通 <code>api.github.com</code>；或参考文档调整 BepInEx/代理配置文件。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- Page Footer -->
