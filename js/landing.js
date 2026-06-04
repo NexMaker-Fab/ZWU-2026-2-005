@@ -1,4 +1,4 @@
-import { applyTranslations, getLang, setLang } from './i18n.js';
+import { applyTranslations, getLang, setLang } from './i18n.js?v=1.2.2';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Theme
