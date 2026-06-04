@@ -6,7 +6,7 @@ import { loadContent, saveToLocalStorage, exportAsJson, generateId, getTheme, se
 import { BlockEditor } from './editor.js';
 import { PageManager } from './pages.js';
 import { getGitHubSettings, saveGitHubSettings, isGitHubConfigured, saveToGitHub } from './github.js';
-import { applyTranslations, toggleLanguage, t, tLang, getLang } from './i18n.js';
+import { applyTranslations, toggleLanguage, t, tLang, getLang, setLang } from './i18n.js';
 
 class App {
   constructor() {
@@ -172,6 +172,11 @@ class App {
     this._loadPage(pageId);
     this.pageManager.activePageId = pageId;
     this.pageManager.render();
+    // Exit settings view if open
+    const settingsView = document.getElementById('settings-view');
+    if (settingsView && settingsView.style.display !== 'none') {
+      this._exitSettingsView();
+    }
   }
 
   _getNextPageTitle(lang) {
@@ -449,18 +454,51 @@ class App {
     modal.addEventListener('click', (e) => { if (e.target === modal) doClose(); }, { once: true });
   }
 
-  _showTrashView() {
+  _showSettingsView(tab) {
     document.getElementById('editor-container').style.display = 'none';
-    document.getElementById('trash-view').style.display = 'flex';
-    document.getElementById('sidebar-trash-btn').classList.add('active');
+    document.getElementById('settings-view').style.display = '';
+    // Update breadcrumb
+    document.getElementById('breadcrumb-page').textContent = t('settings.title');
     this.pageManager.render(); // deselect page
+    this._loadGitHubSettings();
     this._renderTrashList();
+    this._updatePrefCards();
+    this._renderTeamList();
+    if (tab) this._switchSettingsTab(tab);
   }
 
-  _exitTrashView() {
+  _exitSettingsView() {
     document.getElementById('editor-container').style.display = '';
-    document.getElementById('trash-view').style.display = 'none';
-    document.getElementById('sidebar-trash-btn').classList.remove('active');
+    document.getElementById('settings-view').style.display = 'none';
+    // Restore breadcrumb
+    const activeId = this.pageManager?.activePageId;
+    if (activeId) {
+      const page = this.data.pages.find(p => p.id === activeId);
+      if (page) document.getElementById('breadcrumb-page').textContent = page.title || t('placeholder.page');
+    }
+  }
+
+  _switchSettingsTab(tabName) {
+    document.querySelectorAll('.settings-nav-item').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+    document.querySelectorAll('.settings-section').forEach(sec => {
+      sec.classList.toggle('active', sec.dataset.section === tabName);
+    });
+    if (tabName === 'trash') this._renderTrashList();
+    if (tabName === 'team') this._renderTeamList();
+    if (tabName === 'preferences') this._updatePrefCards();
+  }
+
+  _updatePrefCards() {
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
+    document.querySelectorAll('[data-theme-choice]').forEach(card => {
+      card.classList.toggle('active', card.dataset.themeChoice === theme);
+    });
+    const lang = getLang();
+    document.querySelectorAll('[data-lang-choice]').forEach(card => {
+      card.classList.toggle('active', card.dataset.langChoice === lang);
+    });
   }
 
   _renderTrashList() {
@@ -532,7 +570,6 @@ class App {
     delete page.deletedAt;
     delete page.deletedBy;
 
-    // If parent no longer exists in active pages, restore to root
     if (page.parentId && !this.data.pages.some(p => p.id === page.parentId)) {
       page.parentId = null;
     }
@@ -540,7 +577,7 @@ class App {
     this.data.pages.push(page);
     this._updateTrashBadge();
     this.pageManager.load(this.data.pages, page.id);
-    this._exitTrashView();
+    this._exitSettingsView();
     this._loadPage(page.id);
     this._onContentUpdate();
     this._showToast('success', `📄 ${page.title || t('placeholder.page')}`);
@@ -620,28 +657,28 @@ class App {
     picker.classList.add('visible');
   }
 
-  // ─── Settings Modal ───────────────────────────
+  // ─── Settings View ─────────────────────────
 
   _showSettingsModal() {
-    document.getElementById('settings-modal').classList.add('visible');
-  }
-
-  _hideSettingsModal() {
-    document.getElementById('settings-modal').classList.remove('visible');
+    // Redirect to settings view (backward compatibility)
+    this._showSettingsView('sync');
   }
 
   _loadGitHubSettings() {
     const settings = getGitHubSettings();
-    document.getElementById('github-owner').value = settings.owner || '';
-    document.getElementById('github-repo').value = settings.repo || '';
-    document.getElementById('github-branch').value = settings.branch || 'main';
-    document.getElementById('github-token').value = settings.token || '';
-    // Load username into settings form
-    document.getElementById('settings-username').value = this._getUsername();
+    const ownerEl = document.getElementById('github-owner');
+    const repoEl = document.getElementById('github-repo');
+    const branchEl = document.getElementById('github-branch');
+    const tokenEl = document.getElementById('github-token');
+    const usernameEl = document.getElementById('settings-username');
+    if (ownerEl) ownerEl.value = settings.owner || '';
+    if (repoEl) repoEl.value = settings.repo || '';
+    if (branchEl) branchEl.value = settings.branch || 'main';
+    if (tokenEl) tokenEl.value = settings.token || '';
+    if (usernameEl) usernameEl.value = this._getUsername();
   }
 
   _onSettingsSaveClick() {
-    // Save username immediately
     const username = document.getElementById('settings-username').value.trim();
     if (username) {
       localStorage.setItem('teamflow_username', username);
@@ -650,13 +687,9 @@ class App {
 
     const token = document.getElementById('github-token').value.trim();
     if (token) {
-      // Show security warning modal if saving a token
-      document.getElementById('settings-modal').classList.remove('visible');
       document.getElementById('token-security-modal').classList.add('visible');
     } else {
-      // No token, save immediately
       this._continueSavingGitHubSettings();
-      this._hideSettingsModal();
     }
   }
 
@@ -670,6 +703,82 @@ class App {
     saveGitHubSettings(settings);
     document.getElementById('token-security-modal').classList.remove('visible');
     this._showToast('success', t('toast.settings.saved', 'Settings saved!'));
+  }
+
+  // ─── Team Management ──────────────────────
+
+  _getTeam() {
+    if (!this.data.team) this.data.team = [];
+    return this.data.team;
+  }
+
+  _addTeamMember(name, role) {
+    if (!name) return;
+    if (!this.data.team) this.data.team = [];
+    this.data.team.push({ id: Date.now().toString(36), name, role: role || '' });
+    saveToLocalStorage(this.data);
+    this._renderTeamList();
+    const escapeMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+    const safeName = name.replace(/[&<>"']/g, c => escapeMap[c]);
+    this._showToast('success', `👥 ${safeName}`);
+  }
+
+  _removeTeamMember(id) {
+    if (!this.data.team) return;
+    this.data.team = this.data.team.filter(m => m.id !== id);
+    saveToLocalStorage(this.data);
+    this._renderTeamList();
+  }
+
+  _renderTeamList() {
+    const listEl = document.getElementById('team-list');
+    if (!listEl) return;
+    const team = this._getTeam();
+
+    if (team.length === 0) {
+      listEl.innerHTML = `<div class="team-empty">${t('team.empty')}</div>`;
+      return;
+    }
+
+    listEl.innerHTML = '';
+    team.forEach(member => {
+      const row = document.createElement('div');
+      row.className = 'team-member-row';
+
+      // Sanitize: use textContent instead of innerHTML to prevent XSS
+      const initial = member.name ? member.name[0].toUpperCase() : '?';
+
+      const avatar = document.createElement('div');
+      avatar.className = 'team-member-avatar';
+      avatar.textContent = initial;
+
+      const info = document.createElement('div');
+      info.className = 'team-member-info';
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'team-member-name';
+      nameEl.textContent = member.name;
+
+      const roleEl = document.createElement('div');
+      roleEl.className = 'team-member-role';
+      roleEl.textContent = member.role || t('team.role.default');
+
+      info.appendChild(nameEl);
+      info.appendChild(roleEl);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'team-member-remove';
+      removeBtn.title = t('team.remove');
+      removeBtn.textContent = '✕';
+      removeBtn.addEventListener('click', () => {
+        this._removeTeamMember(member.id);
+      });
+
+      row.appendChild(avatar);
+      row.appendChild(info);
+      row.appendChild(removeBtn);
+      listEl.appendChild(row);
+    });
   }
 
   // ─── Toast Notifications ──────────────────────
@@ -816,8 +925,7 @@ class App {
   // ─── UI Event Binding ─────────────────────────
 
   _bindUIEvents() {
-    // Language toggle
-    document.getElementById('lang-toggle-btn').addEventListener('click', () => toggleLanguage());
+
 
     // Save buttons
     document.getElementById('save-local-btn').addEventListener('click', () => this._saveToLocal());
@@ -829,8 +937,54 @@ class App {
     // Add page
     document.getElementById('add-page-btn').addEventListener('click', () => this._addPage());
 
-    // Trash view
-    document.getElementById('sidebar-trash-btn').addEventListener('click', () => this._showTrashView());
+
+
+    // Quick add page button
+    document.getElementById('quick-add-page-btn')?.addEventListener('click', () => this._addPage());
+
+    // Quick import button
+    document.getElementById('quick-import-btn')?.addEventListener('click', () => {
+      document.getElementById('import-file-input')?.click();
+    });
+
+    // Import file handler
+    document.getElementById('import-file-input')?.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          if (!imported || !Array.isArray(imported.pages) || imported.pages.length === 0) {
+            throw new Error('Invalid import file: missing or empty pages array');
+          }
+          imported.trash = Array.isArray(imported.trash) ? imported.trash : [];
+          imported.team = Array.isArray(imported.team) ? imported.team : [];
+
+          this.data = imported;
+          const firstPageId = this.data.pages[0].id;
+          this.pageManager.load(this.data.pages, firstPageId);
+          this._loadPage(firstPageId);
+          saveToLocalStorage(this.data);
+          this._updatePageCount();
+          this._updateTrashBadge();
+          this._showToast('success', t('toast.import.success'));
+        } catch (err) {
+          this._showToast('error', t('toast.import.failed', { message: err.message }));
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    // Search clear button
+    document.getElementById('search-clear-btn')?.addEventListener('click', () => {
+      const searchInput = document.getElementById('page-search');
+      if (searchInput) {
+        searchInput.value = '';
+        this.pageManager.search('');
+      }
+    });
 
     // Quick add page button
     document.getElementById('quick-add-page-btn')?.addEventListener('click', () => this._addPage());
@@ -898,11 +1052,46 @@ class App {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this._toggleIconPicker(); }
     });
 
-    // Settings modal
-    document.getElementById('settings-btn').addEventListener('click', () => this._showSettingsModal());
-    document.getElementById('settings-close-btn').addEventListener('click', () => this._hideSettingsModal());
-    document.getElementById('settings-cancel-btn').addEventListener('click', () => this._hideSettingsModal());
+    // Settings view — nav tabs and back button
+    document.getElementById('settings-btn').addEventListener('click', () => this._showSettingsView('sync'));
+    document.getElementById('settings-back-btn')?.addEventListener('click', () => this._exitSettingsView());
     document.getElementById('settings-save-btn').addEventListener('click', () => this._onSettingsSaveClick());
+
+    // Settings tab switching
+    document.querySelectorAll('.settings-nav-item').forEach(btn => {
+      btn.addEventListener('click', () => this._switchSettingsTab(btn.dataset.tab));
+    });
+
+    // Preference cards — theme
+    document.querySelectorAll('[data-theme-choice]').forEach(card => {
+      card.addEventListener('click', () => {
+        const theme = card.dataset.themeChoice;
+        document.documentElement.setAttribute('data-theme', theme);
+        setTheme(theme);
+        this._updateThemeUI(theme);
+        this._updatePrefCards();
+        if (this.data?.site) this.data.site.theme = theme;
+      });
+    });
+
+    // Preference cards — language
+    document.querySelectorAll('[data-lang-choice]').forEach(card => {
+      card.addEventListener('click', () => {
+        const lang = card.dataset.langChoice;
+        localStorage.setItem('teamflow_lang', lang);
+        setLang(lang);
+        this._updatePrefCards();
+      });
+    });
+
+    // Team add
+    document.getElementById('team-add-btn')?.addEventListener('click', () => {
+      const nameInput = document.getElementById('team-name-input');
+      const roleInput = document.getElementById('team-role-input');
+      this._addTeamMember(nameInput.value.trim(), roleInput.value.trim());
+      nameInput.value = '';
+      roleInput.value = '';
+    });
 
     // Token security modal
     document.getElementById('token-security-cancel-btn').addEventListener('click', () => {
@@ -910,13 +1099,6 @@ class App {
     });
     document.getElementById('token-security-confirm-btn').addEventListener('click', () => {
       this._continueSavingGitHubSettings();
-    });
-
-    // Close modal on overlay click
-    document.getElementById('settings-modal').addEventListener('click', (e) => {
-      if (e.target.classList.contains('modal-overlay')) {
-        this._hideSettingsModal();
-      }
     });
 
     // Sidebar toggle (mobile)
