@@ -471,8 +471,9 @@ class App {
     document.getElementById('editor-container').style.display = '';
     document.getElementById('settings-view').style.display = 'none';
     // Restore breadcrumb
-    if (this.currentPageId) {
-      const page = this.data.pages.find(p => p.id === this.currentPageId);
+    const activeId = this.pageManager?.activePageId;
+    if (activeId) {
+      const page = this.data.pages.find(p => p.id === activeId);
       if (page) document.getElementById('breadcrumb-page').textContent = page.title || t('placeholder.page');
     }
   }
@@ -743,18 +744,39 @@ class App {
     team.forEach(member => {
       const row = document.createElement('div');
       row.className = 'team-member-row';
+
+      // Sanitize: use textContent instead of innerHTML to prevent XSS
       const initial = member.name ? member.name[0].toUpperCase() : '?';
-      row.innerHTML = `
-        <div class="team-member-avatar">${initial}</div>
-        <div class="team-member-info">
-          <div class="team-member-name">${member.name}</div>
-          <div class="team-member-role">${member.role || t('team.role.default')}</div>
-        </div>
-        <button class="team-member-remove" title="${t('team.remove')}">✕</button>
-      `;
-      row.querySelector('.team-member-remove').addEventListener('click', () => {
+
+      const avatar = document.createElement('div');
+      avatar.className = 'team-member-avatar';
+      avatar.textContent = initial;
+
+      const info = document.createElement('div');
+      info.className = 'team-member-info';
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'team-member-name';
+      nameEl.textContent = member.name;
+
+      const roleEl = document.createElement('div');
+      roleEl.className = 'team-member-role';
+      roleEl.textContent = member.role || t('team.role.default');
+
+      info.appendChild(nameEl);
+      info.appendChild(roleEl);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'team-member-remove';
+      removeBtn.title = t('team.remove');
+      removeBtn.textContent = '✕';
+      removeBtn.addEventListener('click', () => {
         this._removeTeamMember(member.id);
       });
+
+      row.appendChild(avatar);
+      row.appendChild(info);
+      row.appendChild(removeBtn);
       listEl.appendChild(row);
     });
   }
@@ -933,16 +955,20 @@ class App {
       reader.onload = (ev) => {
         try {
           const imported = JSON.parse(ev.target.result);
-          if (imported.pages) {
-            this.data = imported;
-            const firstPageId = this.data.pages[0]?.id;
-            this.pageManager.load(this.data.pages, firstPageId);
-            this._loadPage(firstPageId);
-            saveToLocalStorage(this.data);
-            this._updatePageCount();
-            this._updateTrashBadge();
-            this._showToast('success', t('toast.import.success'));
+          if (!imported || !Array.isArray(imported.pages) || imported.pages.length === 0) {
+            throw new Error('Invalid import file: missing or empty pages array');
           }
+          imported.trash = Array.isArray(imported.trash) ? imported.trash : [];
+          imported.team = Array.isArray(imported.team) ? imported.team : [];
+
+          this.data = imported;
+          const firstPageId = this.data.pages[0].id;
+          this.pageManager.load(this.data.pages, firstPageId);
+          this._loadPage(firstPageId);
+          saveToLocalStorage(this.data);
+          this._updatePageCount();
+          this._updateTrashBadge();
+          this._showToast('success', t('toast.import.success'));
         } catch (err) {
           this._showToast('error', t('toast.import.failed', { message: err.message }));
         }
