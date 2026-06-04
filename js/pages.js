@@ -1,12 +1,14 @@
 import { t, tLang } from './i18n.js';
 
 export class PageManager {
-  constructor({ pageListEl, onPageSelect, onPageAdd, onPageDelete, onSubPageAdd }) {
+  constructor({ pageListEl, favListEl, onPageSelect, onPageAdd, onPageDelete, onSubPageAdd, onFavoriteToggle }) {
     this.pageListEl = pageListEl;
+    this.favListEl = favListEl;
     this.onPageSelect = onPageSelect || (() => {});
     this.onPageAdd = onPageAdd || (() => {});
     this.onPageDelete = onPageDelete || (() => {});
     this.onSubPageAdd = onSubPageAdd || (() => {});
+    this.onFavoriteToggle = onFavoriteToggle || (() => {});
     this.pages = [];
     this.activePageId = null;
     this.searchTerm = '';
@@ -112,6 +114,63 @@ export class PageManager {
       // Tree mode: render recursively from root
       this._renderTree(null, 0);
     }
+
+    this.renderFavorites();
+  }
+
+  /** Render favorites list */
+  renderFavorites() {
+    if (!this.favListEl) return;
+    this.favListEl.innerHTML = '';
+
+    const favPages = this.pages.filter(p => p.favorite === true);
+    favPages.forEach(page => {
+      const item = document.createElement('div');
+      item.className = `page-item${page.id === this.activePageId ? ' active' : ''}`;
+      item.dataset.id = page.id;
+      item.style.setProperty('--nest-level', 0);
+
+      // Chevron toggle placeholder (for alignment)
+      const toggle = document.createElement('span');
+      toggle.className = 'page-item-toggle';
+      item.appendChild(toggle);
+
+      // Icon
+      const icon = document.createElement('span');
+      icon.className = 'page-item-icon';
+      icon.textContent = page.icon || '📄';
+      item.appendChild(icon);
+
+      // Name
+      const name = document.createElement('span');
+      name.className = 'page-item-name';
+      name.textContent = page.title || tLang('placeholder.page', page.lang || 'en');
+      item.appendChild(name);
+
+      // Remove from favorites button
+      const actions = document.createElement('span');
+      actions.className = 'page-item-actions';
+
+      const removeFavBtn = document.createElement('button');
+      removeFavBtn.className = 'page-item-delete';
+      removeFavBtn.innerHTML = '★';
+      removeFavBtn.title = t('sidebar.favorites');
+      removeFavBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.onFavoriteToggle(page.id, false);
+      });
+      actions.appendChild(removeFavBtn);
+      item.appendChild(actions);
+
+      // Click to select
+      item.addEventListener('click', (e) => {
+        if (!e.target.closest('.page-item-delete')) {
+          this.setActive(page.id);
+        }
+      });
+
+      this.favListEl.appendChild(item);
+    });
   }
 
   /** Render flat search results */

@@ -41,10 +41,12 @@ class App {
     // Initialize page manager
     this.pageManager = new PageManager({
       pageListEl: document.getElementById('page-list'),
+      favListEl: document.getElementById('fav-page-list'),
       onPageSelect: (pageId) => this._switchPage(pageId),
       onPageAdd: () => {},
       onPageDelete: (pageId) => this._deletePage(pageId),
-      onSubPageAdd: (parentId) => this._addPage(parentId)
+      onSubPageAdd: (parentId) => this._addPage(parentId),
+      onFavoriteToggle: (pageId, isFav) => this._togglePageFavorite(pageId, isFav)
     });
 
     // Load pages
@@ -109,6 +111,9 @@ class App {
     // Update icon display in page header
     const iconDisplay = document.getElementById('page-icon-display');
     if (iconDisplay) iconDisplay.textContent = page.icon || '📄';
+
+    // Update favorite toggle button state
+    this._updateFavoriteButton(page);
 
     // Update breadcrumb with ancestor chain
     this._updateBreadcrumb(page);
@@ -304,6 +309,23 @@ class App {
     this._onContentUpdate();
 
     this._showToast('success', t('trash.confirm.ok'));
+  }
+
+  _togglePageFavorite(pageId, isFav) {
+    const page = this.data.pages.find(p => p.id === pageId);
+    if (!page) return;
+    page.favorite = isFav !== undefined ? isFav : !page.favorite;
+    this._onContentUpdate();
+    this.pageManager.render();
+    this._updateFavoriteButton(page);
+  }
+
+  _updateFavoriteButton(page) {
+    const favBtn = document.getElementById('favorite-toggle-btn');
+    if (favBtn) {
+      favBtn.textContent = page.favorite ? '★' : '☆';
+      favBtn.classList.toggle('active', !!page.favorite);
+    }
   }
 
   _syncCurrentPage() {
@@ -959,6 +981,22 @@ class App {
 
     // Add page
     document.getElementById('add-page-btn').addEventListener('click', () => this._addPage());
+
+    // Favorite toggle button in page header
+    document.getElementById('favorite-toggle-btn')?.addEventListener('click', () => {
+      const page = this.pageManager.getActivePage();
+      if (page) {
+        this._togglePageFavorite(page.id);
+      }
+    });
+
+    // Add to favorites button in sidebar header
+    document.getElementById('add-fav-btn')?.addEventListener('click', () => {
+      const page = this.pageManager.getActivePage();
+      if (page) {
+        this._togglePageFavorite(page.id, true);
+      }
+    });
 
 
 
