@@ -64,6 +64,8 @@ const translations = {
     'toast.settings.saved': 'GitHub settings saved',
     'toast.confirm.delete': 'Delete "{title}"?',
     'toast.delete_page': 'Delete page',
+    'toast.import.success': '✅ Import successful',
+    'toast.import.failed': 'Import failed: {message}',
 
     // Tooltips
     'sidebar.toggle': 'Toggle sidebar',
@@ -187,6 +189,8 @@ const translations = {
     'toast.settings.saved': 'GitHub 配置已保存',
     'toast.confirm.delete': '确定要删除 "{title}" 吗？',
     'toast.delete_page': '删除页面',
+    'toast.import.success': '✅ 导入成功',
+    'toast.import.failed': '导入失败: {message}',
 
     // Tooltips
     'sidebar.toggle': '收起/展开侧边栏',

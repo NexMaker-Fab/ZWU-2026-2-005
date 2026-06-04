@@ -856,10 +856,10 @@ class App {
             saveToLocalStorage(this.data);
             this._updatePageCount();
             this._updateTrashBadge();
-            this._showToast('success', '✅ 导入成功');
+            this._showToast('success', t('toast.import.success'));
           }
         } catch (err) {
-          this._showToast('error', '导入失败: ' + err.message);
+          this._showToast('error', t('toast.import.failed', { message: err.message }));
         }
       };
       reader.readAsText(file);
