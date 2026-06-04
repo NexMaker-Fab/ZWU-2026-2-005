@@ -51,6 +51,7 @@ class App {
     const firstPageId = this.data.pages[0]?.id;
     this.pageManager.load(this.data.pages, firstPageId);
     this._loadPage(firstPageId);
+    this._renderFavorites();
 
     // Bind all UI events
     this._bindUIEvents();
@@ -78,6 +79,7 @@ class App {
       }
       // Also update sidebar user anonymous label if no name set
       this._updateTrashBadge();
+      this._renderFavorites();
     });
 
     // Update trash badge on load
@@ -277,6 +279,7 @@ class App {
     }
     this._exitTrashView();
     this.pageManager.load(this.data.pages, nextActiveId);
+    this._renderFavorites();
     this._loadPage(nextActiveId);
     this._onContentUpdate();
 
@@ -300,6 +303,7 @@ class App {
 
     // Update sidebar
     this.pageManager.render();
+    this._renderFavorites();
   }
 
   // ─── Content Update & Save ────────────────────
@@ -552,6 +556,83 @@ class App {
   }
 
   // ─── Sidebar ────────────────────────────────────
+
+  _ensureFavorites() {
+    if (!Array.isArray(this.data.favorites)) {
+      this.data.favorites = [];
+    }
+    const validIds = new Set(this.data.pages.map(p => p.id));
+    this.data.favorites = this.data.favorites.filter(id => validIds.has(id));
+  }
+
+  _addActivePageToFavorites() {
+    const pageId = this.pageManager.activePageId;
+    if (!pageId) return;
+    this._ensureFavorites();
+    if (this.data.favorites.includes(pageId)) return;
+    this.data.favorites.push(pageId);
+    saveToLocalStorage(this.data);
+    this._renderFavorites();
+  }
+
+  _removeFavoritePage(pageId) {
+    this._ensureFavorites();
+    this.data.favorites = this.data.favorites.filter(id => id !== pageId);
+    saveToLocalStorage(this.data);
+    this._renderFavorites();
+  }
+
+  _renderFavorites() {
+    const listEl = document.getElementById('fav-page-list');
+    if (!listEl || !this.pageManager) return;
+    this._ensureFavorites();
+    listEl.innerHTML = '';
+
+    this.data.favorites.forEach(pageId => {
+      const page = this.data.pages.find(p => p.id === pageId);
+      if (!page) return;
+
+      const item = document.createElement('div');
+      item.className = `page-item${page.id === this.pageManager.activePageId ? ' active' : ''}`;
+      item.style.setProperty('--nest-level', 0);
+
+      const toggle = document.createElement('span');
+      toggle.className = 'page-item-toggle';
+      item.appendChild(toggle);
+
+      const icon = document.createElement('span');
+      icon.className = 'page-item-icon';
+      icon.textContent = page.icon || '📄';
+      item.appendChild(icon);
+
+      const name = document.createElement('span');
+      name.className = 'page-item-name';
+      name.textContent = page.title || tLang('placeholder.page', page.lang || 'en');
+      item.appendChild(name);
+
+      const actions = document.createElement('span');
+      actions.className = 'page-item-actions';
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'page-item-delete';
+      removeBtn.innerHTML = '×';
+      removeBtn.title = t('toast.delete_page');
+      removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this._removeFavoritePage(page.id);
+      });
+      actions.appendChild(removeBtn);
+
+      item.appendChild(actions);
+
+      item.addEventListener('click', () => {
+        this.pageManager.setActive(page.id);
+        this._exitTrashView();
+      });
+
+      listEl.appendChild(item);
+    });
+  }
 
   _initTheme() {
     const theme = getTheme();
@@ -826,6 +907,7 @@ class App {
 
     // Add page
     document.getElementById('add-page-btn').addEventListener('click', () => this._addPage());
+    document.getElementById('add-fav-btn')?.addEventListener('click', () => this._addActivePageToFavorites());
 
     // Trash view
     document.getElementById('sidebar-trash-btn').addEventListener('click', () => this._showTrashView());
@@ -851,6 +933,7 @@ class App {
             const firstPageId = this.data.pages[0]?.id;
             this.pageManager.load(this.data.pages, firstPageId);
             this._loadPage(firstPageId);
+            this._renderFavorites();
             saveToLocalStorage(this.data);
             this._updatePageCount();
             this._updateTrashBadge();
