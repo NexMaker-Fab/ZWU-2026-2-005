@@ -61,7 +61,12 @@
       <!-- Pages populated by JS -->
     </nav>
 
-
+    <!-- Trash sidebar entry -->
+    <button class="sidebar-trash-btn" id="sidebar-trash-btn">
+      <span>🗑️</span>
+      <span data-i18n="trash.title">回收站</span>
+      <span class="trash-count-badge" id="trash-count-badge" style="display:none"></span>
+    </button>
 
     <div class="sidebar-footer">
       <button type="button" class="sidebar-user-info" id="sidebar-user-btn">
@@ -99,6 +104,7 @@
         </div>
       </div>
       <div class="topbar-actions">
+        <button class="btn btn-ghost btn-sm btn-lang" id="lang-toggle-btn" title="English / 中文" style="font-weight: 600;">EN/中</button>
         <button class="btn btn-secondary btn-sm" id="save-local-btn">
           <span>💾</span>
           <span class="btn-label" data-i18n="save.local">Save to Local</span>
@@ -134,113 +140,14 @@
       </div>
     </div>
 
-    <!-- Settings View (secondary page) -->
-    <div class="settings-view" id="settings-view" style="display:none">
-      <div class="settings-layout">
-        <nav class="settings-nav">
-          <div class="settings-nav-header">
-            <button class="settings-back-btn" id="settings-back-btn">← <span data-i18n="settings.back">返回</span></button>
-            <h3 data-i18n="settings.title">设置</h3>
-          </div>
-          <button class="settings-nav-item active" data-tab="sync">
-            <span class="settings-nav-icon">🔄</span>
-            <span data-i18n="settings.tab.sync">同步配置</span>
-          </button>
-          <button class="settings-nav-item" data-tab="trash">
-            <span class="settings-nav-icon">🗑️</span>
-            <span data-i18n="settings.tab.trash">回收站</span>
-            <span class="trash-count-badge" id="trash-count-badge" style="display:none"></span>
-          </button>
-          <button class="settings-nav-item" data-tab="preferences">
-            <span class="settings-nav-icon">🎨</span>
-            <span data-i18n="settings.tab.preferences">偏好设置</span>
-          </button>
-          <button class="settings-nav-item" data-tab="team">
-            <span class="settings-nav-icon">👥</span>
-            <span data-i18n="settings.tab.team">团队</span>
-          </button>
-        </nav>
-        <div class="settings-panel">
-          <!-- Sync Config -->
-          <div class="settings-section active" data-section="sync">
-            <h2 data-i18n="settings.tab.sync">同步配置</h2>
-            <p class="settings-section-desc" data-i18n="settings.sync.desc">配置 GitHub 仓库信息，将内容同步至远端仓库。</p>
-            <div class="settings-form">
-              <div class="form-group">
-                <label class="form-label" for="settings-username" data-i18n="settings.username">显示名称</label>
-                <input type="text" class="form-input" id="settings-username" data-i18n-placeholder="settings.username.placeholder" placeholder="e.g. Zhang San">
-                <p class="form-hint" data-i18n="settings.username.hint">新建页面时会作为作者显示。</p>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="github-owner" data-i18n="settings.owner">仓库所有者</label>
-                <input type="text" class="form-input" id="github-owner" placeholder="e.g. NexMaker-Fab">
-                <p class="form-hint" data-i18n="settings.owner.hint">您的 GitHub 用户名或组织名</p>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="github-repo" data-i18n="settings.repo">仓库名称</label>
-                <input type="text" class="form-input" id="github-repo" placeholder="e.g. ZWU-2026-2-005">
-                <p class="form-hint" data-i18n="settings.repo.hint">存储内容的 Github 仓库名</p>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="github-branch" data-i18n="settings.branch">分支</label>
-                <input type="text" class="form-input" id="github-branch" placeholder="main" value="main">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="github-token" data-i18n="settings.token">GitHub Token</label>
-                <input type="password" class="form-input" id="github-token" placeholder="ghp_xxxxxxxxxxxx">
-                <p class="form-hint" data-i18n="settings.token.hint">⚠️ Token 代表该仓库完整权限。</p>
-              </div>
-              <button class="btn btn-primary" id="settings-save-btn" data-i18n="settings.save">保存设置</button>
-            </div>
-          </div>
-          <!-- Trash -->
-          <div class="settings-section" data-section="trash">
-            <h2 data-i18n="settings.tab.trash">回收站</h2>
-            <p class="settings-section-desc" data-i18n="trash.hint">页面删除后在此保留 3 天，超期后自动清除。</p>
-            <div class="trash-list" id="trash-list"></div>
-          </div>
-          <!-- Preferences -->
-          <div class="settings-section" data-section="preferences">
-            <h2 data-i18n="settings.tab.preferences">偏好设置</h2>
-            <div class="pref-group">
-              <h4 data-i18n="pref.theme.title">主题</h4>
-              <div class="pref-cards">
-                <button class="pref-card" data-theme-choice="light">
-                  <span class="pref-card-icon">☀️</span>
-                  <span data-i18n="pref.theme.light">浅色模式</span>
-                </button>
-                <button class="pref-card" data-theme-choice="dark">
-                  <span class="pref-card-icon">🌙</span>
-                  <span data-i18n="pref.theme.dark">深色模式</span>
-                </button>
-              </div>
-            </div>
-            <div class="pref-group">
-              <h4 data-i18n="pref.lang.title">语言</h4>
-              <div class="pref-cards">
-                <button class="pref-card" data-lang-choice="zh">
-                  <span class="pref-card-icon">🇨🇳</span>
-                  <span data-i18n="pref.lang.zh">中文</span>
-                </button>
-                <button class="pref-card" data-lang-choice="en">
-                  <span class="pref-card-icon">🇺🇸</span>
-                  <span data-i18n="pref.lang.en">English</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- Team -->
-          <div class="settings-section" data-section="team">
-            <h2 data-i18n="settings.tab.team">团队</h2>
-            <p class="settings-section-desc" data-i18n="team.desc">管理团队成员，成员信息将同步至 GitHub。</p>
-            <div class="team-add-form" id="team-add-form">
-              <input type="text" class="form-input" id="team-name-input" data-i18n-placeholder="team.name.placeholder" placeholder="姓名">
-              <input type="text" class="form-input" id="team-role-input" data-i18n-placeholder="team.role.placeholder" placeholder="角色，如 开发者">
-              <button class="btn btn-primary btn-sm" id="team-add-btn" data-i18n="team.add">添加</button>
-            </div>
-            <div class="team-list" id="team-list"></div>
-          </div>
-        </div>
+    <!-- Trash View (shown instead of editor when viewing trash) -->
+    <div class="trash-view" id="trash-view" style="display:none">
+      <div class="trash-view-header">
+        <h2>🗑️ <span data-i18n="trash.title">回收站</span></h2>
+        <p class="trash-view-hint" data-i18n="trash.hint">页面删除后在此保留 3 天，超期后自动清除。</p>
+      </div>
+      <div class="trash-list" id="trash-list">
+        <!-- Populated by JS -->
       </div>
     </div>
 
@@ -318,7 +225,45 @@
     </div>
   </div>
 
-
+  <!-- ===== SETTINGS MODAL ===== -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" data-i18n="settings.title">Settings</h2>
+        <button class="modal-close" id="settings-close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="settings-username" data-i18n="settings.username">Your Display Name</label>
+          <input type="text" class="form-input" id="settings-username" data-i18n-placeholder="settings.username.placeholder" placeholder="e.g. Zhang San">
+          <p class="form-hint" data-i18n="settings.username.hint">Shown as author when creating pages.</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="github-owner" data-i18n="settings.owner">Repository Owner</label>
+          <input type="text" class="form-input" id="github-owner" placeholder="e.g. NexMaker-Fab">
+          <p class="form-hint" data-i18n="settings.owner.hint">GitHub username or organization name</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="github-repo" data-i18n="settings.repo">Repository Name</label>
+          <input type="text" class="form-input" id="github-repo" placeholder="e.g. ZWU-2026-2-005">
+          <p class="form-hint" data-i18n="settings.repo.hint">The repository where your content is stored</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="github-branch" data-i18n="settings.branch">Branch</label>
+          <input type="text" class="form-input" id="github-branch" placeholder="main" value="main">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="github-token" data-i18n="settings.token">GitHub Personal Access Token</label>
+          <input type="password" class="form-input" id="github-token" placeholder="ghp_xxxxxxxxxxxx">
+          <p class="form-hint" data-i18n="settings.token.hint">⚠️ Token represents full access. Stored in localStorage. Needs 'repo' scope.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="settings-cancel-btn" data-i18n="settings.cancel">Cancel</button>
+        <button class="btn btn-primary" id="settings-save-btn" data-i18n="settings.save">Save Settings</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== ICON PICKER ===== -->
   <div class="icon-picker" id="icon-picker">
