@@ -1,15 +1,17 @@
 import { t, tLang } from './i18n.js';
 
 export class PageManager {
-  constructor({ pageListEl, onPageSelect, onPageAdd, onPageDelete, onSubPageAdd }) {
+  constructor({ pageListEl, onPageSelect, onPageAdd, onPageDelete, onSubPageAdd, onReorder }) {
     this.pageListEl = pageListEl;
     this.onPageSelect = onPageSelect || (() => {});
     this.onPageAdd = onPageAdd || (() => {});
     this.onPageDelete = onPageDelete || (() => {});
     this.onSubPageAdd = onSubPageAdd || (() => {});
+    this.onReorder = onReorder || (() => {});
     this.pages = [];
     this.activePageId = null;
     this.searchTerm = '';
+    this.draggedPageId = null;
 
     // Load expanded state from localStorage
     try {
@@ -213,7 +215,107 @@ export class PageManager {
       }
     });
 
+    // Drag-and-drop event listeners
+    item.draggable = true;
+
+    item.addEventListener('dragstart', (e) => {
+      if (e.target.closest('.page-item-delete') || e.target.closest('.page-item-add-child') || e.target.closest('.page-item-toggle')) {
+        e.preventDefault();
+        return;
+      }
+      this.draggedPageId = page.id;
+      item.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', page.id);
+    });
+
+    item.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (!this.draggedPageId || this.draggedPageId === page.id) return;
+      if (this._isDescendant(this.draggedPageId, page.id)) return;
+
+      const rect = item.getBoundingClientRect();
+      const relativeY = (e.clientY - rect.top) / rect.height;
+
+      // Clear all drag indicators on list
+      this.pageListEl.querySelectorAll('.page-item').forEach(el => {
+        el.classList.remove('drag-over-top', 'drag-over-bottom', 'drag-over-inner');
+      });
+
+      if (relativeY < 0.3) {
+        item.classList.add('drag-over-top');
+      } else if (relativeY > 0.7) {
+        item.classList.add('drag-over-bottom');
+      } else {
+        item.classList.add('drag-over-inner');
+      }
+      e.dataTransfer.dropEffect = 'move';
+    });
+
+    item.addEventListener('dragleave', () => {
+      item.classList.remove('drag-over-top', 'drag-over-bottom', 'drag-over-inner');
+    });
+
+    item.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (!this.draggedPageId || this.draggedPageId === page.id) return;
+      if (this._isDescendant(this.draggedPageId, page.id)) return;
+
+      const rect = item.getBoundingClientRect();
+      const relativeY = (e.clientY - rect.top) / rect.height;
+
+      // Find drag source and target index in pages array
+      const dragIdx = this.pages.findIndex(p => p.id === this.draggedPageId);
+      const draggedPage = this.pages[dragIdx];
+
+      // Remove from old position
+      this.pages.splice(dragIdx, 1);
+
+      if (relativeY < 0.3) {
+        // Move before target (same parent)
+        draggedPage.parentId = page.parentId;
+        let targetIdx = this.pages.findIndex(p => p.id === page.id);
+        this.pages.splice(targetIdx, 0, draggedPage);
+      } else if (relativeY > 0.7) {
+        // Move after target (same parent)
+        draggedPage.parentId = page.parentId;
+        let targetIdx = this.pages.findIndex(p => p.id === page.id);
+        this.pages.splice(targetIdx + 1, 0, draggedPage);
+      } else {
+        // Move inside target (as child)
+        draggedPage.parentId = page.id;
+        this._expandedIds.add(page.id);
+        this._saveExpandedState();
+        let targetIdx = this.pages.findIndex(p => p.id === page.id);
+        this.pages.splice(targetIdx + 1, 0, draggedPage);
+      }
+
+      this.pageListEl.querySelectorAll('.page-item').forEach(el => {
+        el.classList.remove('drag-over-top', 'drag-over-bottom', 'drag-over-inner', 'dragging');
+      });
+
+      this.draggedPageId = null;
+      this.render();
+      this.onReorder();
+    });
+
+    item.addEventListener('dragend', () => {
+      this.draggedPageId = null;
+      this.pageListEl.querySelectorAll('.page-item').forEach(el => {
+        el.classList.remove('drag-over-top', 'drag-over-bottom', 'drag-over-inner', 'dragging');
+      });
+    });
+
     return item;
+  }
+
+  _isDescendant(parentPageId, childPageId) {
+    let current = this.pages.find(p => p.id === childPageId);
+    while (current && current.parentId) {
+      if (current.parentId === parentPageId) return true;
+      current = this.pages.find(p => p.id === current.parentId);
+    }
+    return false;
   }
 
   /** Update a page's title/icon */

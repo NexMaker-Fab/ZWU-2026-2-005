@@ -44,7 +44,8 @@ class App {
       onPageSelect: (pageId) => this._switchPage(pageId),
       onPageAdd: () => {},
       onPageDelete: (pageId) => this._deletePage(pageId),
-      onSubPageAdd: (parentId) => this._addPage(parentId)
+      onSubPageAdd: (parentId) => this._addPage(parentId),
+      onReorder: () => this._onContentUpdate()
     });
 
     // Load pages
