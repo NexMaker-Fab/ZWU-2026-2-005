@@ -14,6 +14,117 @@
 </head>
 <body>
 
+  <!-- ===== LANDING PAGE ===== -->
+  <div class="landing-page" id="landing-page">
+    <div class="landing-content">
+      <!-- Hero Section -->
+      <div class="landing-hero">
+        <div class="landing-badge" data-i18n="landing.badge">✨ TeamFlow Wiki v1.2</div>
+        <h1 class="landing-title-gradient">TeamFlow Wiki</h1>
+        <p class="landing-subtitle" data-i18n="landing.subtitle">为现代开发团队打造的轻量级、卡片模块化协作知识库</p>
+        <div class="landing-actions">
+          <button class="btn btn-primary btn-lg" id="enter-wiki-btn">
+            <span class="btn-icon">🚀</span> <span data-i18n="landing.action.enter">进入项目</span>
+          </button>
+          <button class="btn btn-secondary btn-lg" id="landing-settings-btn">
+            <span class="btn-icon">⚙️</span> <span data-i18n="landing.action.settings">配置同步</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="landing-grid">
+        <!-- Build Team -->
+        <div class="landing-card">
+          <div class="landing-card-header">
+            <span class="landing-card-icon">👥</span>
+            <h3 data-i18n="landing.team.title">项目构建成员</h3>
+          </div>
+          <p class="landing-card-desc" data-i18n="landing.team.desc">感谢为 TeamFlow Wiki 项目付出心血的开发与设计小组成员：</p>
+          
+          <div class="landing-team-grid">
+            <div class="landing-member-item">
+              <div class="landing-member-avatar gradient-purple">B</div>
+              <div class="landing-member-info">
+                <div class="landing-member-name">bobwu0214</div>
+                <div class="landing-member-role" data-i18n="landing.team.role.lead">项目负责人 / 核心开发</div>
+              </div>
+            </div>
+            <div class="landing-member-item">
+              <div class="landing-member-avatar gradient-blue">H</div>
+              <div class="landing-member-info">
+                <div class="landing-member-name">Hkzzzzzzz</div>
+                <div class="landing-member-role" data-i18n="landing.team.role.frontend">前端架构师</div>
+              </div>
+            </div>
+            <div class="landing-member-item">
+              <div class="landing-member-avatar gradient-green">X</div>
+              <div class="landing-member-info">
+                <div class="landing-member-name">xiping Chen</div>
+                <div class="landing-member-role" data-i18n="landing.team.role.designer">UI / 交互设计师</div>
+              </div>
+            </div>
+            <div class="landing-member-item">
+              <div class="landing-member-avatar gradient-orange">A</div>
+              <div class="landing-member-info">
+                <div class="landing-member-name">Antigravity</div>
+                <div class="landing-member-role" data-i18n="landing.team.role.ai">AI 配对程序员</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Project Context -->
+          <div class="landing-context-box">
+            <div class="landing-context-title">
+              <span class="landing-context-icon">🎮</span>
+              <span data-i18n="landing.context.title">历史战绩: Blue Prince (2025) 汉化项目</span>
+            </div>
+            <p class="landing-context-text" data-i18n="landing.context.desc">小组曾成功使用 Unity IL2CPP、BepInEx 及 XUnity.AutoTranslator，通过重制 TMP 1.4.0 字体与配置自研代理成功汉化该大作，本 Wiki 正是小组协作沉淀的结晶。</p>
+          </div>
+        </div>
+
+        <!-- Usage Guide -->
+        <div class="landing-card">
+          <div class="landing-card-header">
+            <span class="landing-card-icon">📖</span>
+            <h3 data-i18n="landing.guide.title">使用指南</h3>
+          </div>
+          <p class="landing-card-desc" data-i18n="landing.guide.desc">快速掌握 TeamFlow Wiki 的核心协作工作流：</p>
+          
+          <div class="landing-guide-steps">
+            <div class="landing-guide-step-item">
+              <div class="landing-step-num">1</div>
+              <div class="landing-step-content">
+                <h4 data-i18n="landing.guide.step1.title">模块化块级编辑</h4>
+                <p data-i18n="landing.guide.step1.desc">点击任意文本块即可直接编辑，按 Enter 键换行。每一行都是独立积木，可自由修改。</p>
+              </div>
+            </div>
+            <div class="landing-guide-step-item">
+              <div class="landing-step-num">2</div>
+              <div class="landing-step-content">
+                <h4 data-i18n="landing.guide.step2.title">斜杠命令 (Slash Command)</h4>
+                <p data-i18n="landing.guide.step2.desc">在新行输入 / 即可呼出快捷菜单，一键插入标题、分隔线、图片或普通段落。</p>
+              </div>
+            </div>
+            <div class="landing-guide-step-item">
+              <div class="landing-step-num">3</div>
+              <div class="landing-step-content">
+                <h4 data-i18n="landing.guide.step3.title">拖拽手柄排序</h4>
+                <p data-i18n="landing.guide.step3.desc">悬停于每一行左侧可显现 ⠿ 手柄，长按即可上下拖拽块重新排布内容顺序。</p>
+              </div>
+            </div>
+            <div class="landing-guide-step-item">
+              <div class="landing-step-num">4</div>
+              <div class="landing-step-content">
+                <h4 data-i18n="landing.guide.step4.title">GitHub 自动云同步</h4>
+                <p data-i18n="landing.guide.step4.desc">在设置 (⚙️) 中输入 GitHub Token 及仓库信息后，即可免安装 Git，一键向远端推送更新。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Sidebar Overlay (mobile) -->
   <div class="sidebar-overlay" id="sidebar-overlay"></div>
 

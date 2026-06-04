@@ -14,7 +14,6 @@ class App {
     this.editor = null;
     this.pageManager = null;
     this.saveDebounceTimer = null;
-    this.welcomeEditMode = false;
   }
 
   async init() {
@@ -78,10 +77,6 @@ class App {
       if (settingsView && settingsView.style.display !== 'none' && isTrashActive) {
         this._renderTrashList();
       }
-      // Re-render welcome dashboard on language change if active
-      if (this.pageManager?.activePageId === 'welcome' && !this.welcomeEditMode) {
-        this._renderWelcomeDashboard();
-      }
       // Also update sidebar user anonymous label if no name set
       this._updateTrashBadge();
       this._updatePageCount();
@@ -121,16 +116,6 @@ class App {
 
     // Update page meta (author + date)
     this._updatePageMeta(page);
-
-    // Render Welcome Dashboard if applicable
-    if (pageId === 'welcome' && !this.welcomeEditMode) {
-      this._renderWelcomeDashboard();
-      return;
-    }
-
-    // Show editor header if previously hidden
-    const headerEl = document.querySelector('.editor-header');
-    if (headerEl) headerEl.style.display = '';
 
     // Load blocks into editor
     this.editor.load(page.blocks || [], page.lang || 'en');
@@ -176,11 +161,6 @@ class App {
   }
 
   _switchPage(pageId) {
-    // Reset welcome edit mode when navigating to welcome page
-    if (pageId === 'welcome') {
-      this.welcomeEditMode = false;
-    }
-
     // NOTE: _syncCurrentPage() is intentionally NOT called here.
     // pages.js setActive() calls onPageSelect (this function) BEFORE updating
     // activePageId, so _syncCurrentPage has already saved the old page correctly
@@ -687,150 +667,6 @@ class App {
     picker.classList.add('visible');
   }
 
-  // ─── Welcome Dashboard ─────────────────────
-
-  _renderWelcomeDashboard() {
-    const editorEl = document.getElementById('editor');
-    if (!editorEl) return;
-
-    // Hide editor header for a clean presentation look
-    const headerEl = document.querySelector('.editor-header');
-    if (headerEl) headerEl.style.display = 'none';
-
-    editorEl.innerHTML = this._getWelcomeDashboardHtml();
-
-    // Bind dashboard actions
-    document.getElementById('dashboard-start-btn')?.addEventListener('click', () => {
-      this._addPage();
-    });
-    document.getElementById('dashboard-settings-btn')?.addEventListener('click', () => {
-      this._showSettingsView('sync');
-    });
-    document.getElementById('dashboard-edit-welcome-btn')?.addEventListener('click', () => {
-      this.welcomeEditMode = true;
-      this._loadPage('welcome');
-    });
-  }
-
-  _getWelcomeDashboardHtml() {
-    return `
-      <div class="welcome-dashboard">
-        <!-- Hero Section -->
-        <div class="welcome-hero">
-          <div class="welcome-badge">${t('welcome.badge')}</div>
-          <h1 class="welcome-title-gradient">TeamFlow Wiki</h1>
-          <p class="welcome-subtitle">${t('welcome.subtitle')}</p>
-          <div class="welcome-actions">
-            <button class="btn btn-primary btn-lg" id="dashboard-start-btn">
-              <span class="btn-icon">✍️</span> <span>${t('welcome.action.start')}</span>
-            </button>
-            <button class="btn btn-secondary btn-lg" id="dashboard-settings-btn">
-              <span class="btn-icon">⚙️</span> <span>${t('welcome.action.settings')}</span>
-            </button>
-            <button class="btn btn-tertiary btn-lg" id="dashboard-edit-welcome-btn">
-              <span class="btn-icon">🛠️</span> <span>${t('welcome.action.edit_layout')}</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="dashboard-grid">
-          <!-- Build Team -->
-          <div class="dashboard-card team-card-panel">
-            <div class="card-header">
-              <span class="card-header-icon">👥</span>
-              <h3>${t('welcome.team.title')}</h3>
-            </div>
-            <p class="card-desc">${t('welcome.team.desc')}</p>
-            
-            <div class="team-grid">
-              <div class="team-member-item">
-                <div class="member-avatar gradient-purple">B</div>
-                <div class="member-info">
-                  <div class="member-name">bobwu0214</div>
-                  <div class="member-role">${t('welcome.team.role.lead')}</div>
-                </div>
-              </div>
-              <div class="team-member-item">
-                <div class="member-avatar gradient-blue">H</div>
-                <div class="member-info">
-                  <div class="member-name">Hkzzzzzzz</div>
-                  <div class="member-role">${t('welcome.team.role.frontend')}</div>
-                </div>
-              </div>
-              <div class="team-member-item">
-                <div class="member-avatar gradient-green">X</div>
-                <div class="member-info">
-                  <div class="member-name">xiping Chen</div>
-                  <div class="member-role">${t('welcome.team.role.designer')}</div>
-                </div>
-              </div>
-              <div class="team-member-item">
-                <div class="member-avatar gradient-orange">A</div>
-                <div class="member-info">
-                  <div class="member-name">Antigravity</div>
-                  <div class="member-role">${t('welcome.team.role.ai')}</div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Project Context (Game Translation Ref) -->
-            <div class="project-context-box">
-              <div class="context-title">
-                <span class="context-icon">🎮</span>
-                <span>${t('welcome.guide.title') === 'Usage Guide' ? 'Legacy: Blue Prince (2025) Translation' : '历史战绩: Blue Prince (2025) 汉化项目'}</span>
-              </div>
-              <p class="context-text">
-                ${t('welcome.guide.title') === 'Usage Guide' 
-                  ? 'The team successfully localized the IL2CPP game using BepInEx and XUnity.AutoTranslator, recreating TMP 1.4.0 fonts to support Chinese and Roman numerals.' 
-                  : '小组曾成功使用 Unity IL2CPP、BepInEx 及 XUnity.AutoTranslator，通过重制 TMP 1.4.0 字体与配置自研代理成功汉化该大作，本 Wiki 正是小组协作沉淀的结晶。'}
-              </p>
-            </div>
-          </div>
-
-          <!-- Usage Guide -->
-          <div class="dashboard-card usage-card-panel">
-            <div class="card-header">
-              <span class="card-header-icon">📖</span>
-              <h3>${t('welcome.guide.title')}</h3>
-            </div>
-            <p class="card-desc">${t('welcome.guide.desc')}</p>
-            
-            <div class="guide-steps">
-              <div class="guide-step-item">
-                <div class="step-num">1</div>
-                <div class="step-content">
-                  <h4>${t('welcome.guide.step1.title')}</h4>
-                  <p>${t('welcome.guide.step1.desc')}</p>
-                </div>
-              </div>
-              <div class="guide-step-item">
-                <div class="step-num">2</div>
-                <div class="step-content">
-                  <h4>${t('welcome.guide.step2.title')}</h4>
-                  <p>${t('welcome.guide.step2.desc')}</p>
-                </div>
-              </div>
-              <div class="guide-step-item">
-                <div class="step-num">3</div>
-                <div class="step-content">
-                  <h4>${t('welcome.guide.step3.title')}</h4>
-                  <p>${t('welcome.guide.step3.desc')}</p>
-                </div>
-              </div>
-              <div class="guide-step-item">
-                <div class="step-num">4</div>
-                <div class="step-content">
-                  <h4>${t('welcome.guide.step4.title')}</h4>
-                  <p>${t('welcome.guide.step4.desc')}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
   // ─── Settings View ─────────────────────────
 
   _showSettingsModal() {
@@ -1099,7 +935,46 @@ class App {
   // ─── UI Event Binding ─────────────────────────
 
   _bindUIEvents() {
+    // Landing Page Actions
+    document.getElementById('enter-wiki-btn')?.addEventListener('click', () => {
+      const landing = document.getElementById('landing-page');
+      if (landing) {
+        landing.classList.add('fade-out');
+        setTimeout(() => landing.style.display = 'none', 300);
+      }
+    });
 
+    document.getElementById('landing-settings-btn')?.addEventListener('click', () => {
+      const landing = document.getElementById('landing-page');
+      if (landing) {
+        landing.classList.add('fade-out');
+        setTimeout(() => {
+          landing.style.display = 'none';
+          this._showSettingsView('sync');
+        }, 300);
+      }
+    });
+
+    // Site Name and Breadcrumb Root click to show landing page again
+    document.getElementById('site-name')?.addEventListener('click', () => {
+      const landing = document.getElementById('landing-page');
+      if (landing) {
+        landing.style.display = '';
+        // Force reflow to ensure display is applied before removing fade-out for smooth transition
+        landing.offsetHeight;
+        landing.classList.remove('fade-out');
+      }
+    });
+
+    document.getElementById('breadcrumb-root')?.addEventListener('click', () => {
+      const landing = document.getElementById('landing-page');
+      if (landing) {
+        landing.style.display = '';
+        // Force reflow to ensure display is applied before removing fade-out for smooth transition
+        landing.offsetHeight;
+        landing.classList.remove('fade-out');
+      }
+    });
 
     // Save buttons
     document.getElementById('save-local-btn').addEventListener('click', () => this._saveToLocal());
