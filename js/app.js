@@ -958,6 +958,49 @@ class App {
       }
     });
 
+    // Quick add page button
+    document.getElementById('quick-add-page-btn')?.addEventListener('click', () => this._addPage());
+
+    // Quick import button
+    document.getElementById('quick-import-btn')?.addEventListener('click', () => {
+      document.getElementById('import-file-input')?.click();
+    });
+
+    // Import file handler
+    document.getElementById('import-file-input')?.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          if (imported.pages) {
+            this.data = imported;
+            const firstPageId = this.data.pages[0]?.id;
+            this.pageManager.load(this.data.pages, firstPageId);
+            this._loadPage(firstPageId);
+            saveToLocalStorage(this.data);
+            this._updatePageCount();
+            this._updateTrashBadge();
+            this._showToast('success', t('toast.import.success'));
+          }
+        } catch (err) {
+          this._showToast('error', t('toast.import.failed', { message: err.message }));
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    // Search clear button
+    document.getElementById('search-clear-btn')?.addEventListener('click', () => {
+      const searchInput = document.getElementById('page-search');
+      if (searchInput) {
+        searchInput.value = '';
+        this.pageManager.search('');
+      }
+    });
+
     // Page title editing
     const titleEl = document.getElementById('page-title');
     titleEl.addEventListener('input', () => {
