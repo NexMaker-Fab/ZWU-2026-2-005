@@ -2041,3 +2041,10 @@ button {
   transform: scale(1.08);
 }
 
+/* ===== BRAND CURSOR & AESTHETICS ===== */
+#site-name:hover,
+#breadcrumb-root:hover {
+  cursor: pointer;
+  color: var(--accent);
+  text-decoration: underline;
+}

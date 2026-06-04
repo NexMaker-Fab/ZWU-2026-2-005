@@ -58,6 +58,12 @@ class App {
     // Load GitHub settings into form
     this._loadGitHubSettings();
 
+    // Check URL parameters to see if we should open settings on load
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('open') === 'settings') {
+      this._showSettingsView('sync');
+    }
+
     // Set site name
     const siteName = document.getElementById('site-name');
     if (siteName && this.data.site?.name) {
@@ -935,7 +941,14 @@ class App {
   // ─── UI Event Binding ─────────────────────────
 
   _bindUIEvents() {
+    // Site Name and Breadcrumb Root click to return to landing page
+    document.getElementById('site-name')?.addEventListener('click', () => {
+      window.location.href = 'landing.html';
+    });
 
+    document.getElementById('breadcrumb-root')?.addEventListener('click', () => {
+      window.location.href = 'landing.html';
+    });
 
     // Save buttons
     document.getElementById('save-local-btn').addEventListener('click', () => this._saveToLocal());
