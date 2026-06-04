@@ -494,7 +494,7 @@ class App {
     document.querySelectorAll('[data-theme-choice]').forEach(card => {
       card.classList.toggle('active', card.dataset.themeChoice === theme);
     });
-    const lang = localStorage.getItem('teamflow_lang') || 'zh';
+    const lang = getLang();
     document.querySelectorAll('[data-lang-choice]').forEach(card => {
       card.classList.toggle('active', card.dataset.langChoice === lang);
     });
