@@ -113,6 +113,7 @@ const translations = {
 
     // Sidebar layout
     'sidebar.favorites': 'Favorites',
+    'sidebar.remove_favorite': 'Remove from favorites',
     'sidebar.quick.new': 'New Page',
     'sidebar.quick.import': 'Import',
     'sidebar.role': 'Admin',
@@ -236,6 +237,7 @@ const translations = {
 
     // Sidebar layout
     'sidebar.favorites': '收藏页面',
+    'sidebar.remove_favorite': '移出收藏',
     'sidebar.quick.new': '新页面',
     'sidebar.quick.import': '导入',
     'sidebar.role': '管理员',

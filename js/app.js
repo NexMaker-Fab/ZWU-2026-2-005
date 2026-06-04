@@ -616,7 +616,8 @@ class App {
       const removeBtn = document.createElement('button');
       removeBtn.className = 'page-item-delete';
       removeBtn.innerHTML = '×';
-      removeBtn.title = t('toast.delete_page');
+      removeBtn.title = t('sidebar.remove_favorite');
+      removeBtn.setAttribute('aria-label', t('sidebar.remove_favorite'));
       removeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         this._removeFavoritePage(page.id);
