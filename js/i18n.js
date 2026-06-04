@@ -125,6 +125,27 @@ const translations = {
     'status.last_saved.min': '{n} min ago',
     'status.last_saved.hour': '{n} hr ago',
 
+    // Settings page
+    'settings.back': 'Back',
+    'settings.tab.sync': 'Sync Config',
+    'settings.tab.trash': 'Trash',
+    'settings.tab.preferences': 'Preferences',
+    'settings.tab.team': 'Team',
+    'settings.sync.desc': 'Configure GitHub repository to sync your content to a remote repo.',
+    'pref.theme.title': 'Theme',
+    'pref.theme.light': 'Light Mode',
+    'pref.theme.dark': 'Dark Mode',
+    'pref.lang.title': 'Language',
+    'pref.lang.zh': '中文',
+    'pref.lang.en': 'English',
+    'team.desc': 'Manage team members. Member info will be synced to GitHub.',
+    'team.add': 'Add',
+    'team.name.placeholder': 'Name',
+    'team.role.placeholder': 'Role, e.g. Developer',
+    'team.role.default': 'Member',
+    'team.remove': 'Remove',
+    'team.empty': 'No team members yet. Add one above.',
+
     // Nested pages
     'toast.subpage_created': 'Sub-page created'
   },
@@ -249,6 +270,27 @@ const translations = {
     'status.last_saved.just': '刚刚',
     'status.last_saved.min': '{n} 分钟前',
     'status.last_saved.hour': '{n} 小时前',
+
+    // Settings page
+    'settings.back': '返回',
+    'settings.tab.sync': '同步配置',
+    'settings.tab.trash': '回收站',
+    'settings.tab.preferences': '偏好设置',
+    'settings.tab.team': '团队',
+    'settings.sync.desc': '配置 GitHub 仓库信息，将内容同步至远端仓库。',
+    'pref.theme.title': '主题',
+    'pref.theme.light': '浅色模式',
+    'pref.theme.dark': '深色模式',
+    'pref.lang.title': '语言',
+    'pref.lang.zh': '中文',
+    'pref.lang.en': 'English',
+    'team.desc': '管理团队成员，成员信息将同步至 GitHub。',
+    'team.add': '添加',
+    'team.name.placeholder': '姓名',
+    'team.role.placeholder': '角色，如 开发者',
+    'team.role.default': '成员',
+    'team.remove': '移除',
+    'team.empty': '还没有团队成员，在上方添加。',
 
     // Nested pages
     'toast.subpage_created': '子页面已创建'
