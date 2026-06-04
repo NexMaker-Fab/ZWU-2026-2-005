@@ -78,6 +78,8 @@ class App {
       }
       // Also update sidebar user anonymous label if no name set
       this._updateTrashBadge();
+      this._updatePageCount();
+      this._refreshLastSavedDisplay();
     });
 
     // Update trash badge on load
