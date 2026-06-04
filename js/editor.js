@@ -385,6 +385,13 @@ export class BlockEditor {
         if (activeItem) {
           this._executeSlashCommand(activeItem.dataset.type);
         }
+      } else if (/^[1-9]$/.test(e.key)) {
+        e.preventDefault();
+        e.stopPropagation();
+        const index = parseInt(e.key, 10) - 1;
+        if (index < items.length) {
+          this._executeSlashCommand(items[index].dataset.type);
+        }
       } else if (e.key === 'Escape') {
         e.preventDefault();
         this._hideSlashMenu();
