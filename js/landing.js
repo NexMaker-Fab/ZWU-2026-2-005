@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize 3D Card Hover Effects
   initCardInteractivity();
+
+  // Initialize Troubleshooting Accordion
+  initAccordions();
 });
 
 // ─── Theme Management ──────────────────────────────
@@ -241,6 +244,33 @@ function initCardInteractivity() {
 
     card.addEventListener('mouseleave', () => {
       card.style.transform = '';
+    });
+  });
+}
+
+// ─── Troubleshooting Accordion ─────────────────────
+function initAccordions() {
+  const headers = document.querySelectorAll('.accordion-header');
+  headers.forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.parentElement;
+      const content = header.nextElementSibling;
+      const icon = header.querySelector('.accordion-icon');
+      
+      const isOpen = item.classList.contains('active');
+      
+      // Close other items
+      document.querySelectorAll('.accordion-item').forEach(otherItem => {
+        otherItem.classList.remove('active');
+        otherItem.querySelector('.accordion-content').style.maxHeight = null;
+        otherItem.querySelector('.accordion-icon').textContent = '+';
+      });
+      
+      if (!isOpen) {
+        item.classList.add('active');
+        content.style.maxHeight = content.scrollHeight + 'px';
+        icon.textContent = '−';
+      }
     });
   });
 }

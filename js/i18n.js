@@ -113,11 +113,20 @@ const translations = {
     'landing.sync_guide.title': 'Cloud Collaboration Guide',
     'landing.sync_guide.desc': 'Establish a shared GitHub cloud sync loop in just 3 steps to achieve serverless team collaboration:',
     'landing.sync_guide.step1.title': '1. Create Repository',
-    'landing.sync_guide.step1.desc': 'The team lead creates a new repository on GitHub (recommended to initialize with README.md), and adds members as collaborators via Settings -> Collaborators to grant write access.',
+    'landing.sync_guide.step1.desc': 'The team owner visits <a href="https://github.com/new" target="_blank" class="guide-link">github.com/new</a> to create a new repository. Next, go to <strong>Settings</strong> -> <strong>Collaborators</strong> -> click <strong>Add people</strong> to invite teammates. Members <strong>must</strong> accept the invitation in their email or GitHub notifications to get write permissions.',
     'landing.sync_guide.step2.title': '2. Generate Access Token',
-    'landing.sync_guide.step2.desc': 'Each member generates a PAT in settings. Classic tokens need the \'repo\' scope; Fine-grained tokens must be granted \'Read and write\' access to Repository Contents.',
+    'landing.sync_guide.step2.desc': 'Each member clicks their avatar -> <strong>Settings</strong> -> <strong>Developer settings</strong> -> <strong>Personal access tokens</strong>:<br>• Recommended: <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" class="guide-link">Fine-grained tokens</a>. Select the target repo, under <strong>Repository permissions</strong> -> <strong>Contents</strong>, select <strong>Read and write</strong>.<br>• Alternative: <a href="https://github.com/settings/tokens/new" target="_blank" class="guide-link">Tokens (classic)</a>. Check the main <strong>repo</strong> scope box.',
     'landing.sync_guide.step3.title': '3. Sync Configuration',
-    'landing.sync_guide.step3.desc': 'Enter Wiki, click settings (⚙️) to save the same Owner, Repo and personal Token. Click \'Save to GitHub\' to push local edits and sync instantly!',
+    'landing.sync_guide.step3.desc': 'Click "Enter Wiki", and click ⚙️ <strong>Settings</strong> -> <strong>Sync Config</strong>:<br>• Enter the shared <strong>Owner</strong> (username or org) and <strong>Repo</strong> (repository name).<br>• Enter your personal <strong>Access Token</strong>.<br>• Click <strong>Save Settings</strong>. Finally, click <strong>Save to GitHub</strong> on the top bar to push edits and pull updates instantly!',
+    'landing.sync_guide.trouble.title': 'Troubleshooting & Error Guide',
+    'landing.sync_guide.err404.title': 'GitHub API Error: Not Found (404)',
+    'landing.sync_guide.err404.desc': '<strong>Possible Causes:</strong> Repository name or owner is misspelled, the token does not have access to this repository, or the collaborator has not accepted the repository invitation.<br><strong>Solution:</strong> Verify Owner/Repo spelling; ensure the token scope is valid; collaborators must visit <code>https://github.com/Owner/Repo/invitations</code> to accept the invitation.',
+    'landing.sync_guide.err401.title': 'GitHub API Error: Bad credentials (401)',
+    'landing.sync_guide.err401.desc': '<strong>Possible Causes:</strong> The Personal Access Token is incorrect, invalid, or has expired.<br><strong>Solution:</strong> Go to Developer Settings, delete the old token, generate a new one, copy it completely, and paste it back into Wiki settings (ensuring no extra whitespace).',
+    'landing.sync_guide.err403.title': 'GitHub API Error: Write access denied / Blocked by branch protection (403)',
+    'landing.sync_guide.err403.desc': '<strong>Possible Causes:</strong> The token is valid but has no write permissions (Classic token missing <code>repo</code> checkbox, or Fine-grained token missing <code>Contents: Read and write</code>); or the repository\'s main branch has branch protection rules preventing direct pushing.<br><strong>Solution:</strong> Edit token permissions on GitHub; or check the repository settings to adjust branch protection rules temporarily.',
+    'landing.sync_guide.errnet.title': 'SSL / Connection Timeout / Network Connect Failure',
+    'landing.sync_guide.errnet.desc': '<strong>Possible Causes:</strong> Direct connection to the GitHub API failed or timed out in your local network environment, or SSL handshake failed through some proxy middlewares.<br><strong>Solution:</strong> Check your local network. If using a proxy client, make sure it is in global mode or has rule exceptions for <code>api.github.com</code>; or toggle proxy settings in your local translator proxy settings.',
     'settings.username': 'Display Name',
     'settings.username.placeholder': 'e.g. Zhang San',
     'settings.username.hint': 'Shown as author when you create pages.',
@@ -287,11 +296,20 @@ const translations = {
     'landing.sync_guide.title': '云端协作配置向导',
     'landing.sync_guide.desc': '只需 3 步，即可在团队中建立共同的 GitHub 云端数据同步闭环，实现免安装协同：',
     'landing.sync_guide.step1.title': '1. 共同建库',
-    'landing.sync_guide.step1.desc': '团队主导者在 GitHub 上新建仓库（推荐初始化 README.md），并在 Settings -> Collaborators 中将团队成员添加为协作者（私有库必须），使大家获得写入权限。',
+    'landing.sync_guide.step1.desc': '团队主导者访问 <a href="https://github.com/new" target="_blank" class="guide-link">github.com/new</a> 创建新仓库。接着在仓库页面进入 <strong>Settings</strong> -> <strong>Collaborators</strong> -> 点击 <strong>Add people</strong> 邀请团队成员。成员<strong>必须</strong>在邮箱或 GitHub 消息通知中接受邀请，才能获得写权限。',
     'landing.sync_guide.step2.title': '2. 创建 Access Token',
-    'landing.sync_guide.step2.desc': '每个成员在个人 GitHub 设置中生成 Token。Classic 令牌需勾选 repo 权限；Fine-grained 令牌需授予该仓库 Contents 属性的 Read and write 读写权限。',
+    'landing.sync_guide.step2.desc': '每个成员点击 GitHub 右上角头像 -> <strong>Settings</strong> -> 左下角 <strong>Developer settings</strong> -> <strong>Personal access tokens</strong>：<br>• 推荐：<a href="https://github.com/settings/personal-access-tokens/new" target="_blank" class="guide-link">Fine-grained tokens (细粒度令牌)</a>。选择对应的仓库，在 <strong>Repository permissions</strong> -> <strong>Contents</strong> 中赋予 <strong>Read and write</strong> 读写权限。<br>• 备选：<a href="https://github.com/settings/tokens/new" target="_blank" class="guide-link">Tokens (classic)</a>。勾选最上方的 <strong>repo</strong> 权限框。',
     'landing.sync_guide.step3.title': '3. 同步配置与提交',
-    'landing.sync_guide.step3.desc': '进入 Wiki 点击 ⚙️ 设置，填入相同的 Owner、Repo 与个人的 Token 保存。点击顶部“同步到 GitHub”，即可推送本地修改并实时拉取同步，完成闭环！',
+    'landing.sync_guide.step3.desc': '点击右上角“进入项目”，在侧边栏或右上角点击 ⚙️ <strong>设置</strong> -> <strong>同步配置</strong>：<br>• 填入共同的 <strong>Owner</strong> (用户名/组织名) 和 <strong>Repo</strong> (仓库名)。<br>• 填入个人的 <strong>Personal Access Token</strong> 令牌。<br>• 点击 <strong>保存设置</strong>。随后在编辑页面右上角点击 <strong>同步到 GitHub</strong>，即可向远端推送更新并拉取同步，完成闭环！',
+    'landing.sync_guide.trouble.title': '常见错误与故障排查',
+    'landing.sync_guide.err404.title': 'GitHub API Error: Not Found (404 错误)',
+    'landing.sync_guide.err404.desc': '<strong>可能原因：</strong>仓库所有者 (Owner) 或仓库名称 (Repo) 拼写错误；或者 Token 没有访问该仓库的权限；或者协作者尚未接受仓库的合作邀请。<br><strong>解决方案：</strong>仔细核对 Owner 和 Repo 拼写；检查 Token 作用范围是否包含该仓库；协作者需先访问 <code>https://github.com/用户名/仓库名/invitations</code> 接受邀请。',
+    'landing.sync_guide.err401.title': 'GitHub API Error: Bad credentials (401 错误)',
+    'landing.sync_guide.err401.desc': '<strong>可能原因：</strong>输入的 Personal Access Token（个人访问令牌）不正确、已失效或已过期。<br><strong>解决方案：</strong>前往 GitHub 开发者设置重新生成 Token，复制并完整填入，确保没有复制多余的空格或换行符。',
+    'landing.sync_guide.err403.title': 'GitHub API Error: Write access denied / Blocked by branch protection (403 错误)',
+    'landing.sync_guide.err403.desc': '<strong>可能原因：</strong>Token 校验成功但没有写入权限（Classic 令牌未勾选 repo，或 Fine-grained 令牌未在 Contents 中赋予 Read and write）；或者主分支设置了分支保护规则，阻止了直接推送。<br><strong>解决方案：</strong>在 GitHub 修改该 Token 的权限，确保选中 repo 写入或 Contents 读写；或在仓库设置中暂时调整分支保护规则。',
+    'landing.sync_guide.errnet.title': 'SSL / Connection Timeout / 网络连接失败',
+    'landing.sync_guide.errnet.desc': '<strong>可能原因：</strong>本地网络访问 GitHub API 失败或超时；或者是 SSL 证书验证在部分本地中继代理中出错。<br><strong>解决方案：</strong>检查本地网络。如果使用了代理客户端，请确保其处于全局/规则代理状态并能正常连通 <code>api.github.com</code>；或参考文档调整 BepInEx/代理配置文件。',
     'settings.username': '显示名称',
     'settings.username.placeholder': '例如 张三',
     'settings.username.hint': '新建页面时会作为作者显示。',
@@ -384,7 +402,7 @@ export function applyTranslations() {
   // Update texts
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    el.textContent = t(key);
+    el.innerHTML = t(key);
   });
 
   // Update placeholders

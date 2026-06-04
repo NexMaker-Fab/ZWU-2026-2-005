@@ -679,6 +679,128 @@ body {
   }
 }
 
+/* Troubleshooting Section */
+.troubleshooting-section {
+  margin-top: 40px;
+  border-top: 1px solid var(--border-glass);
+  padding-top: 30px;
+}
+
+.section-subtitle {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.accordion-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.accordion-item {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--border-glass);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .accordion-item {
+  background: rgba(0, 0, 0, 0.005);
+}
+
+.accordion-item.active {
+  border-color: var(--accent-primary);
+  background: rgba(59, 130, 246, 0.02);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.03);
+}
+
+[data-theme="light"] .accordion-item.active {
+  background: rgba(37, 99, 235, 0.01);
+}
+
+.accordion-header {
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 0.9rem;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.accordion-header:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme="light"] .accordion-header:hover {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.error-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: monospace;
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  flex-shrink: 0;
+}
+
+.accordion-icon {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  font-family: monospace;
+  font-weight: normal;
+  flex-shrink: 0;
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-content p {
+  padding: 0 20px 20px 20px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.accordion-content p strong {
+  color: var(--text-main);
+}
+
+.guide-link {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px dashed var(--accent-primary);
+  transition: all 0.2s ease;
+}
+
+.guide-link:hover {
+  color: var(--accent-secondary);
+  border-bottom-color: var(--accent-secondary);
+  text-shadow: 0 0 8px var(--accent-glow);
+}
+
 /* Footer Section */
 .landing-footer {
   text-align: center;
