@@ -46,7 +46,8 @@ class App {
       onPageAdd: () => {},
       onPageDelete: (pageId) => this._deletePage(pageId),
       onSubPageAdd: (parentId) => this._addPage(parentId),
-      onFavoriteToggle: (pageId, isFav) => this._togglePageFavorite(pageId, isFav)
+      onFavoriteToggle: (pageId, isFav) => this._togglePageFavorite(pageId, isFav),
+      onReorder: () => this._onContentUpdate()
     });
 
     // Load pages
