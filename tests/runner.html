@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeamFlow Wiki — Automated Test Suites</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="runner.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-main">
+        <h1>⚡ TeamFlow Wiki Test Runner</h1>
+        <p class="subtitle">Vanilla JS Automated Integration & Unit Testing System</p>
+      </div>
+      <button class="run-btn" id="run-btn">Run Tests</button>
+    </header>
+
+    <div class="summary-cards">
+      <div class="card card-total">
+        <span class="card-num" id="stat-total">0</span>
+        <span class="card-label">Total Tests</span>
+      </div>
+      <div class="card card-passed">
+        <span class="card-num" id="stat-passed">0</span>
+        <span class="card-label">Passed</span>
+      </div>
+      <div class="card card-failed">
+        <span class="card-num" id="stat-failed">0</span>
+        <span class="card-label">Failed</span>
+      </div>
+      <div class="card card-status">
+        <span class="card-num" id="stat-percent">0%</span>
+        <span class="card-label">Success Rate</span>
+      </div>
+    </div>
+
+    <main class="test-results" id="test-results">
+      <div class="loading-status">Click "Run Tests" to start testing...</div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { runTests } from './assert.js';
+
+    // Import specs to register them
+    import './specs/i18n.spec.js';
+    import './specs/storage.spec.js';
+    import './specs/editor.spec.js';
+
+    const runBtn = document.getElementById('run-btn');
+    const resultsEl = document.getElementById('test-results');
+
+    async function execute() {
+      resultsEl.innerHTML = '<div class="loading-status">Running test suites...</div>';
+      runBtn.disabled = true;
+
+      // Small delay for loading state rendering
+      await new Promise(r => setTimeout(r, 100));
+
+      const startTime = performance.now();
+      const results = await runTests();
+      const endTime = performance.now();
+      const elapsed = ((endTime - startTime) / 1000).toFixed(3);
+
+      runBtn.disabled = false;
+      resultsEl.innerHTML = '';
+
+      let total = 0;
+      let passed = 0;
+      let failed = 0;
+
+      results.forEach(suite => {
+        const suiteEl = document.createElement('div');
+        suiteEl.className = 'suite';
+
+        const suiteHeader = document.createElement('div');
+        suiteHeader.className = 'suite-header';
+        suiteHeader.innerHTML = `<h3>📂 Suite: ${suite.name}</h3>`;
+        suiteEl.appendChild(suiteHeader);
+
+        const specsList = document.createElement('div');
+        specsList.className = 'specs-list';
+
+        suite.specs.forEach(spec => {
+          total++;
+          const specEl = document.createElement('div');
+          specEl.className = `spec spec-${spec.status}`;
+
+          const header = document.createElement('div');
+          header.className = 'spec-header';
+
+          const icon = spec.status === 'pass' ? '✅' : '❌';
+          header.innerHTML = `
+            <span class="spec-icon">${icon}</span>
+            <span class="spec-name">${spec.name}</span>
+            <span class="badge badge-${spec.status}">${spec.status.toUpperCase()}</span>
+          `;
+          specEl.appendChild(header);
+
+          if (spec.status === 'pass') {
+            passed++;
+          } else {
+            failed++;
+            const details = document.createElement('div');
+            details.className = 'spec-details';
+            details.innerHTML = `
+              <p class="error-msg"><strong>Error:</strong> ${spec.message}</p>
+              ${spec.stack ? `<pre class="error-stack">${spec.stack}</pre>` : ''}
+            `;
+            specEl.appendChild(details);
+          }
+
+          specsList.appendChild(specEl);
+        });
+
+        suiteEl.appendChild(specsList);
+        resultsEl.appendChild(suiteEl);
+      });
+
+      // Update statistics
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-passed').textContent = passed;
+      document.getElementById('stat-failed').textContent = failed;
+      
+      const percent = total > 0 ? Math.round((passed / total) * 100) : 0;
+      const percentEl = document.getElementById('stat-percent');
+      percentEl.textContent = `${percent}%`;
+
+      const summaryFooter = document.createElement('div');
+      summaryFooter.className = 'summary-footer';
+      summaryFooter.textContent = `Completed ${total} tests in ${elapsed}s.`;
+      resultsEl.appendChild(summaryFooter);
+    }
+
+    runBtn.addEventListener('click', execute);
+
+    // Auto-run on load
+    execute();
+  </script>
+</body>
+</html>

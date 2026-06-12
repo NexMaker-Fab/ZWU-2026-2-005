@@ -2,7 +2,7 @@
  * Internationalization (i18n) Module
  */
 
-const translations = {
+export const translations = {
   en: {
     // Sidebar
     'search.placeholder': 'Search pages...',

@@ -16,7 +16,7 @@ const COMPRESS_MAX_WIDTH = 1600;
  * @param {File} file
  * @returns {Promise<{dataUrl: string, compressed: boolean} | {error: string}>}
  */
-function processImageFile(file) {
+export function processImageFile(file) {
   return new Promise((resolve) => {
     if (file.size > MAX_IMAGE_SIZE) {
       resolve({ error: t('toast.image.too_large') });
