@@ -872,6 +872,7 @@ class App {
 
     document.getElementById('welcome-confirm-btn').addEventListener('click', () => {
       const nameInput = document.getElementById('welcome-username');
+      nameInput.dispatchEvent(new Event('input')); // dispatch event to trigger input listeners (e.g. autofill)
       const name = nameInput.value.trim();
       if (!name) {
         nameInput.focus();
