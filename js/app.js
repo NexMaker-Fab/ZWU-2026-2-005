@@ -1133,41 +1133,68 @@ class App {
         };
         reader.readAsText(file);
       } else if (isImage) {
+        // Size check
+        if (file.size > 5 * 1024 * 1024) {
+          this._showToast('error', t('toast.image.too_large'));
+          e.target.value = '';
+          return;
+        }
         reader.onload = (ev) => {
           try {
-            const dataUrl = ev.target.result;
-            const title = file.name.replace(/\.[^/.]+$/, "") || 'Untitled Image';
-            const now = new Date().toISOString();
-            const imageBlock = {
-              id: generateId(),
-              type: 'image',
-              src: dataUrl,
-              caption: title
+            const rawDataUrl = ev.target.result;
+
+            const finalize = (dataUrl) => {
+              const title = file.name.replace(/\.[^/.]+$/, "") || 'Untitled Image';
+              const now = new Date().toISOString();
+              const imageBlock = {
+                id: generateId(),
+                type: 'image',
+                src: dataUrl,
+                caption: title
+              };
+              const newPage = {
+                id: generateId(),
+                parentId: null,
+                title,
+                icon: '🖼️',
+                lang: getLang(),
+                author: this._getUsername(),
+                createdAt: now,
+                updatedAt: now,
+                blocks: [
+                  imageBlock,
+                  {
+                    id: generateId(),
+                    type: 'paragraph',
+                    content: ''
+                  }
+                ]
+              };
+              this.data.pages.push(newPage);
+              this.pageManager.load(this.data.pages, newPage.id);
+              this._switchPage(newPage.id);
+              saveToLocalStorage(this.data);
+              this._updatePageCount();
+              this._showToast('success', t('toast.import.success'));
             };
-            const newPage = {
-              id: generateId(),
-              parentId: null,
-              title,
-              icon: '🖼️',
-              lang: getLang(),
-              author: this._getUsername(),
-              createdAt: now,
-              updatedAt: now,
-              blocks: [
-                imageBlock,
-                {
-                  id: generateId(),
-                  type: 'paragraph',
-                  content: ''
-                }
-              ]
-            };
-            this.data.pages.push(newPage);
-            this.pageManager.load(this.data.pages, newPage.id);
-            this._switchPage(newPage.id);
-            saveToLocalStorage(this.data);
-            this._updatePageCount();
-            this._showToast('success', t('toast.import.success'));
+
+            // Compress if above 500KB
+            if (file.size > 500 * 1024) {
+              const img = new Image();
+              img.onload = () => {
+                const scale = Math.min(1, 1600 / img.width);
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width * scale;
+                canvas.height = img.height * scale;
+                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                finalize(canvas.toDataURL('image/jpeg', 0.7));
+                this._showToast('info', t('toast.image.compressed'));
+              };
+              img.onerror = () => finalize(rawDataUrl);
+              img.src = rawDataUrl;
+            } else {
+              finalize(rawDataUrl);
+            }
           } catch (err) {
             this._showToast('error', t('toast.import.failed', { message: err.message }));
           }

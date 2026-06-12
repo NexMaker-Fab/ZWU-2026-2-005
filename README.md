@@ -130,7 +130,7 @@ HTML 中通过 `data-i18n` 属性即可自动绑定翻译：
 3. 填入 [Personal Access Token](https://github.com/settings/tokens)（需勾选 `repo` 权限）
 4. 点击 **同步到 GitHub** 即可将 `content.json` 推送至仓库
 
-> ⚠️ Token 仅存储在当前页面 Session 中，关闭标签页即自动清除，不会泄露。
+> ⚠️ Token 保存在浏览器 localStorage 中，长期有效。请勿在公共设备上保存。建议使用 [Fine-grained Token](https://github.com/settings/personal-access-tokens/new)，仅授权目标仓库的 `contents:write` 权限。
 
 ---
 

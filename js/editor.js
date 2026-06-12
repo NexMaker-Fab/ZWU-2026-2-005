@@ -6,6 +6,51 @@
 import { generateId } from './storage.js';
 import { t, tLang } from './i18n.js';
 
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;       // 5MB hard limit
+const COMPRESS_THRESHOLD = 500 * 1024;         // 500KB — compress above this
+const COMPRESS_QUALITY = 0.7;
+const COMPRESS_MAX_WIDTH = 1600;
+
+/**
+ * Process an image file: reject if too large, compress if above threshold.
+ * @param {File} file
+ * @returns {Promise<{dataUrl: string, compressed: boolean} | {error: string}>}
+ */
+function processImageFile(file) {
+  return new Promise((resolve) => {
+    if (file.size > MAX_IMAGE_SIZE) {
+      resolve({ error: t('toast.image.too_large') });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const dataUrl = ev.target.result;
+
+      if (file.size <= COMPRESS_THRESHOLD) {
+        resolve({ dataUrl, compressed: false });
+        return;
+      }
+
+      // Compress via canvas
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, COMPRESS_MAX_WIDTH / img.width);
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const compressed = canvas.toDataURL('image/jpeg', COMPRESS_QUALITY);
+        resolve({ dataUrl: compressed, compressed: true });
+      };
+      img.onerror = () => resolve({ dataUrl, compressed: false }); // fallback
+      img.src = dataUrl;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 export class BlockEditor {
   constructor({ editorEl, slashMenuEl, floatingToolbarEl, onUpdate }) {
     this.editorEl = editorEl;
@@ -276,17 +321,19 @@ export class BlockEditor {
       }
     });
 
-    // Handle file upload — convert to base64
-    fileInput.addEventListener('change', (e) => {
+    // Handle file upload — validate size & compress
+    fileInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        block.src = ev.target.result;
-        this.render();
-        this.onUpdate();
-      };
-      reader.readAsDataURL(file);
+      const result = await processImageFile(file);
+      if (result.error) {
+        // Show error via a temporary inline message
+        alert(result.error);
+        return;
+      }
+      block.src = result.dataUrl;
+      this.render();
+      this.onUpdate();
     });
 
     // Handle URL input

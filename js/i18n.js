@@ -184,7 +184,11 @@ const translations = {
     'team.empty': 'No team members yet. Add one above.',
 
     // Nested pages
-    'toast.subpage_created': 'Sub-page created'
+    'toast.subpage_created': 'Sub-page created',
+
+    // Image size
+    'toast.image.too_large': 'Image is too large (max 5MB). Please use a smaller image or paste a URL instead.',
+    'toast.image.compressed': 'Image was compressed to save space.'
   },
   zh: {
     // Sidebar
@@ -367,7 +371,11 @@ const translations = {
     'team.empty': '还没有团队成员，在上方添加。',
 
     // Nested pages
-    'toast.subpage_created': '子页面已创建'
+    'toast.subpage_created': '子页面已创建',
+
+    // Image size
+    'toast.image.too_large': '图片过大（上限5MB），请压缩后再上传或粘贴图片链接。',
+    'toast.image.compressed': '图片已自动压缩以节省存储空间。'
   }
 };
 
