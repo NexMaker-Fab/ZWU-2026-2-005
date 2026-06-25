@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>最终项目 — 团队作业的博客 / Final Project</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+  <meta name="description" content="Final Project Dashboard for ZWU-2026-2-005.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com;">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/project.css">
+</head>
+<body>
+
+  <!-- Dynamic Interaction Background -->
+  <canvas class="landing-canvas" id="landing-canvas"></canvas>
+
+  <!-- Ambient Light Orbs -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+  <div class="ambient-orb orb-3"></div>
+
+  <!-- Header Navigation -->
+  <header class="landing-header">
+    <div class="brand">
+      <span class="brand-logo">🚀</span>
+      <span class="brand-title" data-i18n="nav.title">团队作业的博客</span>
+    </div>
+    
+    <nav class="nav-links">
+      <a href="landing.html" class="nav-link" data-i18n="nav.intro">介绍页</a>
+      <a href="team.html" class="nav-link" data-i18n="nav.team">团队成员</a>
+      <a href="homework.html" class="nav-link" data-i18n="nav.homework">平时作业</a>
+      <a href="project.html" class="nav-link active" data-i18n="nav.project">最终项目</a>
+    </nav>
+
+    <div class="header-actions">
+      <!-- Admin Workspace Entry -->
+      <a href="app.html" class="nav-workspace-btn" id="header-workspace-btn" title="Admin Workspace">
+        <span>📝</span>
+        <span data-i18n="landing.header.workspace">协作后台</span>
+      </a>
+      <!-- Theme Switch Button -->
+      <button class="icon-btn" id="theme-toggle-btn" title="Toggle Theme">
+        <span id="theme-icon">🌙</span>
+      </button>
+      <!-- Language Selection -->
+      <button class="lang-toggle-btn" id="lang-toggle-btn">
+        <span class="lang-icon">🌐</span>
+        <span id="lang-label">English / 中文</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Container -->
+  <div class="landing-container" style="padding-top: 100px;">
+    
+    <!-- Hero Section -->
+    <section class="hero-section" style="padding-bottom: 20px;">
+      <h1 class="hero-title-shimmer" data-i18n="project.hero.title">🤖 情感互动机器人 / Emotional Robot</h1>
+      <p class="hero-subtitle" data-i18n="project.hero.subtitle">基于 Arduino 开发的老年情感陪伴机器人与 Web 可视化监测底座</p>
+    </section>
+
+    <!-- Grid Layout -->
+    <div class="project-grid">
+      
+      <!-- Left Column: Face Simulator & Specs -->
+      <div class="project-col-left">
+        
+        <!-- Robot Face Canvas Card -->
+        <div class="info-card glass-card visual-card">
+          <h2 class="card-title" data-i18n="project.sim.title">📺 表情模拟器 / Face Simulator</h2>
+          <p class="card-desc" data-i18n="project.sim.desc">实时渲染机器人头部 OLED 屏幕表情与情感状态响应：</p>
+          
+          <div class="canvas-container">
+            <canvas id="robot-canvas" width="400" height="240"></canvas>
+            <div class="robot-status-badge" id="robot-mood-badge">HAPPY</div>
+          </div>
+          
+          <div class="mood-controls">
+            <button class="btn btn-primary btn-sm mood-btn active" data-mood="happy">😊 HAPPY</button>
+            <button class="btn btn-secondary btn-sm mood-btn" data-mood="sad">😢 SAD</button>
+            <button class="btn btn-secondary btn-sm mood-btn" data-mood="sleeping">💤 SLEEPY</button>
+            <button class="btn btn-secondary btn-sm mood-btn" data-mood="love">❤️ LOVING</button>
+          </div>
+        </div>
+
+        <!-- Specifications Card -->
+        <div class="info-card glass-card spec-card" style="margin-top: 24px;">
+          <h2 class="card-title" data-i18n="project.specs.title">🛠️ 硬件架构与物料 / Spec Sheets</h2>
+          <div class="spec-list">
+            <div class="spec-item">
+              <span class="spec-name">MCU Controller</span>
+              <span class="spec-val">Arduino Nano ESP32</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-name">Biometric Sensor</span>
+              <span class="spec-val">MAX30102 Heart Rate & SpO2</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-name">Environment Sensing</span>
+              <span class="spec-val">DHT11 Temp & Humidity</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-name">Actuators</span>
+              <span class="spec-val">2x SG90 Servo Motors (Head tilt)</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-name">Display Module</span>
+              <span class="spec-val">0.96 inch SSD1306 I2C OLED</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Sensor Graphs & Console -->
+      <div class="project-col-right">
+        
+        <!-- Live Telemetry Card -->
+        <div class="info-card glass-card sensor-card">
+          <h2 class="card-title" data-i18n="project.sensors.title">📊 传感器实时数据 / Telemetry</h2>
+          
+          <div class="sensor-grid">
+            <!-- Heart Rate -->
+            <div class="sensor-widget">
+              <div class="widget-header">
+                <span class="widget-icon">💓</span>
+                <span class="widget-label" data-i18n="project.sensor.hr">Heart Rate</span>
+              </div>
+              <div class="widget-value"><span id="hr-value">72</span> <span class="widget-unit">BPM</span></div>
+              <div class="graph-container">
+                <canvas id="hr-graph" width="220" height="60"></canvas>
+              </div>
+            </div>
+
+            <!-- Body Temperature -->
+            <div class="sensor-widget">
+              <div class="widget-header">
+                <span class="widget-icon">🌡️</span>
+                <span class="widget-label" data-i18n="project.sensor.temp">Temperature</span>
+              </div>
+              <div class="widget-value"><span id="temp-value">36.7</span> <span class="widget-unit">°C</span></div>
+              <div class="graph-container">
+                <canvas id="temp-graph" width="220" height="60"></canvas>
+              </div>
+            </div>
+
+            <!-- Stability (IMU) -->
+            <div class="sensor-widget">
+              <div class="widget-header">
+                <span class="widget-icon">📐</span>
+                <span class="widget-label" data-i18n="project.sensor.stability">Stability</span>
+              </div>
+              <div class="widget-value"><span id="stability-value">98.5</span> <span class="widget-unit">%</span></div>
+              <div class="graph-container">
+                <canvas id="stability-graph" width="220" height="60"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Serial Console Card -->
+        <div class="info-card glass-card console-card" style="margin-top: 24px;">
+          <h2 class="card-title" data-i18n="project.console.title">🖥️ 串口调试终端 / Arduino Console</h2>
+          <div class="serial-console">
+            <div class="console-lines" id="console-lines">
+              <!-- Animated terminal logs -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Page Footer -->
+    <footer class="landing-footer">
+      <p class="footer-text">Made by ZWU-2026-2-005 2026</p>
+    </footer>
+  </div>
+
+  <script type="module" src="js/project.js"></script>
+</body>
+</html>

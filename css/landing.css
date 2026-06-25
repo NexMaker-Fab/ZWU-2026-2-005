@@ -132,6 +132,39 @@ body {
   border-bottom: 1px solid var(--border-glass);
 }
 
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.92rem;
+  transition: all 0.3s ease;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.nav-link:hover {
+  color: var(--accent-primary);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+[data-theme="light"] .nav-link:hover {
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.nav-link.active {
+  color: var(--text-main);
+  font-weight: 600;
+  border-bottom: 2px solid var(--accent-primary);
+  border-radius: 0;
+}
+
 .brand {
   display: flex;
   align-items: center;

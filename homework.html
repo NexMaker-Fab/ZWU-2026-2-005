@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>平时作业 — 团队作业的博客 / Class Homework</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+  <meta name="description" content="Homework notebook for ZWU-2026-2-005.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com;">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/style.css?v=20260413">
+  <link rel="stylesheet" href="css/homework.css">
+</head>
+<body class="homework-body">
+
+  <!-- Dynamic Interaction Background -->
+  <canvas class="landing-canvas" id="landing-canvas"></canvas>
+
+  <!-- Ambient Light Orbs -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+
+  <!-- Header Navigation -->
+  <header class="landing-header">
+    <div class="brand">
+      <span class="brand-logo">🚀</span>
+      <span class="brand-title" data-i18n="nav.title">团队作业的博客</span>
+    </div>
+    
+    <nav class="nav-links">
+      <a href="landing.html" class="nav-link" data-i18n="nav.intro">介绍页</a>
+      <a href="team.html" class="nav-link" data-i18n="nav.team">团队成员</a>
+      <a href="homework.html" class="nav-link active" data-i18n="nav.homework">平时作业</a>
+      <a href="project.html" class="nav-link" data-i18n="nav.project">最终项目</a>
+    </nav>
+
+    <div class="header-actions">
+      <!-- Admin Workspace Entry -->
+      <a href="app.html" class="nav-workspace-btn" id="header-workspace-btn" title="Admin Workspace">
+        <span>📝</span>
+        <span data-i18n="landing.header.workspace">协作后台</span>
+      </a>
+      <!-- Theme Switch Button -->
+      <button class="icon-btn" id="theme-toggle-btn" title="Toggle Theme">
+        <span id="theme-icon">🌙</span>
+      </button>
+      <!-- Language Selection -->
+      <button class="lang-toggle-btn" id="lang-toggle-btn">
+        <span class="lang-icon">🌐</span>
+        <span id="lang-label">English / 中文</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Split Pane Homework Workspace -->
+  <div class="homework-workspace">
+    
+    <!-- Left Sidebar: Homework List -->
+    <aside class="homework-sidebar">
+      <div class="sidebar-list-header">
+        <h3 data-i18n="homework.sidebar.title">📝 作业笔记 / Notebooks</h3>
+      </div>
+      <div class="homework-list" id="homework-list">
+        <!-- 6 assignments loaded here -->
+      </div>
+    </aside>
+
+    <!-- Right Content Pane: Editor -->
+    <main class="homework-content-pane">
+      <div class="homework-editor-top">
+        <div class="breadcrumb" id="homework-breadcrumb">
+          <span data-i18n="nav.homework">平时作业</span> / <span id="breadcrumb-current-homework">项目管理</span>
+        </div>
+        <div class="save-indicator" id="homework-save-status" data-i18n="save.status.ready">Saved to local cache</div>
+      </div>
+      
+      <div class="homework-editor-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="page-header-top" style="display: flex; align-items: center; gap: 12px;">
+            <div class="page-icon-display" id="page-icon-display" role="button" tabindex="0" title="Change icon">📅</div>
+            <div class="page-title" id="page-title" contenteditable="true" data-placeholder="Untitled" role="textbox" aria-label="Page title">Project Manage</div>
+          </div>
+        </div>
+
+        <!-- Block Editor Container -->
+        <div class="editor" id="editor" role="document">
+          <!-- Rendered dynamically by BlockEditor -->
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ===== FLOATING TOOLBAR ===== -->
+  <div class="floating-toolbar" id="floating-toolbar" role="toolbar" aria-label="Formatting toolbar">
+    <button class="btn-icon" data-command="bold" data-i18n-title="toolbar.bold" title="Bold (Ctrl+B)"><b>B</b></button>
+    <button class="btn-icon" data-command="italic" data-i18n-title="toolbar.italic" title="Italic (Ctrl+I)"><i>I</i></button>
+    <button class="btn-icon" data-command="underline" data-i18n-title="toolbar.underline" title="Underline (Ctrl+U)"><u>U</u></button>
+    <div class="divider"></div>
+    <button class="btn-icon" data-command="heading1" data-i18n-title="toolbar.h1" title="Heading 1">H1</button>
+    <button class="btn-icon" data-command="heading2" data-i18n-title="toolbar.h2" title="Heading 2">H2</button>
+    <button class="btn-icon" data-command="heading3" data-i18n-title="toolbar.h3" title="Heading 3">H3</button>
+    <button class="btn-icon" data-command="paragraph" data-i18n-title="toolbar.p" title="Paragraph">¶</button>
+  </div>
+
+  <!-- ===== SLASH COMMAND MENU ===== -->
+  <div class="slash-menu" id="slash-menu" role="listbox" aria-label="Block type menu">
+    <div class="slash-menu-label" data-i18n="menu.title">Basic Blocks</div>
+    <div class="slash-menu-item" data-type="paragraph" role="option">
+      <div class="slash-menu-item-icon">📝</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.text">Text</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.text.desc">Plain text paragraph</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="heading1" role="option">
+      <div class="slash-menu-item-icon">H1</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.h1">Heading 1</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.h1.desc">Large section heading</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="heading2" role="option">
+      <div class="slash-menu-item-icon">H2</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.h2">Heading 2</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.h2.desc">Medium section heading</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="heading3" role="option">
+      <div class="slash-menu-item-icon">H3</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.h3">Heading 3</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.h3.desc">Small section heading</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="image" role="option">
+      <div class="slash-menu-item-icon">🖼️</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.image">Image</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.image.desc">Upload or embed an image</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="quote" role="option">
+      <div class="slash-menu-item-icon">💬</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.quote">Quote</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.quote.desc">Add a block quote</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="code" role="option">
+      <div class="slash-menu-item-icon">💻</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.code">Code Block</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.code.desc">Write code blocks</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="bullet-list" role="option">
+      <div class="slash-menu-item-icon">•</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.bullet">Bullet List</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.bullet.desc">Simple bulleted list</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="todo" role="option">
+      <div class="slash-menu-item-icon">☑️</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.todo">To-do List</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.todo.desc">List with checkboxes</div>
+      </div>
+    </div>
+    <div class="slash-menu-item" data-type="divider" role="option">
+      <div class="slash-menu-item-icon">—</div>
+      <div class="slash-menu-item-info">
+        <div class="slash-menu-item-name" data-i18n="menu.divider">Divider</div>
+        <div class="slash-menu-item-desc" data-i18n="menu.divider.desc">Horizontal line separator</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ICON PICKER ===== -->
+  <div class="icon-picker" id="icon-picker">
+    <!-- Populated by JS -->
+  </div>
+
+  <script type="module" src="js/homework.js"></script>
+</body>
+</html>

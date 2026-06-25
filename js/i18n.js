@@ -97,6 +97,13 @@ export const translations = {
 
     // Misc
 
+    // Navigation
+    'nav.title': 'Team Homework Blog',
+    'nav.intro': 'Intro',
+    'nav.team': 'Team',
+    'nav.homework': 'Homework',
+    'nav.project': 'Final Project',
+
     // Author / Identity
     'welcome.title': '👋 Welcome to Team Homework Blog',
     'welcome.desc': 'Please enter your display name so your teammates can identify your contributions.',
@@ -211,7 +218,22 @@ export const translations = {
 
     // Image size
     'toast.image.too_large': 'Image is too large (max 5MB). Please use a smaller image or paste a URL instead.',
-    'toast.image.compressed': 'Image was compressed to save space.'
+    'toast.image.compressed': 'Image was compressed to save space.',
+
+    // Homework Portal
+    'homework.sidebar.title': '📝 Assignments',
+
+    // Project Portal
+    'project.hero.title': '🤖 Emotional Robot',
+    'project.hero.subtitle': 'Arduino-based emotional robot and Web monitoring dashboard',
+    'project.sim.title': '📺 Face Simulator',
+    'project.sim.desc': 'Real-time rendering of robot\'s OLED screen and emotional feedback:',
+    'project.specs.title': '🛠️ Spec Sheets',
+    'project.sensors.title': '📊 Telemetry',
+    'project.sensor.hr': 'Heart Rate',
+    'project.sensor.temp': 'Temperature',
+    'project.sensor.stability': 'Stability',
+    'project.console.title': '🖥️ Arduino Console'
   },
   zh: {
     // Sidebar
@@ -306,6 +328,13 @@ export const translations = {
     'toolbar.p': '正文',
 
     // Misc
+
+    // Navigation
+    'nav.title': '团队作业的博客',
+    'nav.intro': '介绍页',
+    'nav.team': '团队成员',
+    'nav.homework': '平时作业',
+    'nav.project': '最终项目',
 
     // Author / Identity
     'welcome.title': '👋 欢迎使用 团队作业的博客',
@@ -421,7 +450,22 @@ export const translations = {
 
     // Image size
     'toast.image.too_large': '图片过大（上限5MB），请压缩后再上传或粘贴图片链接。',
-    'toast.image.compressed': '图片已自动压缩以节省存储空间。'
+    'toast.image.compressed': '图片已自动压缩以节省存储空间。',
+
+    // Homework Portal
+    'homework.sidebar.title': '📝 作业笔记 / Notebooks',
+
+    // Project Portal
+    'project.hero.title': '🤖 情感互动机器人 / Emotional Robot',
+    'project.hero.subtitle': '基于 Arduino 开发的老年情感陪伴机器人与 Web 可视化监测底座',
+    'project.sim.title': '📺 表情模拟器 / Face Simulator',
+    'project.sim.desc': '实时渲染机器人头部 OLED 屏幕表情与情感状态响应：',
+    'project.specs.title': '🛠️ 硬件架构与物料 / Spec Sheets',
+    'project.sensors.title': '📊 传感器实时数据 / Telemetry',
+    'project.sensor.hr': '心率 / Heart Rate',
+    'project.sensor.temp': '温度 / Temperature',
+    'project.sensor.stability': '稳定性 / Stability',
+    'project.console.title': '🖥️ 串口调试终端 / Arduino Console'
   }
 };
 

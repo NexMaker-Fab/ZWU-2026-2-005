@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>张小媛 (Xiaoyuan Zhang) — 个人主页 / Personal Homepage</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍🎨</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0a1c;
+      --card-bg: rgba(24, 18, 38, 0.75);
+      --border-color: rgba(236, 72, 153, 0.15);
+      --text-main: #f1f0f5;
+      --text-muted: #a78bfa;
+      --primary: #ec4899;
+      --secondary: #8b5cf6;
+      --accent: #f43f5e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient backdrop animations */
+    .glow-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: -1;
+      opacity: 0.25;
+      animation: float 8s infinite alternate ease-in-out;
+    }
+    .blob-1 {
+      width: 350px;
+      height: 350px;
+      background: var(--primary);
+      top: 10%;
+      left: 15%;
+    }
+    .blob-2 {
+      width: 400px;
+      height: 400px;
+      background: var(--secondary);
+      bottom: 10%;
+      right: 15%;
+      animation-delay: -3s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-30px) scale(1.1); }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      backdrop-filter: blur(20px);
+      padding: 45px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(236, 72, 153, 0.05);
+      position: relative;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 35px;
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      transform: rotate(-6deg);
+      box-shadow: 0 10px 20px rgba(236, 72, 153, 0.3);
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .avatar:hover {
+      transform: rotate(6deg) scale(1.05);
+    }
+
+    .meta h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      font-family: 'Playfair Display', serif;
+      background: linear-gradient(90deg, #fff, #ecd9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .meta .title {
+      font-size: 0.95rem;
+      color: var(--primary);
+      font-weight: 600;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 28px;
+      margin-bottom: 12px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .content-box {
+      font-size: 0.98rem;
+      line-height: 1.7;
+      color: #cbd5e1;
+      margin-bottom: 22px;
+    }
+
+    .highlight-list {
+      list-style: none;
+    }
+
+    .highlight-list li {
+      position: relative;
+      padding-left: 26px;
+      margin-bottom: 12px;
+    }
+
+    .highlight-list li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-size: 1rem;
+    }
+
+    /* Color Palette widget */
+    .color-playground {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 18px;
+      padding: 24px;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .playground-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .color-swatch {
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .color-swatch:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 32px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 10px 22px;
+      border-radius: 15px;
+      border: 1px solid var(--border-color);
+      background: rgba(236, 72, 153, 0.02);
+    }
+
+    .back-btn:hover {
+      background: rgba(236, 72, 153, 0.08);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-blob blob-1"></div>
+  <div class="glow-blob blob-2"></div>
+
+  <div class="container">
+    <div class="header">
+      <div class="avatar">👩‍🎨</div>
+      <div class="meta">
+        <h1>张小媛 (Xiaoyuan Zhang)</h1>
+        <div class="title">UI / 交互设计师 / Creative Director</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">🎨 关于我 / About Me</h2>
+    <div class="content-box">
+      我主导小组成员博客的视觉规范、暗黑模式色彩配比以及交互动效的流畅呈现。我深信优秀的交互能赋予代码以“呼吸感”和生命力。
+    </div>
+
+    <h2 class="section-title">✨ 核心设计贡献 / Design Work</h2>
+    <div class="content-box">
+      <ul class="highlight-list">
+        <li><strong>毛玻璃磨砂视效 (Glassmorphism)</strong>：设计并实施了全站卡片、浮动弹窗以及控制面板的高精度毛玻璃与自适应半透明边框。</li>
+        <li><strong>粒子动效背景</strong>：利用 Canvas 实现具有流体感与鼠标排斥效应的深空粒子连线背景，大幅增强首屏震撼力。</li>
+        <li><strong>交互微动效</strong>：添加了全站卡片 3D 倾斜悬浮跟随动效、侧边栏平滑拉伸阻尼效果，以及极度丝滑的黑暗模式过渡渐变。</li>
+      </ul>
+    </div>
+
+    <div class="color-playground">
+      <div class="playground-title">💡 交互式博客视觉色盘 (Click to copy swatch HEX)</div>
+      <div class="palette-grid">
+        <div class="color-swatch" style="background-color: #0f0a1c;" data-hex="#0F0A1C">#0F0A1C</div>
+        <div class="color-swatch" style="background-color: #8b5cf6;" data-hex="#8B5CF6">#8B5CF6</div>
+        <div class="color-swatch" style="background-color: #ec4899;" data-hex="#EC4899">#EC4899</div>
+        <div class="color-swatch" style="background-color: #f43f5e;" data-hex="#F43F5E">#F43F5E</div>
+        <div class="color-swatch" style="background-color: #a78bfa;" data-hex="#A78BFA">#A78BFA</div>
+      </div>
+      <span style="font-size: 0.8rem; color: var(--text-muted);" id="copy-status">Click a color block to simulate design palette extraction</span>
+    </div>
+
+    <a href="../../team.html" class="back-btn">
+      <span>←</span> 返回团队成员列表 / Back to Team
+    </a>
+  </div>
+
+  <script>
+    document.querySelectorAll('.color-swatch').forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        const hex = swatch.getAttribute('data-hex');
+        const status = document.getElementById('copy-status');
+        
+        navigator.clipboard.writeText(hex).then(() => {
+          status.textContent = `Copied ${hex} to clipboard!`;
+          status.style.color = '#10b981';
+          setTimeout(() => {
+            status.textContent = "Click a color block to simulate design palette extraction";
+            status.style.color = 'var(--text-muted)';
+          }, 2000);
+        }).catch(() => {
+          status.textContent = `Selected: ${hex}`;
+        });
+      });
+    });
+  </script>
+</body>
+</html>
