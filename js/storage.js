@@ -71,7 +71,8 @@ export async function loadContent() {
         (p.id === 'homework-project-manage' || p.id === 'homework-arduino-app' || p.id === 'homework-iot-interaction') && 
         p.blocks && p.blocks.length < 20
       );
-      if (hasBluePrince || lacksArduino || lacksRootHomework || lacksHkz || hkzIsNotFirst || hasOldHomework || hasAbsoluteImages || hasMockHomework) {
+      const hasOldPurple = parsed.pages?.some(p => p.id === 'member-purple' && p.title && p.title.includes('周波'));
+      if (hasBluePrince || lacksArduino || lacksRootHomework || lacksHkz || hkzIsNotFirst || hasOldHomework || hasAbsoluteImages || hasMockHomework || hasOldPurple) {
         console.info('Stale cache detected, forcing reload from content.json');
         localStorage.removeItem(STORAGE_KEY);
       } else {
