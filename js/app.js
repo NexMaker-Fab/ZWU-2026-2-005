@@ -129,6 +129,18 @@ class App {
     // Update page meta (author + date)
     this._updatePageMeta(page);
 
+    // Update layout selector display (only for root category folders)
+    const layoutMetaEl = document.getElementById('page-meta-layout');
+    const layoutSelectEl = document.getElementById('page-layout-select');
+    if (layoutMetaEl && layoutSelectEl) {
+      if (page.parentId === null) {
+        layoutMetaEl.style.display = 'flex';
+        layoutSelectEl.value = page.layout || 'grid';
+      } else {
+        layoutMetaEl.style.display = 'none';
+      }
+    }
+
     // Load blocks into editor
     this.editor.load(page.blocks || [], page.lang || 'en');
   }
@@ -997,6 +1009,15 @@ class App {
       const page = this.pageManager.getActivePage();
       if (page) {
         this._togglePageFavorite(page.id, true);
+      }
+    });
+
+    // Layout select dropdown in page header
+    document.getElementById('page-layout-select')?.addEventListener('change', (e) => {
+      const page = this.pageManager.getActivePage();
+      if (page && page.parentId === null) {
+        page.layout = e.target.value;
+        this._onContentUpdate();
       }
     });
 

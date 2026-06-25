@@ -132,6 +132,16 @@
           <span class="page-meta-date" id="page-meta-date"></span>
         </div>
 
+        <!-- Page Showcase Layout Settings (Only shown for root folders) -->
+        <div class="page-meta-layout" id="page-meta-layout" style="display: none; align-items: center; gap: 8px; margin-top: 10px; font-size: 0.82rem; color: var(--text-secondary); background: rgba(0,0,0,0.02); padding: 8px 12px; border-radius: 6px; width: fit-content; border: 1px solid rgba(0,0,0,0.05);">
+          <span style="font-weight: 500;" data-i18n="editor.layout">Display Layout:</span>
+          <select id="page-layout-select" class="form-input" style="width: auto; padding: 2px 6px; font-size: 0.78rem; height: auto; border: 1px solid rgba(0,0,0,0.1); border-radius: 4px; background: transparent; color: inherit; cursor: pointer; outline: none;">
+            <option value="grid" data-i18n="editor.layout.grid" style="color: #333;">Grid (Cards)</option>
+            <option value="timeline" data-i18n="editor.layout.timeline" style="color: #333;">Timeline (Milestones)</option>
+            <option value="list" data-i18n="editor.layout.list" style="color: #333;">List (Vertical)</option>
+          </select>
+        </div>
+
         <!-- Block Editor -->
         <div class="editor" id="editor" role="document">
           <!-- Blocks rendered by JS -->

@@ -308,37 +308,87 @@ function initOnboardingCollapsible() {
 
 // ─── Dynamic CMS Showcase Loading ──────────────────
 async function initPortalShowcase() {
-  const projectsGrid = document.getElementById('projects-grid');
-  const teamGrid = document.getElementById('team-showcase-grid');
-  const timelineContainer = document.getElementById('timeline-container');
+  const container = document.getElementById('showcase-sections-container');
 
   try {
     const contentData = await loadContent();
     const pages = contentData.pages || [];
 
-    // 1. Render Projects
-    const projectPages = pages.filter(p => p.parentId === 'root-projects');
-    renderProjectsList(projectPages, projectsGrid);
+    if (!container) return;
+    container.innerHTML = '';
 
-    // 2. Render Team Members
-    const teamPages = pages.filter(p => p.parentId === 'root-team');
-    renderTeamList(teamPages, teamGrid);
+    // Find all root-level pages except 'welcome'
+    const rootCategories = pages.filter(p => p.parentId === null && p.id !== 'welcome');
 
-    // 3. Render Chronological Progress Timeline
-    const timelinePages = pages.filter(p => p.parentId === 'root-timeline');
-    renderTimelineList(timelinePages, timelineContainer);
+    rootCategories.forEach(category => {
+      // Filter out root pages with no children to avoid empty sections
+      const subPages = pages.filter(p => p.parentId === category.id);
+      if (subPages.length === 0) return;
+
+      const section = document.createElement('section');
+      section.className = 'portal-section';
+      section.id = category.id;
+
+      // Map root category IDs to their specific i18n keys if available
+      let i18nKey = '';
+      if (category.id === 'root-projects') i18nKey = 'landing.section.projects';
+      else if (category.id === 'root-team') i18nKey = 'landing.section.team';
+      else if (category.id === 'root-timeline') i18nKey = 'landing.section.timeline';
+
+      const icon = category.icon || '📁';
+      const title = category.title || 'Untitled';
+      const titleSpan = i18nKey
+        ? `<span data-i18n="${i18nKey}">${title}</span>`
+        : `<span>${title}</span>`;
+
+      section.innerHTML = `
+        <h2 class="section-title">
+          <span class="title-icon">${icon}</span>
+          ${titleSpan}
+        </h2>
+        <div class="section-content-target"></div>
+      `;
+
+      container.appendChild(section);
+
+      const targetContainer = section.querySelector('.section-content-target');
+      const layout = category.layout || 'grid';
+
+      // Route based on layout type
+      if (layout === 'timeline') {
+        targetContainer.className = 'timeline-wrapper';
+        const innerTimeline = document.createElement('div');
+        innerTimeline.className = 'timeline-container';
+        targetContainer.appendChild(innerTimeline);
+        renderTimelineList(subPages, innerTimeline);
+      } else if (layout === 'list') {
+        renderSimpleList(subPages, targetContainer);
+      } else {
+        // Grid (default)
+        if (category.id === 'root-team') {
+          targetContainer.className = 'team-showcase-grid';
+          renderTeamList(subPages, targetContainer);
+        } else {
+          targetContainer.className = 'projects-grid';
+          renderProjectsList(subPages, targetContainer);
+        }
+      }
+    });
+
+    // Translate dynamic elements
+    applyTranslations();
 
     // Re-bind theme listener to redraw cards with updated colors if theme changes
     window.addEventListener('theme-changed', () => {
-      // Re-trigger cards effect
       applyCardHoverEffects('.glass-card');
+      applyCardHoverEffects('.list-item-card');
     });
 
   } catch (error) {
     console.error('Error rendering portal showcase:', error);
-    if (projectsGrid) projectsGrid.innerHTML = `<div class="error-placeholder">Failed to load content.</div>`;
-    if (teamGrid) teamGrid.innerHTML = `<div class="error-placeholder">Failed to load content.</div>`;
-    if (timelineContainer) timelineContainer.innerHTML = `<div class="error-placeholder">Failed to load content.</div>`;
+    if (container) {
+      container.innerHTML = `<div class="error-placeholder" style="text-align: center; padding: 40px; color: var(--text-secondary);">Failed to load content.</div>`;
+    }
   }
 
   // Setup Reader Modal closing handlers
@@ -521,6 +571,51 @@ function renderTimelineList(milestones, container) {
 
     container.appendChild(item);
   });
+}
+
+/** Render simple list (vertical) */
+function renderSimpleList(items, container) {
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (items.length === 0) {
+    container.innerHTML = `<div class="empty-placeholder">No items posted yet.</div>`;
+    return;
+  }
+
+  const listContainer = document.createElement('div');
+  listContainer.className = 'list-layout-container';
+
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'list-item-card glass-card';
+    card.style.cursor = 'pointer';
+
+    const icon = item.icon || '📄';
+    const summary = getPageSummary(item);
+
+    card.innerHTML = `
+      <div class="list-item-main" style="flex: 1;">
+        <div class="list-item-header" style="display: flex; align-items: center; gap: 8px;">
+          <span class="list-item-icon" style="font-size: 1.15rem; display: flex; align-items: center; justify-content: center;">${icon}</span>
+          <h3 class="list-item-title" style="margin: 0; font-size: 1.05rem; font-weight: 600; color: var(--text-primary);">${item.title || 'Untitled'}</h3>
+        </div>
+        <p class="list-item-desc" style="margin: 6px 0 0 28px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">${summary}</p>
+      </div>
+      <div class="list-item-action" style="font-size: 0.85rem; font-weight: 500; color: var(--accent-color); white-space: nowrap; margin-left: 16px; transition: transform 0.2s ease;">
+        Browse →
+      </div>
+    `;
+
+    card.addEventListener('click', () => {
+      openReaderModal(item);
+    });
+
+    listContainer.appendChild(card);
+  });
+
+  container.appendChild(listContainer);
+  applyCardHoverEffects('.list-item-card');
 }
 
 // ─── Reader Modal Display Engine ───────────────────

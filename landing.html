@@ -58,7 +58,7 @@
       <p class="hero-subtitle" data-i18n="landing.subtitle">为现代开发团队打造的轻量级、卡片模块化协作知识库</p>
       
       <div class="action-buttons">
-        <a href="#projects-section" class="btn btn-primary btn-glow" id="view-projects-btn">
+        <a href="#root-projects" class="btn btn-primary btn-glow" id="view-projects-btn">
           <span class="btn-icon">⚡</span>
           <span data-i18n="landing.action.browse">浏览项目</span>
         </a>
@@ -69,43 +69,10 @@
       </div>
     </section>
 
-    <!-- Dynamic Section: Projects Showcase -->
-    <section class="portal-section" id="projects-section">
-      <h2 class="section-title">
-        <span class="title-icon">🚀</span>
-        <span data-i18n="landing.section.projects">项目成果展示 / Projects Showcase</span>
-      </h2>
-      <div class="projects-grid" id="projects-grid">
-        <!-- Loaded dynamically from content.json -->
-        <div class="loading-placeholder">Loading projects...</div>
-      </div>
-    </section>
-
-    <!-- Dynamic Section: Team Members -->
-    <section class="portal-section" id="team-section">
-      <h2 class="section-title">
-        <span class="title-icon">👥</span>
-        <span data-i18n="landing.section.team">项目构建成员 / Team Members</span>
-      </h2>
-      <div class="team-showcase-grid" id="team-showcase-grid">
-        <!-- Loaded dynamically from content.json -->
-        <div class="loading-placeholder">Loading team members...</div>
-      </div>
-    </section>
-
-    <!-- Dynamic Section: Project Progress Timeline -->
-    <section class="portal-section" id="timeline-section">
-      <h2 class="section-title">
-        <span class="title-icon">📅</span>
-        <span data-i18n="landing.section.timeline">开发与项目进展 / Project Progress</span>
-      </h2>
-      <div class="timeline-wrapper">
-        <div class="timeline-container" id="timeline-container">
-          <!-- Loaded dynamically from content.json -->
-          <div class="loading-placeholder">Loading timeline...</div>
-        </div>
-      </div>
-    </section>
+    <!-- Dynamic Showcase Sections Container -->
+    <div id="showcase-sections-container">
+      <div class="loading-placeholder">Loading portal showcase...</div>
+    </div>
 
     <!-- Collapsible Section: Developer Onboarding & Guides -->
     <section class="portal-section collapsible-section" id="developer-onboarding-section">
