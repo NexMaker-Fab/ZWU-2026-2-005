@@ -219,9 +219,13 @@ async function initTeamPage() {
         summary = content.length > 120 ? content.substring(0, 117) + '...' : content;
       }
 
+      const avatarHtml = member.photo 
+        ? `<div class="member-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center; background: none; border-radius: 50%;"><img src="${member.photo}" style="width: 100%; height: 100%; object-fit: cover;"></div>`
+        : `<div class="member-avatar" style="background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%); display:flex; align-items:center; justify-content:center; border-radius:50%; font-size:1.4rem;">${icon}</div>`;
+
       card.innerHTML = `
         <div class="team-member-header">
-          <div class="member-avatar" style="background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%); display:flex; align-items:center; justify-content:center; border-radius:50%; font-size:1.4rem;">${icon}</div>
+          ${avatarHtml}
           <div class="member-meta">
             <h3 class="member-name">${member.title || 'Anonymous'}</h3>
             <span class="member-role">${roleText}</span>
@@ -238,7 +242,7 @@ async function initTeamPage() {
         if (!member.id.startsWith('member-')) {
           folderName = (member.title || '').replace(/\s+/g, '').toLowerCase();
         }
-        window.open(`members/${folderName}/index.html`, '_blank');
+        window.location.href = `members/${folderName}/index.html`;
       });
 
       teamGrid.appendChild(card);

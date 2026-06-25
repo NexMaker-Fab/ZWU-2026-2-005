@@ -58,7 +58,19 @@ export async function loadContent() {
   const cached = localStorage.getItem(STORAGE_KEY);
   if (cached) {
     try {
-      return JSON.parse(cached);
+      const parsed = JSON.parse(cached);
+      // Self-healing: if cache contains the deleted project, lacks the new pages, lacks Hkz, or Hkz is not first, force reload
+      const hasBluePrince = parsed.pages?.some(p => p.id === 'project-blue-prince');
+      const lacksArduino = !parsed.pages?.some(p => p.id === 'project-arduino');
+      const lacksRootHomework = !parsed.pages?.some(p => p.id === 'root-homework');
+      const lacksHkz = !parsed.pages?.some(p => p.id === 'member-hkz');
+      const hkzIsNotFirst = parsed.pages?.filter(p => p.parentId === 'root-team')[0]?.id !== 'member-hkz';
+      if (hasBluePrince || lacksArduino || lacksRootHomework || lacksHkz || hkzIsNotFirst) {
+        console.info('Stale cache detected, forcing reload from content.json');
+        localStorage.removeItem(STORAGE_KEY);
+      } else {
+        return parsed;
+      }
     } catch (e) {
       console.warn('Failed to parse cached content:', e);
     }

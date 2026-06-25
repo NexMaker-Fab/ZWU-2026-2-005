@@ -334,6 +334,7 @@ async function initPortalShowcase() {
       if (category.id === 'root-projects') i18nKey = 'landing.section.projects';
       else if (category.id === 'root-team') i18nKey = 'landing.section.team';
       else if (category.id === 'root-timeline') i18nKey = 'landing.section.timeline';
+      else if (category.id === 'root-homework') i18nKey = 'landing.section.homework';
 
       const icon = category.icon || '📁';
       const title = category.title || 'Untitled';
@@ -451,7 +452,16 @@ function renderProjectsList(projects, container) {
     `;
 
     card.addEventListener('click', () => {
-      openReaderModal(project);
+      if (project.id && project.id.startsWith('homework-')) {
+        const hwKey = project.id.replace('homework-', '');
+        window.location.href = `homework.html?tab=${hwKey}`;
+      } else if (project.id === 'project-arduino') {
+        window.location.href = 'homework.html?tab=arduino-app';
+      } else if (project.id === 'project-teamflow-wiki') {
+        window.location.href = 'homework.html?tab=project-manage';
+      } else {
+        openReaderModal(project);
+      }
     });
 
     container.appendChild(card);
@@ -491,9 +501,13 @@ function renderTeamList(members, container) {
       }
     }
 
+    const avatarHtml = member.photo 
+      ? `<div class="member-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center; background: none;"><img src="${member.photo}" style="width: 100%; height: 100%; object-fit: cover;"></div>`
+      : `<div class="member-avatar">${icon}</div>`;
+
     card.innerHTML = `
       <div class="team-member-header">
-        <div class="member-avatar">${icon}</div>
+        ${avatarHtml}
         <div class="member-meta">
           <h3 class="member-name">${member.title || 'Anonymous'}</h3>
           <span class="member-role">${roleText}</span>
@@ -510,7 +524,7 @@ function renderTeamList(members, container) {
       if (!member.id.startsWith('member-')) {
         folderName = (member.title || '').replace(/\s+/g, '').toLowerCase();
       }
-      window.open(`members/${folderName}/index.html`, '_blank');
+      window.location.href = `members/${folderName}/index.html`;
     });
 
     container.appendChild(card);

@@ -262,6 +262,11 @@ function initParticleBackground() {
 
 // ─── Homework Workspace Logic ─────────────────────
 async function initHomeworkWorkspace() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const tabParam = urlParams.get('tab') || urlParams.get('id');
+  if (tabParam && homeworkKeys.includes(tabParam)) {
+    activeHomeworkId = tabParam;
+  }
   await loadHomeworkData();
   renderSidebarList();
   initBlockEditor();

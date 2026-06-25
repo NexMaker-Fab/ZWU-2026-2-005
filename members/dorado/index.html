@@ -1,115 +1,220 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>张建宇（Dorado） | 个人介绍</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>张建宇（Dorado） | 个人主页</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧑‍💻</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/landing.css">
+  <link rel="stylesheet" href="../../css/member.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <div class="logo">张建宇（Dorado）</div>
-      <nav class="main-nav">
-        <a href="#profile">个人信息</a>
-        <a href="pages/major.html">专业介绍</a>
-        <a href="pages/plan.html">发展规划</a>
-      </nav>
+
+  <!-- Dynamic Interaction Background -->
+  <canvas class="landing-canvas" id="landing-canvas"></canvas>
+
+  <!-- Ambient Light Orbs -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+  <div class="ambient-orb orb-3"></div>
+
+  <!-- Header Navigation -->
+  <header class="landing-header">
+    <div class="brand">
+      <span class="brand-logo">🚀</span>
+      <span class="brand-title" data-i18n="nav.title">团队作业的博客</span>
+    </div>
+    
+    <nav class="nav-links">
+      <a href="../../landing.html" class="nav-link" data-i18n="nav.intro">介绍页</a>
+      <a href="../../team.html" class="nav-link active" data-i18n="nav.team">团队成员</a>
+      <a href="../../homework.html" class="nav-link" data-i18n="nav.homework">平时作业</a>
+      <a href="../../project.html" class="nav-link" data-i18n="nav.project">最终项目</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="../../app.html" class="nav-workspace-btn" id="header-workspace-btn" title="Admin Workspace">
+        <span>📝</span>
+        <span data-i18n="landing.header.workspace">协作后台</span>
+      </a>
+      <button class="icon-btn" id="theme-toggle-btn" title="Toggle Theme">
+        <span id="theme-icon">☀️</span>
+      </button>
+      <button class="lang-toggle-btn" id="lang-toggle-btn">
+        <span class="lang-icon">🌐</span>
+        <span id="lang-label">English / 中文</span>
+      </button>
     </div>
   </header>
 
-  <main>
-    <section class="hero-section">
-      <div class="hero-content">
-        <h1>张建宇（Dorado）</h1>
-        <p>Art & Tech | Sino-German Dual Degree Program</p>
-      </div>
-      <div class="hero-lines"></div>
-    </section>
-
-    <section id="profile" class="profile-section section-panel">
-      <div class="container section-grid">
-        <div class="profile-text" style="flex:1;">
-          <h2>PROFILE</h2>
-          <p><strong>姓名：</strong>张建宇（Dorado）</p>
-          <p><strong>就读院校：</strong>浙江万里学院</p>
-          <p><strong>所属学部：</strong>中德品牌学部</p>
-          <p><strong>专业班级：</strong>艺术与科技 中德(2+2) 24A2班</p>
-          <p><strong>培养模式：</strong>中德双学位2+2联合培养项目</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="about-section section-panel">
-      <div class="container about-inner">
-        <h2>ABOUT ME</h2>
-        <p>我是张建宇，英文名Dorado，就读于浙江万里学院中德品牌学部艺术与科技2+2合作班。我们专业融合国内设计基础与德国数字艺术课程，两种截然不同的教学思路，也让我找到了自己更感兴趣的创作方向。</p>
-        <p>比起平面插画类创作，我对硬件交互、编程、三维建模更感兴趣。软件方面基础掌握PS、AE用来处理配套视觉素材，平时更多精力放在Arduino开发、传感器接线、简易代码编写上；同时学习CAD三维建模，尝试给自制硬件设备设计外壳，也会接触AI工具辅助生成装置外观参考图。</p>
-        <p>目前还处在入门摸索阶段，复杂代码、高精度建模暂时还无法独立完成，主要跟着课程一步步练习环境监测、感应灯光这类小型交互装置，一点点吃透硬件接线逻辑、基础编程语句和零件建模流程。我很喜欢把程序代码、实体硬件和简单视觉效果结合起来，做出可以互动的实物作品，经常围绕环保、环境感知主题完成课堂项目。</p>
-      </div>
-    </section>
-
-    <section class="features-section section-panel">
-      <div class="container section-header">
-        <h2>FEATURES</h2>
-        <p>专业特色与学习优势</p>
-      </div>
-      <div class="container card-grid">
-        <article class="feature-card">
-          <h3>双学位分段培养</h3>
-          <p>采用2+2学习模式，前两年在校内完成美术、设计、数字技术基础课程，后续可自主选择是否前往德国合作院校深造，两条发展路径都可行，毕业对应不同学位证书。</p>
-        </article>
-        <article class="feature-card">
-          <h3>文理交叉学习模式</h3>
-          <p>专业不局限单一美术创作，同时兼顾视觉设计、数字媒体、基础硬件、三维建模相关内容，培养兼顾审美与基础技术的综合设计学生。</p>
-        </article>
-        <article class="feature-card">
-          <h3>国际化学习视角</h3>
-          <p>同步学习中西方两种设计教学体系，对比不同的创作思路，拓宽自己的设计审美与思考方式，即便不赴德学习，也能吸收海外交互装置设计理念。</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="plan-section section-panel">
-      <div class="container plan-inner">
-        <div class="panel-line"></div>
-        <div>
-          <h2>STUDY PLAN</h2>
-          <p>在校期间重点夯实Arduino硬件开发、传感器实操与三维建模能力，独立完成课堂交互装置全套作品，搭建线上作品集整合硬件项目与3D模型。未来以硬件交互、三维建模作为自身核心竞争力，从事智能交互装置相关设计工作，可自主选择是否赴德深造，平面设计仅作为配套辅助技能使用。</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="campus-section section-panel">
-      <div class="container section-header">
-        <h2>CAMPUS</h2>
-        <p>校园空间与学习环境展示</p>
-      </div>
-      <div class="container grid-images">
-        <div class="image-large">
-          <img src="images/campus-1.jpg" alt="校园中庭建筑视图" />
-        </div>
-        <div class="image-small">
-          <img src="images/campus-2.jpg" alt="校园内教学楼与楼梯" />
-          <img src="images/campus-3.jpg" alt="图书馆阶梯学习区" />
-        </div>
-      </div>
-    </section>
-
-    <section class="interests-section section-panel">
-      <div class="container interests-inner">
-        <div class="interest-text">
-          <h2>INTERESTS</h2>
-          <p>我喜欢打游戏、打羽毛球、看书，也喜欢将代码、硬件和视觉设计结合起来，探索交互装置的多种可能。通过Arduino与传感器实现环境感知，用3D建模设计结构与外壳，利用视觉素材提升体验表达，打造具有科技感与人文关怀的作品。</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>© 2026 张建宇（Dorado） | 浙江万里学院 中德品牌学部 艺术与科技2+2 24A2班</p>
+  <!-- Main Container -->
+  <div class="landing-container" style="padding-top: 100px;">
+    
+    <!-- Breadcrumbs -->
+    <div class="breadcrumb" style="margin-bottom: 20px; font-size: 0.9rem;">
+      <a href="../../team.html" style="color: var(--text-muted); text-decoration: none;" data-i18n="nav.team">团队成员</a> / <span>张建宇（Dorado）</span>
     </div>
-  </footer>
+
+    <!-- Layout Grid -->
+    <div class="profile-layout">
+      
+      <!-- Left Sidebar: Profile Card & Tabs -->
+      <aside class="profile-sidebar glass-card">
+        <div class="profile-avatar">
+          <span>🧑‍💻</span>
+        </div>
+        <h2 class="profile-name">张建宇 / Dorado</h2>
+        <p class="profile-sub">Art & Tech | Project Lead & Hardware</p>
+        
+        <div class="profile-nav-menu">
+          <button class="profile-nav-btn active" data-tab="tab-profile">
+            <span>🧑‍💻</span> 个人信息 / Profile
+          </button>
+          <button class="profile-nav-btn" data-tab="tab-major">
+            <span>🎓</span> 专业介绍 / Major
+          </button>
+          <button class="profile-nav-btn" data-tab="tab-plan">
+            <span>📅</span> 发展规划 / Plan
+          </button>
+          <button class="profile-nav-btn" data-tab="tab-campus">
+            <span>🏫</span> 校园印象 / Campus
+          </button>
+        </div>
+      </aside>
+
+      <!-- Right Column: Content Display -->
+      <main class="profile-content">
+        
+        <!-- Tab 1: 个人信息 -->
+        <div class="tab-pane active" id="tab-profile">
+          <div class="info-card glass-card">
+            <h3 class="section-title-sub"><span>👤</span> 个人基础信息 / Profile</h3>
+            
+            <div class="info-grid">
+              <div class="info-list">
+                <div class="info-item">
+                  <span class="info-label">姓名</span>
+                  <span class="info-value">张建宇 (Dorado)</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">就读院校</span>
+                  <span class="info-value">浙江万里学院</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">所属学部</span>
+                  <span class="info-value">中德品牌学部</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">专业班级</span>
+                  <span class="info-value">艺术与科技 中德(2+2) 24A2班</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">培养模式</span>
+                  <span class="info-value">中德双学位2+2联合培养项目</span>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <div class="profile-avatar" style="width: 160px; height: 160px; font-size: 5rem; margin: 0;">
+                  <span>🧑‍💻</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 30px; border-top: 1px solid var(--border-glass); padding-top: 24px;">
+              <h3 class="section-title-sub"><span>📝</span> 关于我 / About Me</h3>
+              <p class="text-paragraph">我是张建宇，英文名Dorado，就读于浙江万里学院中德品牌学部艺术与科技2+2合作班。我们专业融合国内设计基础与德国数字艺术课程，两种截然不同的教学思路，也让我找到了自己更感兴趣的创作方向。</p>
+              <p class="text-paragraph">比起平面插画类创作，我对硬件交互、编程、三维建模更感兴趣。软件方面基础掌握PS、AE用来处理配套视觉素材，平时更多精力放在Arduino开发、传感器接线、简易代码编写上；同时学习CAD三维建模，尝试给自制硬件设备设计外壳，也会接触AI工具辅助生成装置外观参考图。</p>
+              <p class="text-paragraph">目前还处在入门摸索阶段，复杂代码、高精度建模暂时还无法独立完成，主要跟着课程一步步练习环境监测、感应灯光这类小型交互装置，一点点吃透硬件接线逻辑、基础编程语句和零件建模流程。我很喜欢把程序代码、实体硬件和简单视觉效果结合起来，做出可以互动的实物作品，经常围绕环保、环境感知主题完成课堂项目。</p>
+            </div>
+
+            <div style="margin-top: 30px; border-top: 1px solid var(--border-glass); padding-top: 24px;">
+              <h3 class="section-title-sub"><span>🎮</span> 个人兴趣 / Interests</h3>
+              <p class="text-paragraph">我喜欢打游戏、打羽毛球、看书，也喜欢将代码、硬件和视觉设计结合起来，探索交互装置的多种可能。通过Arduino与传感器实现环境感知，用3D建模设计结构与外壳，利用视觉素材提升体验表达，打造具有科技感与人文关怀的作品。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: 专业介绍 -->
+        <div class="tab-pane" id="tab-major">
+          <div class="info-card glass-card">
+            <h3 class="section-title-sub"><span>🎓</span> 专业方向介绍 / Major Features</h3>
+            <p class="text-paragraph">艺术与科技专业融合国内设计基础与德国数字艺术课程，强调跨学科整合与实践能力培养。课程内容涵盖视觉设计、媒体艺术、硬件交互、传感器应用与三维建模，为学生提供设计与技术双重支持。</p>
+            <p class="text-paragraph">该专业面向具有创新潜力的综合设计学生，重视审美训练与技术实践并行，适合希望将视觉表达与电子装置融合、打造互动作品的学习者。</p>
+            
+            <div class="features-grid">
+              <div class="feature-card-profile">
+                <h4 class="feature-card-title">🇩🇪 双学位分段培养</h4>
+                <p class="feature-card-desc">采用2+2学习模式，前两年在校内完成美术、设计、数字技术基础课程，后续可自主选择是否前往德国合作院校深造，两条发展路径都可行，毕业对应不同学位证书。</p>
+              </div>
+              <div class="feature-card-profile">
+                <h4 class="feature-card-title">🔬 文理交叉学习模式</h4>
+                <p class="feature-card-desc">专业不局限单一美术创作，同时兼顾视觉设计、数字媒体、基础硬件、三维建模相关内容，培养兼顾审美与基础技术的综合设计学生。</p>
+              </div>
+              <div class="feature-card-profile">
+                <h4 class="feature-card-title">🌍 国际化学习视角</h4>
+                <p class="feature-card-desc">同步学习中西方两种设计教学体系，对比不同的创作思路，拓宽自己的设计审美与思考方式，即便不赴德学习，也能吸收海外交互装置设计理念。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: 发展规划 -->
+        <div class="tab-pane" id="tab-plan">
+          <div class="info-card glass-card">
+            <h3 class="section-title-sub"><span>📅</span> 个人学习与发展规划 / Study Plan</h3>
+            
+            <div class="roadmap-container">
+              <div class="roadmap-item">
+                <h4 class="roadmap-title">在校学习阶段</h4>
+                <p class="roadmap-desc">重点夯实Arduino硬件开发、传感器实操与三维建模能力，独立完成课堂交互装置全套作品，搭建线上作品集整合硬件项目与3D模型。</p>
+              </div>
+              <div class="roadmap-item">
+                <h4 class="roadmap-title">未来竞争力构建</h4>
+                <p class="roadmap-desc">以硬件交互、三维建模作为自身核心竞争力，从事智能交互装置相关设计工作，平面设计仅作为配套辅助技能使用。</p>
+              </div>
+              <div class="roadmap-item">
+                <h4 class="roadmap-title">深造路线选择</h4>
+                <p class="roadmap-desc">在完成国内学业后，可根据个人发展方向和具体条件，自主选择是否前往德国合作院校进一步深造。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: 校园印象 -->
+        <div class="tab-pane" id="tab-campus">
+          <div class="info-card glass-card">
+            <h3 class="section-title-sub"><span>🏫</span> 校园印象与环境展示 / Campus Show</h3>
+            <p class="text-paragraph">这里展示了我们在中德品牌学部的日常学习空间以及万里学院的经典景观。在现代化设计工坊与阶梯教室中，我们在浓厚的国际化教学氛围中不断激发灵感。</p>
+            
+            <div class="campus-grid-container">
+              <div class="campus-img-main">
+                <img src="/members/dorado/images/campus-1.jpg" alt="校园中庭建筑视图">
+              </div>
+              <div class="campus-thumbs-col">
+                <div class="campus-img-thumb">
+                  <img src="/members/dorado/images/campus-2.jpg" alt="校园内教学楼与楼梯">
+                </div>
+                <div class="campus-img-thumb">
+                  <img src="/members/dorado/images/campus-3.jpg" alt="图书馆阶梯学习区">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+
+    <!-- Page Footer -->
+    <footer class="landing-footer">
+      <p class="footer-text">Made by ZWU-2026-2-005 2026</p>
+    </footer>
+  </div>
+
+  <script type="module" src="../../js/member-profile.js"></script>
 </body>
 </html>
