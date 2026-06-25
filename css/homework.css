@@ -335,3 +335,52 @@
     padding: 24px;
   }
 }
+
+/* Inline Outline / Table of Contents at the beginning of the notebook */
+.homework-editor-wrapper .editor-toc {
+  width: 100% !important;
+  max-width: var(--editor-max-width) !important;
+  margin: 0 auto 30px auto !important;
+  position: static !important;
+  border-left: none !important;
+  padding: 20px 24px !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px dashed var(--border-glass) !important;
+  border-radius: 12px !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .homework-editor-wrapper .editor-toc {
+  background: rgba(0, 0, 0, 0.01) !important;
+  border: 1px dashed rgba(0, 0, 0, 0.08) !important;
+}
+
+.homework-editor-wrapper .editor-toc h4 {
+  font-size: 0.85rem !important;
+  color: var(--text-muted) !important;
+  margin-bottom: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.8px !important;
+}
+
+.homework-editor-wrapper .toc-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+.homework-editor-wrapper .toc-item {
+  font-size: 0.9rem !important;
+  color: var(--text-main) !important;
+  opacity: 0.85;
+}
+
+.homework-editor-wrapper .toc-item:hover {
+  opacity: 1;
+  color: var(--accent-primary) !important;
+  transform: translateX(4px);
+}
