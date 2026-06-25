@@ -526,3 +526,123 @@ export function applyTranslations() {
 export function toggleLanguage() {
   setLang(currentLang === 'en' ? 'zh' : 'en');
 }
+
+// ─── Premium Custom Cursor ────────────────────────
+function initCustomCursor() {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+
+  // Check if cursor elements already exist
+  if (document.querySelector('.custom-cursor-dot')) return;
+
+  // Inject CSS styles
+  const style = document.createElement('style');
+  style.textContent = `
+    @media (pointer: fine) {
+      html, body, a, button, select, input, textarea, [role="button"], [contenteditable="true"], .page-icon-display {
+        cursor: none !important;
+      }
+      .custom-cursor-dot {
+        width: 6px;
+        height: 6px;
+        background-color: var(--accent-primary, #3b82f6);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 100000;
+        transform: translate(-50%, -50%);
+        transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+      }
+      .custom-cursor-ring {
+        width: 26px;
+        height: 26px;
+        border: 1.5px solid var(--accent-primary, #3b82f6);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 99999;
+        transform: translate(-50%, -50%);
+        transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+      }
+      body.custom-cursor-hover .custom-cursor-dot {
+        width: 3px;
+        height: 3px;
+        background-color: var(--accent-secondary, #8b5cf6) !important;
+      }
+      body.custom-cursor-hover .custom-cursor-ring {
+        width: 36px;
+        height: 36px;
+        border-color: var(--accent-secondary, #8b5cf6) !important;
+        background-color: rgba(139, 92, 246, 0.12) !important;
+      }
+      body.custom-cursor-click .custom-cursor-dot {
+        transform: translate(-50%, -50%) scale(1.5);
+      }
+      body.custom-cursor-click .custom-cursor-ring {
+        transform: translate(-50%, -50%) scale(0.6);
+        background-color: rgba(59, 130, 246, 0.3) !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Create cursor DOM elements
+  const dot = document.createElement('div');
+  const ring = document.createElement('div');
+  dot.className = 'custom-cursor-dot';
+  ring.className = 'custom-cursor-ring';
+  document.body.appendChild(dot);
+  document.body.appendChild(ring);
+
+  let mouseX = -100;
+  let mouseY = -100;
+  let ringX = -100;
+  let ringY = -100;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    dot.style.left = `${mouseX}px`;
+    dot.style.top = `${mouseY}px`;
+  });
+
+  // Lerp for the lag ring effect
+  function tick() {
+    ringX += (mouseX - ringX) * 0.15;
+    ringY += (mouseY - ringY) * 0.15;
+    ring.style.left = `${ringX}px`;
+    ring.style.top = `${ringY}px`;
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  // Click Animation
+  window.addEventListener('mousedown', () => {
+    document.body.classList.add('custom-cursor-click');
+  });
+  window.addEventListener('mouseup', () => {
+    document.body.classList.remove('custom-cursor-click');
+  });
+
+  // Hover states on interactive items
+  const interactives = 'a, button, select, input, textarea, [role="button"], [contenteditable="true"], .page-icon-display, .form-input, .homework-item-card, .team-member-card, .pref-card, .info-card, .mood-btn, .block-drag-handle, .block-plus-btn';
+  
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest(interactives)) {
+      document.body.classList.add('custom-cursor-hover');
+    }
+  });
+
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest(interactives)) {
+      document.body.classList.remove('custom-cursor-hover');
+    }
+  });
+}
+
+// Auto init on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCustomCursor);
+} else {
+  initCustomCursor();
+}
+
