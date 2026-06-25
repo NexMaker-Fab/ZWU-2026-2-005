@@ -189,17 +189,17 @@ export class BlockEditor {
       let numberStr = '';
 
       if (level === 1) {
+        // Level 1 headings are usually page/document titles. We don't number them.
+        numberStr = '';
+      } else if (level === 2) {
         counters[0]++;
         counters[1] = 0;
         counters[2] = 0;
         numberStr = `${counters[0]}`;
-      } else if (level === 2) {
+      } else if (level === 3) {
         counters[1]++;
         counters[2] = 0;
         numberStr = `${counters[0]}.${counters[1]}`;
-      } else if (level === 3) {
-        counters[2]++;
-        numberStr = `${counters[0]}.${counters[1]}.${counters[2]}`;
       }
 
       const item = document.createElement('div');
@@ -210,7 +210,11 @@ export class BlockEditor {
       const text = tempEl.textContent.trim() || 'Untitled Heading';
       const cleanText = text.replace(/^[0-9.]+\s*/, '');
       
-      item.textContent = `${numberStr}. ${cleanText}`;
+      if (numberStr) {
+        item.textContent = `${numberStr}. ${cleanText}`;
+      } else {
+        item.textContent = cleanText;
+      }
       
       item.addEventListener('click', () => {
         const blockEl = this._getBlockEl(heading.id);
