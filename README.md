@@ -1,8 +1,8 @@
-# TeamFlow Wiki 📝
+# 团队作业的博客 / Team Homework Blog 📝
 
 <div align="center">
 
-一个轻量级、类 Notion 风格的团队协作 Wiki — 纯前端实现，支持中英双语，可一键部署至 GitHub Pages。
+一个轻量级、类 Notion 风格的团队作业与项目成果展示博客 — 纯前端实现，支持中英双语，可一键部署至 GitHub Pages。
 
 **[🌐 在线体验](https://nexmaker-fab.github.io/ZWU-2026-2-005/)** · **[📋 提交 Issue](https://github.com/NexMaker-Fab/ZWU-2026-2-005/issues)** · **[🔀 查看 PR](https://github.com/NexMaker-Fab/ZWU-2026-2-005/pulls)**
 

@@ -73,7 +73,7 @@ export async function saveToGitHub(data) {
 
     // Create or update the file
     const putBody = {
-      message: `Update content via TeamFlow Wiki [${new Date().toLocaleString()}]`,
+      message: `Update content via Team Homework Blog [${new Date().toLocaleString()}]`,
       content: encoded,
       branch: settings.branch
     };

@@ -1,12 +1,12 @@
 {
   "site": {
-    "name": "TeamFlow Wiki",
+    "name": "团队作业的博客",
     "theme": "light"
   },
   "pages": [
     {
       "id": "welcome",
-      "title": "Welcome to TeamFlow",
+      "title": "欢迎使用",
       "icon": "👋",
       "parentId": null,
       "blocks": [
@@ -14,7 +14,7 @@
           "id": "w1",
           "type": "heading",
           "level": 1,
-          "content": "Welcome to TeamFlow Wiki"
+          "content": "欢迎使用团队作业的博客"
         },
         {
           "id": "w2",
@@ -109,7 +109,7 @@
     },
     {
       "id": "project-teamflow-wiki",
-      "title": "TeamFlow Wiki 本地化展示平台",
+      "title": "团队作业展示平台",
       "icon": "📝",
       "parentId": "root-projects",
       "blocks": [
@@ -117,7 +117,7 @@
           "id": "tf1",
           "type": "heading",
           "level": 1,
-          "content": "TeamFlow Wiki 本地化展示平台"
+          "content": "团队作业展示平台"
         },
         {
           "id": "tf2",

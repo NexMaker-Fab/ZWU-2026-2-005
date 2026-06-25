@@ -1383,5 +1383,5 @@ class App {
 
 const app = new App();
 app.init().catch(err => {
-  console.error('Failed to initialize TeamFlow:', err);
+  console.error('Failed to initialize Team Homework Blog:', err);
 });

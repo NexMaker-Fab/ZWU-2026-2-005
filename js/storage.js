@@ -8,15 +8,15 @@ const DATA_PATH = 'data/content.json';
 /** Default empty content structure */
 function createDefaultContent() {
   return {
-    site: { name: 'TeamFlow Wiki', theme: 'light' },
+    site: { name: '团队作业的博客', theme: 'light' },
     pages: [
       {
         id: 'welcome',
-        title: 'Welcome to TeamFlow',
+        title: '欢迎使用',
         icon: '👋',
         parentId: null,
         blocks: [
-          { id: 'w1', type: 'heading', level: 1, content: 'Welcome to TeamFlow Wiki' },
+          { id: 'w1', type: 'heading', level: 1, content: '欢迎使用团队作业的博客' },
           { id: 'w2', type: 'paragraph', content: '这是一个专为团队项目进程展示和协作打造的门户网站后台。' }
         ]
       },

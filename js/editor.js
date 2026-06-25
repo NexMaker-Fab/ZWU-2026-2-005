@@ -60,6 +60,24 @@ export function sanitizeHtml(html) {
   return cleanBody.innerHTML;
 }
 
+/**
+ * Render inline Markdown syntax into HTML tags.
+ * Supports bold (**), italic (* or _), code (`), strikeout (~~), and links ([text](url)).
+ * @param {string} text
+ * @returns {string}
+ */
+export function renderInlineMarkdown(text) {
+  if (!text) return '';
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/_(.*?)_/g, '<em>$1</em>')
+    .replace(/~~(.*?)~~/g, '<del>$1</del>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+}
+
+
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;       // 5MB hard limit
 const COMPRESS_THRESHOLD = 500 * 1024;         // 500KB — compress above this
 const COMPRESS_QUALITY = 0.7;
@@ -115,6 +133,7 @@ export class BlockEditor {
     this.activeBlockId = null;
     this.slashMenuTarget = null;
     this.draggedBlockId = null;
+    this.undoManager = new UndoManager(this);
 
     this._bindEvents();
   }
@@ -126,6 +145,8 @@ export class BlockEditor {
     this.blocks = blocks || [];
     this.pageLang = lang;
     this.render();
+    this.undoManager.clear();
+    this.undoManager.saveState();
   }
 
   /** Get current blocks data */
@@ -155,7 +176,14 @@ export class BlockEditor {
         block.content = extraData.content || '';
         break;
       case 'paragraph':
+      case 'quote':
+      case 'code':
+      case 'bullet-list':
         block.content = extraData.content || '';
+        break;
+      case 'todo':
+        block.content = extraData.content || '';
+        block.checked = !!extraData.checked;
         break;
       case 'image':
         block.src = extraData.src || '';
@@ -211,6 +239,7 @@ export class BlockEditor {
     }
     this._insertDomBlockAfter(afterId, block);
     this.onUpdate();
+    this.undoManager.saveState();
 
     // Focus the new block
     requestAnimationFrame(() => {
@@ -230,6 +259,7 @@ export class BlockEditor {
     this.blocks.splice(idx, 1);
     this._removeDomBlock(id);
     this.onUpdate();
+    this.undoManager.saveState();
   }
 
   /** Change block type */
@@ -259,6 +289,7 @@ export class BlockEditor {
 
     this._replaceDomBlock(block);
     this.onUpdate();
+    this.undoManager.saveState();
 
     // Focus the changed block
     requestAnimationFrame(() => {
@@ -332,7 +363,7 @@ export class BlockEditor {
         el.dataset.type = 'heading';
         el.dataset.level = block.level || 1;
         el.dataset.placeholder = t('placeholder.heading') + (block.level || 1);
-        el.innerHTML = sanitizeHtml(block.content || '');
+        el.innerHTML = sanitizeHtml(renderInlineMarkdown(block.content || ''));
         return el;
       }
       case 'paragraph': {
@@ -341,8 +372,78 @@ export class BlockEditor {
         el.contentEditable = 'true';
         el.dataset.type = 'paragraph';
         el.dataset.placeholder = t('placeholder.paragraph');
-        el.innerHTML = sanitizeHtml(block.content || '');
+        el.innerHTML = sanitizeHtml(renderInlineMarkdown(block.content || ''));
         return el;
+      }
+      case 'quote': {
+        const el = document.createElement('blockquote');
+        el.className = 'block-content block-quote';
+        el.contentEditable = 'true';
+        el.dataset.type = 'quote';
+        el.dataset.placeholder = t('placeholder.quote') || 'Quote';
+        el.innerHTML = sanitizeHtml(renderInlineMarkdown(block.content || ''));
+        return el;
+      }
+      case 'code': {
+        const wrap = document.createElement('div');
+        wrap.className = 'block-code-container';
+        const el = document.createElement('pre');
+        el.className = 'block-content block-code';
+        el.contentEditable = 'true';
+        el.dataset.type = 'code';
+        el.dataset.placeholder = t('placeholder.code') || '// Write code here...';
+        el.textContent = block.content || '';
+        wrap.appendChild(el);
+        return wrap;
+      }
+      case 'bullet-list': {
+        const wrap = document.createElement('div');
+        wrap.className = 'block-bullet-container';
+        const bullet = document.createElement('span');
+        bullet.className = 'bullet-point';
+        bullet.innerHTML = '•';
+        const el = document.createElement('div');
+        el.className = 'block-content bullet-text';
+        el.contentEditable = 'true';
+        el.dataset.type = 'bullet-list';
+        el.dataset.placeholder = t('placeholder.bullet') || 'List';
+        el.innerHTML = sanitizeHtml(renderInlineMarkdown(block.content || ''));
+        wrap.appendChild(bullet);
+        wrap.appendChild(el);
+        return wrap;
+      }
+      case 'todo': {
+        const wrap = document.createElement('div');
+        wrap.className = 'block-todo-container';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'todo-checkbox';
+        checkbox.checked = !!block.checked;
+        
+        const el = document.createElement('div');
+        el.className = 'block-content todo-text';
+        el.contentEditable = 'true';
+        el.dataset.type = 'todo';
+        el.dataset.placeholder = t('placeholder.todo') || 'To-do';
+        el.innerHTML = sanitizeHtml(renderInlineMarkdown(block.content || ''));
+        if (block.checked) {
+          el.classList.add('checked');
+        }
+        
+        checkbox.addEventListener('change', () => {
+          block.checked = checkbox.checked;
+          if (checkbox.checked) {
+            el.classList.add('checked');
+          } else {
+            el.classList.remove('checked');
+          }
+          this.onUpdate();
+          this.undoManager.saveState();
+        });
+        
+        wrap.appendChild(checkbox);
+        wrap.appendChild(el);
+        return wrap;
       }
       case 'image': {
         const wrap = document.createElement('div');
@@ -381,7 +482,7 @@ export class BlockEditor {
         el.className = 'block-content';
         el.contentEditable = 'true';
         el.dataset.type = 'paragraph';
-        el.innerHTML = sanitizeHtml(block.content || '');
+        el.innerHTML = sanitizeHtml(renderInlineMarkdown(block.content || ''));
         return el;
       }
     }
@@ -449,7 +550,7 @@ export class BlockEditor {
       this.render();
     });
 
-    // Input handler — debounced auto-save + slash command filtering
+    // Input handler — debounced auto-save + slash command filtering + undo manager state save
     let saveTimer = null;
     this.editorEl.addEventListener('input', (e) => {
       // Slash menu filtering
@@ -471,6 +572,7 @@ export class BlockEditor {
       saveTimer = setTimeout(() => {
         this._syncAllBlocks();
         this.onUpdate();
+        this.undoManager.saveState(); // Save state on typing pause
       }, 500);
     });
 
@@ -486,6 +588,29 @@ export class BlockEditor {
       }
       if (!this.toolbarEl.contains(e.target)) {
         this._hideToolbar();
+      }
+    });
+
+    // Click on editor blank area to edit
+    this.editorEl.addEventListener('click', (e) => {
+      if (e.target === this.editorEl) {
+        if (this.blocks.length === 0) {
+          this.addBlockAfter(null, 'paragraph');
+        } else {
+          const lastBlock = this.blocks[this.blocks.length - 1];
+          const lastEl = this.editorEl.querySelector(`[data-id="${lastBlock.id}"] .block-content, [data-id="${lastBlock.id}"] .image-caption`);
+          if (lastEl && lastEl.contentEditable === 'true') {
+            lastEl.focus();
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.selectNodeContents(lastEl);
+            range.collapse(false);
+            sel.removeAllRanges();
+            sel.addRange(range);
+          } else {
+            this.addBlockAfter(lastBlock.id, 'paragraph');
+          }
+        }
       }
     });
 
@@ -548,6 +673,24 @@ export class BlockEditor {
       }
     });
 
+    // Global Undo / Redo key bindings
+    document.addEventListener('keydown', (e) => {
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      const isCmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
+      if (isCmdOrCtrl && e.key === 'z') {
+        if (e.shiftKey) {
+          e.preventDefault();
+          this.undoManager.redo();
+        } else {
+          e.preventDefault();
+          this.undoManager.undo();
+        }
+      } else if (isCmdOrCtrl && e.key === 'y') {
+        e.preventDefault();
+        this.undoManager.redo();
+      }
+    });
+
     // Floating toolbar button clicks
     this.toolbarEl.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-command]');
@@ -588,6 +731,49 @@ export class BlockEditor {
       }
     }
 
+    // Space — Markdown shortcuts / auto-formatting
+    if (e.key === ' ') {
+      const contentEl = e.target.closest('.block-content');
+      if (contentEl) {
+        const text = contentEl.textContent || '';
+        const offset = this._getCursorOffset(contentEl);
+        const prefix = text.substring(0, offset);
+
+        if (prefix === '#') {
+          e.preventDefault();
+          contentEl.textContent = text.substring(offset);
+          this.changeBlockType(blockId, 'heading', 1);
+        } else if (prefix === '##') {
+          e.preventDefault();
+          contentEl.textContent = text.substring(offset);
+          this.changeBlockType(blockId, 'heading', 2);
+        } else if (prefix === '###') {
+          e.preventDefault();
+          contentEl.textContent = text.substring(offset);
+          this.changeBlockType(blockId, 'heading', 3);
+        } else if (prefix === '>') {
+          e.preventDefault();
+          contentEl.textContent = text.substring(offset);
+          this.changeBlockType(blockId, 'quote');
+        } else if (prefix === '```') {
+          e.preventDefault();
+          contentEl.textContent = text.substring(offset);
+          this.changeBlockType(blockId, 'code');
+        } else if (prefix === '-' || prefix === '*') {
+          e.preventDefault();
+          contentEl.textContent = text.substring(offset);
+          this.changeBlockType(blockId, 'bullet-list');
+        } else if (prefix === '[]') {
+          e.preventDefault();
+          contentEl.textContent = text.substring(offset);
+          this.changeBlockType(blockId, 'todo');
+        } else if (prefix === '---') {
+          e.preventDefault();
+          this.changeBlockType(blockId, 'divider');
+        }
+      }
+    }
+
     // If slash menu is visible, let the dedicated slash menu keyboard handler deal with it
     // MUST be checked before Enter/Arrow handling to prevent creating new blocks
     if (this._isSlashMenuVisible()) {
@@ -602,6 +788,13 @@ export class BlockEditor {
       e.preventDefault();
       const contentEl = e.target.closest('.block-content');
       if (!contentEl) return;
+
+      // Special check: if text is '---', convert to divider instead of splitting
+      const text = contentEl.textContent || '';
+      if (text.trim() === '---') {
+        this.changeBlockType(blockId, 'divider');
+        return;
+      }
 
       this._syncBlock(blockId);
 
@@ -625,8 +818,13 @@ export class BlockEditor {
       // Update current block data and DOM
       const block = this.blocks.find(b => b.id === blockId);
       if (block) {
-        block.content = sanitizeHtml(textBefore);
-        contentEl.innerHTML = block.content;
+        // Special case: if code block, keep plain text
+        if (block.type === 'code') {
+          block.content = contentEl.textContent || '';
+        } else {
+          block.content = sanitizeHtml(textBefore);
+          contentEl.innerHTML = block.content;
+        }
       }
 
       // Create new paragraph with text after cursor
@@ -646,10 +844,10 @@ export class BlockEditor {
 
         const prevBlock = this.blocks[idx - 1];
         const currentBlock = this.blocks[idx];
+        const textTypes = ['heading', 'paragraph', 'quote', 'bullet-list', 'todo', 'code'];
 
-        // If both are text blocks (heading/paragraph), merge content
-        if ((prevBlock.type === 'heading' || prevBlock.type === 'paragraph')
-            && (currentBlock.type === 'heading' || currentBlock.type === 'paragraph')) {
+        // If both are text blocks, merge content
+        if (textTypes.includes(prevBlock.type) && textTypes.includes(currentBlock.type)) {
           e.preventDefault();
 
           // Get the plain-text merge point Y character offset before appending
@@ -660,17 +858,23 @@ export class BlockEditor {
           this._syncBlock(prevBlock.id);
           this._syncBlock(currentBlock.id);
 
-          prevBlock.content = sanitizeHtml((prevBlock.content || '') + (currentBlock.content || ''));
-
-          // Update DOM of prevBlock
-          if (prevEl) {
-            prevEl.innerHTML = prevBlock.content;
+          if (prevBlock.type === 'code' || currentBlock.type === 'code') {
+            prevBlock.content = (prevBlock.content || '') + (currentBlock.content || '');
+            if (prevEl) {
+              prevEl.textContent = prevBlock.content;
+            }
+          } else {
+            prevBlock.content = sanitizeHtml((prevBlock.content || '') + (currentBlock.content || ''));
+            if (prevEl) {
+              prevEl.innerHTML = prevBlock.content;
+            }
           }
 
           // Remove current block from data and DOM
           this.blocks.splice(idx, 1);
           this._removeDomBlock(blockId);
           this.onUpdate();
+          this.undoManager.saveState();
 
           // Place cursor at merge point
           requestAnimationFrame(() => {
@@ -683,6 +887,7 @@ export class BlockEditor {
           this.blocks.splice(idx, 1);
           this._removeDomBlock(blockId);
           this.onUpdate();
+          this.undoManager.saveState();
           requestAnimationFrame(() => {
             const prevEl = this.editorEl.querySelector(`[data-id="${prevId}"] .block-content`);
             if (prevEl && prevEl.contentEditable === 'true') {
@@ -912,6 +1117,18 @@ export class BlockEditor {
       case 'heading3':
         this.changeBlockType(blockId, 'heading', 3);
         break;
+      case 'quote':
+        this.changeBlockType(blockId, 'quote');
+        break;
+      case 'code':
+        this.changeBlockType(blockId, 'code');
+        break;
+      case 'bullet-list':
+        this.changeBlockType(blockId, 'bullet-list');
+        break;
+      case 'todo':
+        this.changeBlockType(blockId, 'todo');
+        break;
       case 'image':
         this.changeBlockType(blockId, 'image');
         break;
@@ -1031,6 +1248,7 @@ export class BlockEditor {
       if (blockEl) {
         this._syncBlock(blockEl.dataset.id);
         this.onUpdate();
+        this.undoManager.saveState();
       }
     }
 
