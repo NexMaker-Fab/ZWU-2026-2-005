@@ -65,7 +65,8 @@ export async function loadContent() {
       const lacksRootHomework = !parsed.pages?.some(p => p.id === 'root-homework');
       const lacksHkz = !parsed.pages?.some(p => p.id === 'member-hkz');
       const hkzIsNotFirst = parsed.pages?.filter(p => p.parentId === 'root-team')[0]?.id !== 'member-hkz';
-      if (hasBluePrince || lacksArduino || lacksRootHomework || lacksHkz || hkzIsNotFirst) {
+      const hasOldHomework = parsed.pages?.some(p => p.id === 'homework-cad-design' && p.blocks?.some(b => b.content && b.content.includes('本章学习如何利用三维建模软件')));
+      if (hasBluePrince || lacksArduino || lacksRootHomework || lacksHkz || hkzIsNotFirst || hasOldHomework) {
         console.info('Stale cache detected, forcing reload from content.json');
         localStorage.removeItem(STORAGE_KEY);
       } else {
