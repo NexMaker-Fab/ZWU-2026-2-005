@@ -6,6 +6,60 @@
 import { generateId } from './storage.js';
 import { t, tLang } from './i18n.js';
 
+/**
+ * Sanitizes HTML content using native DOMParser.
+ * Only allows a whitelist of styling tags: b, i, u, strong, em, a, br, span.
+ * @param {string} html
+ * @returns {string}
+ */
+export function sanitizeHtml(html) {
+  if (!html) return '';
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const allowedTags = ['B', 'I', 'U', 'STRONG', 'EM', 'A', 'BR', 'SPAN'];
+  
+  const sanitizeNode = (node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      return node.cloneNode(true);
+    }
+    
+    if (node.nodeType === Node.ELEMENT_NODE && allowedTags.includes(node.tagName)) {
+      const cleanEl = document.createElement(node.tagName.toLowerCase());
+      
+      if (node.tagName === 'A') {
+        const href = node.getAttribute('href');
+        if (href && (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:') || href.startsWith('#'))) {
+          cleanEl.setAttribute('href', href);
+          cleanEl.setAttribute('target', '_blank');
+          cleanEl.setAttribute('rel', 'noopener noreferrer');
+        }
+      }
+      
+      const style = node.getAttribute('style');
+      if (style && !/url|expression|javascript/i.test(style)) {
+        cleanEl.setAttribute('style', style);
+      }
+      
+      for (const child of node.childNodes) {
+        cleanEl.appendChild(sanitizeNode(child));
+      }
+      return cleanEl;
+    }
+    
+    const fragment = document.createDocumentFragment();
+    for (const child of node.childNodes) {
+      fragment.appendChild(sanitizeNode(child));
+    }
+    return fragment;
+  };
+  
+  const cleanBody = document.createElement('body');
+  for (const child of doc.body.childNodes) {
+    cleanBody.appendChild(sanitizeNode(child));
+  }
+  return cleanBody.innerHTML;
+}
+
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;       // 5MB hard limit
 const COMPRESS_THRESHOLD = 500 * 1024;         // 500KB — compress above this
 const COMPRESS_QUALITY = 0.7;
@@ -113,6 +167,39 @@ export class BlockEditor {
     return block;
   }
 
+  // ─── DOM Helpers (Incremental Updates) ─────────
+
+  _getBlockEl(id) {
+    return this.editorEl.querySelector(`[data-id="${id}"]`);
+  }
+
+  _removeDomBlock(blockId) {
+    const el = this._getBlockEl(blockId);
+    if (el) el.remove();
+  }
+
+  _insertDomBlockAfter(afterId, block) {
+    const index = this.blocks.findIndex(b => b.id === block.id);
+    const newEl = this._createBlockEl(block, index);
+    if (afterId) {
+      const afterEl = this._getBlockEl(afterId);
+      if (afterEl) {
+        afterEl.after(newEl);
+        return;
+      }
+    }
+    this.editorEl.appendChild(newEl);
+  }
+
+  _replaceDomBlock(block) {
+    const oldEl = this._getBlockEl(block.id);
+    if (oldEl) {
+      const index = this.blocks.findIndex(b => b.id === block.id);
+      const newEl = this._createBlockEl(block, index);
+      oldEl.replaceWith(newEl);
+    }
+  }
+
   /** Add a block after a given block ID, or at the end */
   addBlockAfter(afterId, type, extraData = {}) {
     const block = this.createBlock(type, extraData);
@@ -122,7 +209,7 @@ export class BlockEditor {
     } else {
       this.blocks.push(block);
     }
-    this.render();
+    this._insertDomBlockAfter(afterId, block);
     this.onUpdate();
 
     // Focus the new block
@@ -141,7 +228,7 @@ export class BlockEditor {
     const idx = this.blocks.findIndex(b => b.id === id);
     if (idx === -1) return;
     this.blocks.splice(idx, 1);
-    this.render();
+    this._removeDomBlock(id);
     this.onUpdate();
   }
 
@@ -170,12 +257,12 @@ export class BlockEditor {
       delete block.content;
     }
 
-    this.render();
+    this._replaceDomBlock(block);
     this.onUpdate();
 
     // Focus the changed block
     requestAnimationFrame(() => {
-      const el = this.editorEl.querySelector(`[data-id="${id}"] .block-content`);
+      const el = this.editorEl.querySelector(`[data-id="${id}"] .block-content, [data-id="${id}"] .image-caption`);
       if (el && el.contentEditable === 'true') {
         el.focus();
       }
@@ -189,7 +276,6 @@ export class BlockEditor {
     wrapper.className = 'block';
     wrapper.dataset.id = block.id;
     wrapper.dataset.type = block.type;
-    wrapper.draggable = true;
 
     // Controls container (handle + add button)
     const controls = document.createElement('div');
@@ -208,6 +294,7 @@ export class BlockEditor {
     handle.className = 'block-handle';
     handle.innerHTML = '⠿';
     handle.title = 'Drag to reorder';
+    handle.draggable = true;
 
     controls.appendChild(addBtn);
     controls.appendChild(handle);
@@ -245,7 +332,7 @@ export class BlockEditor {
         el.dataset.type = 'heading';
         el.dataset.level = block.level || 1;
         el.dataset.placeholder = t('placeholder.heading') + (block.level || 1);
-        el.textContent = block.content || '';
+        el.innerHTML = sanitizeHtml(block.content || '');
         return el;
       }
       case 'paragraph': {
@@ -254,7 +341,7 @@ export class BlockEditor {
         el.contentEditable = 'true';
         el.dataset.type = 'paragraph';
         el.dataset.placeholder = t('placeholder.paragraph');
-        el.textContent = block.content || '';
+        el.innerHTML = sanitizeHtml(block.content || '');
         return el;
       }
       case 'image': {
@@ -294,7 +381,7 @@ export class BlockEditor {
         el.className = 'block-content';
         el.contentEditable = 'true';
         el.dataset.type = 'paragraph';
-        el.textContent = block.content || '';
+        el.innerHTML = sanitizeHtml(block.content || '');
         return el;
       }
     }
@@ -332,7 +419,7 @@ export class BlockEditor {
         return;
       }
       block.src = result.dataUrl;
-      this.render();
+      this._replaceDomBlock(block);
       this.onUpdate();
     });
 
@@ -343,7 +430,7 @@ export class BlockEditor {
         const url = urlInput.value.trim();
         if (url) {
           block.src = url;
-          this.render();
+          this._replaceDomBlock(block);
           this.onUpdate();
         }
       }
@@ -362,9 +449,24 @@ export class BlockEditor {
       this.render();
     });
 
-    // Input handler — debounced auto-save
+    // Input handler — debounced auto-save + slash command filtering
     let saveTimer = null;
     this.editorEl.addEventListener('input', (e) => {
+      // Slash menu filtering
+      if (this._isSlashMenuVisible() && this.slashMenuTarget) {
+        const contentEl = e.target.closest('.block-content');
+        if (contentEl) {
+          const offset = this._getCursorOffset(contentEl);
+          if (offset <= this.slashTriggerOffset) {
+            this._hideSlashMenu();
+          } else {
+            const text = contentEl.textContent || '';
+            const query = text.substring(this.slashTriggerOffset + 1, offset);
+            this._filterSlashMenu(query);
+          }
+        }
+      }
+
       clearTimeout(saveTimer);
       saveTimer = setTimeout(() => {
         this._syncAllBlocks();
@@ -402,11 +504,12 @@ export class BlockEditor {
       this._executeSlashCommand(type);
     });
 
-    // Keyboard navigation within slash menu
+    // Keyboard navigation within slash menu (only visible items)
     document.addEventListener('keydown', (e) => {
       if (!this._isSlashMenuVisible()) return;
 
-      const items = Array.from(this.slashMenuEl.querySelectorAll('.slash-menu-item'));
+      const items = Array.from(this.slashMenuEl.querySelectorAll('.slash-menu-item'))
+        .filter(i => i.style.display !== 'none');
       if (items.length === 0) return;
 
       const activeIdx = items.findIndex(i => i.classList.contains('active'));
@@ -467,12 +570,22 @@ export class BlockEditor {
     if (!blockEl) return;
     const blockId = blockEl.dataset.id;
 
-    // Slash command detection — trigger on '/' at the start of empty block
-    if (e.key === '/' && e.target.textContent === '') {
-      e.preventDefault();
-      this.slashMenuTarget = blockId;
-      this._showSlashMenu(e.target);
-      return; // Don't process further to avoid conflicts
+    // Slash command detection — trigger on '/' at start of block or after space
+    if (e.key === '/') {
+      const contentEl = e.target.closest('.block-content');
+      if (contentEl) {
+        const offset = this._getCursorOffset(contentEl);
+        const text = contentEl.textContent || '';
+        const beforeCursor = text.substring(0, offset);
+        
+        if (offset === 0 || /\s$/.test(beforeCursor)) {
+          this.slashTriggerOffset = offset;
+          this.slashMenuTarget = blockId;
+          requestAnimationFrame(() => {
+            this._showSlashMenu(contentEl);
+          });
+        }
+      }
     }
 
     // If slash menu is visible, let the dedicated slash menu keyboard handler deal with it
@@ -481,31 +594,99 @@ export class BlockEditor {
       return;
     }
 
-    // Enter — create new block below
+    // Enter — split block at cursor position (HTML-aware via Range extraction)
     if (e.key === 'Enter' && !e.shiftKey) {
       const type = blockEl.dataset.type;
       if (type === 'divider') return;
 
       e.preventDefault();
+      const contentEl = e.target.closest('.block-content');
+      if (!contentEl) return;
+
       this._syncBlock(blockId);
-      this.addBlockAfter(blockId, 'paragraph');
+
+      const sel = window.getSelection();
+      if (!sel.rangeCount) return;
+      const range = sel.getRangeAt(0);
+
+      // Create a range from cursor to end of the block content
+      const tailRange = document.createRange();
+      tailRange.setStart(range.startContainer, range.startOffset);
+      tailRange.setEnd(contentEl, contentEl.childNodes.length);
+
+      // Extract the content after the cursor
+      const fragment = tailRange.extractContents();
+      const container = document.createElement('div');
+      container.appendChild(fragment);
+
+      const textBefore = contentEl.innerHTML;
+      const textAfter = container.innerHTML;
+
+      // Update current block data and DOM
+      const block = this.blocks.find(b => b.id === blockId);
+      if (block) {
+        block.content = sanitizeHtml(textBefore);
+        contentEl.innerHTML = block.content;
+      }
+
+      // Create new paragraph with text after cursor
+      this.addBlockAfter(blockId, 'paragraph', { content: sanitizeHtml(textAfter) });
     }
 
-    // Backspace on empty block — delete it
+    // Backspace — merge with previous block when cursor is at start
     if (e.key === 'Backspace') {
-      const content = e.target.textContent;
-      if (content === '' && this.blocks.length > 1) {
-        e.preventDefault();
-        // Focus previous block
+      const contentEl = e.target.closest('.block-content');
+      if (!contentEl) return;
+
+      const offset = this._getCursorOffset(contentEl);
+
+      if (offset === 0 && this.blocks.length > 1) {
         const idx = this.blocks.findIndex(b => b.id === blockId);
-        if (idx > 0) {
-          const prevId = this.blocks[idx - 1].id;
-          this.deleteBlock(blockId);
+        if (idx <= 0) return;
+
+        const prevBlock = this.blocks[idx - 1];
+        const currentBlock = this.blocks[idx];
+
+        // If both are text blocks (heading/paragraph), merge content
+        if ((prevBlock.type === 'heading' || prevBlock.type === 'paragraph')
+            && (currentBlock.type === 'heading' || currentBlock.type === 'paragraph')) {
+          e.preventDefault();
+
+          // Get the plain-text merge point Y character offset before appending
+          const prevEl = this.editorEl.querySelector(`[data-id="${prevBlock.id}"] .block-content`);
+          const mergePoint = prevEl ? prevEl.textContent.length : 0;
+
+          // Sync both to get latest content
+          this._syncBlock(prevBlock.id);
+          this._syncBlock(currentBlock.id);
+
+          prevBlock.content = sanitizeHtml((prevBlock.content || '') + (currentBlock.content || ''));
+
+          // Update DOM of prevBlock
+          if (prevEl) {
+            prevEl.innerHTML = prevBlock.content;
+          }
+
+          // Remove current block from data and DOM
+          this.blocks.splice(idx, 1);
+          this._removeDomBlock(blockId);
+          this.onUpdate();
+
+          // Place cursor at merge point
+          requestAnimationFrame(() => {
+            this._setCursorAt(prevBlock.id, mergePoint);
+          });
+        } else if ((currentBlock.content || '') === '' || currentBlock.type === 'divider') {
+          // Current block is empty or is a divider — just delete it
+          e.preventDefault();
+          const prevId = prevBlock.id;
+          this.blocks.splice(idx, 1);
+          this._removeDomBlock(blockId);
+          this.onUpdate();
           requestAnimationFrame(() => {
             const prevEl = this.editorEl.querySelector(`[data-id="${prevId}"] .block-content`);
-            if (prevEl) {
+            if (prevEl && prevEl.contentEditable === 'true') {
               prevEl.focus();
-              // Move cursor to end
               const range = document.createRange();
               const sel = window.getSelection();
               range.selectNodeContents(prevEl);
@@ -524,34 +705,55 @@ export class BlockEditor {
       this._hideToolbar();
     }
 
-    // Arrow navigation between blocks
+    // Arrow navigation between blocks (visual multi-line checks)
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       const sel = window.getSelection();
       if (!sel.rangeCount) return;
 
       const idx = this.blocks.findIndex(b => b.id === blockId);
-      let targetIdx = -1;
+      const range = sel.getRangeAt(0);
+      const cursorRect = range.getBoundingClientRect();
+      const contentEl = e.target.closest('.block-content');
+      
+      if (contentEl) {
+        const contentRect = contentEl.getBoundingClientRect();
+        const style = window.getComputedStyle(contentEl);
+        const lineHeight = parseFloat(style.lineHeight) || 24;
+        const hasValidCursorRect = cursorRect && cursorRect.height > 0;
+        
+        let targetIdx = -1;
 
-      if (e.key === 'ArrowUp') {
-        const range = sel.getRangeAt(0);
-        // Check if cursor is at start of block
-        if (range.startOffset === 0 && idx > 0) {
-          targetIdx = idx - 1;
+        if (e.key === 'ArrowUp') {
+          const isAtFirstLine = hasValidCursorRect 
+            ? (cursorRect.top - contentRect.top < lineHeight * 1.2) 
+            : (range.startOffset === 0);
+          if (isAtFirstLine && idx > 0) {
+            targetIdx = idx - 1;
+          }
+        } else {
+          const textLength = contentEl.textContent.length;
+          const isAtLastLine = hasValidCursorRect 
+            ? (contentRect.bottom - cursorRect.bottom < lineHeight * 1.2) 
+            : (range.endOffset >= textLength);
+          if (isAtLastLine && idx < this.blocks.length - 1) {
+            targetIdx = idx + 1;
+          }
         }
-      } else {
-        const text = e.target.textContent || '';
-        const range = sel.getRangeAt(0);
-        if (range.endOffset >= text.length && idx < this.blocks.length - 1) {
-          targetIdx = idx + 1;
-        }
-      }
 
-      if (targetIdx >= 0) {
-        e.preventDefault();
-        const targetId = this.blocks[targetIdx].id;
-        const targetEl = this.editorEl.querySelector(`[data-id="${targetId}"] .block-content`);
-        if (targetEl && targetEl.contentEditable === 'true') {
-          targetEl.focus();
+        if (targetIdx >= 0) {
+          e.preventDefault();
+          let step = e.key === 'ArrowUp' ? -1 : 1;
+          let currIdx = targetIdx;
+          
+          while (currIdx >= 0 && currIdx < this.blocks.length) {
+            const targetId = this.blocks[currIdx].id;
+            const targetEl = this.editorEl.querySelector(`[data-id="${targetId}"] .block-content, [data-id="${targetId}"] .image-caption`);
+            if (targetEl && targetEl.contentEditable === 'true') {
+              targetEl.focus();
+              break;
+            }
+            currIdx += step;
+          }
         }
       }
     }
@@ -564,28 +766,138 @@ export class BlockEditor {
   }
 
   _showSlashMenu(anchorEl) {
-    const rect = anchorEl.getBoundingClientRect();
-    this.slashMenuEl.style.top = `${rect.bottom + 4}px`;
-    this.slashMenuEl.style.left = `${rect.left}px`;
+    const sel = window.getSelection();
+    let rect = null;
+    if (sel.rangeCount) {
+      const range = sel.getRangeAt(0);
+      rect = range.getBoundingClientRect();
+    }
+    
+    if (!rect || (rect.width === 0 && rect.height === 0)) {
+      rect = anchorEl.getBoundingClientRect();
+    }
+
+    const menuWidth = 280;
+    const menuHeight = 320;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    let top = rect.bottom + 4;
+    let left = rect.left;
+
+    // Check bottom boundary
+    if (top + menuHeight > viewportHeight) {
+      top = rect.top - menuHeight - 4;
+    }
+
+    // Check right boundary
+    if (left + menuWidth > viewportWidth) {
+      left = viewportWidth - menuWidth - 8;
+    }
+
+    top = Math.max(8, top);
+    left = Math.max(8, left);
+
+    this.slashMenuEl.style.top = `${top}px`;
+    this.slashMenuEl.style.left = `${left}px`;
     this.slashMenuEl.classList.add('visible');
 
-    // Highlight first item
-    const items = this.slashMenuEl.querySelectorAll('.slash-menu-item');
-    items.forEach(i => i.classList.remove('active'));
-    if (items[0]) items[0].classList.add('active');
+    // Reset visibility of all items
+    this._filterSlashMenu('');
   }
 
   _hideSlashMenu() {
     this.slashMenuEl.classList.remove('visible');
     this.slashMenuTarget = null;
+    this.slashTriggerOffset = undefined;
+  }
+
+  _filterSlashMenu(query) {
+    query = query.toLowerCase().trim();
+    const items = this.slashMenuEl.querySelectorAll('.slash-menu-item');
+    let hasVisible = false;
+    let firstVisibleItem = null;
+
+    items.forEach(item => {
+      const nameEl = item.querySelector('.slash-menu-item-name');
+      const descEl = item.querySelector('.slash-menu-item-desc');
+      const name = nameEl ? nameEl.textContent.toLowerCase() : '';
+      const desc = descEl ? descEl.textContent.toLowerCase() : '';
+      const type = item.dataset.type.toLowerCase();
+
+      if (name.includes(query) || desc.includes(query) || type.includes(query)) {
+        item.style.display = 'flex';
+        hasVisible = true;
+        item.classList.remove('active');
+        if (!firstVisibleItem) {
+          firstVisibleItem = item;
+        }
+      } else {
+        item.style.display = 'none';
+        item.classList.remove('active');
+      }
+    });
+
+    if (firstVisibleItem) {
+      firstVisibleItem.classList.add('active');
+    }
+
+    const labelEl = this.slashMenuEl.querySelector('.slash-menu-label');
+    if (labelEl) {
+      labelEl.style.display = hasVisible ? 'block' : 'none';
+    }
   }
 
   _executeSlashCommand(type) {
     // IMPORTANT: Save the target block ID BEFORE hiding the menu,
     // because _hideSlashMenu sets slashMenuTarget to null.
     const blockId = this.slashMenuTarget;
+    const contentEl = this.editorEl.querySelector(`[data-id="${blockId}"] .block-content`);
+    let queryLength = 0;
+    if (contentEl && this.slashTriggerOffset !== undefined) {
+      const text = contentEl.textContent || '';
+      const offset = this._getCursorOffset(contentEl);
+      queryLength = Math.max(0, offset - this.slashTriggerOffset);
+    }
+
     this._hideSlashMenu();
     if (!blockId) return;
+
+    // Delete the slash command text from DOM
+    if (contentEl && this.slashTriggerOffset !== undefined) {
+      try {
+        const sel = window.getSelection();
+        const range = document.createRange();
+        
+        let startNode = null;
+        let startOffset = 0;
+        let remaining = this.slashTriggerOffset;
+        const walker = document.createTreeWalker(contentEl, NodeFilter.SHOW_TEXT, null);
+        let node = walker.nextNode();
+        while (node) {
+          if (remaining <= node.textContent.length) {
+            startNode = node;
+            startOffset = remaining;
+            break;
+          }
+          remaining -= node.textContent.length;
+          node = walker.nextNode();
+        }
+
+        if (startNode) {
+          const endNode = sel.rangeCount ? sel.getRangeAt(0).startContainer : startNode;
+          const endOffset = sel.rangeCount ? sel.getRangeAt(0).startOffset : startOffset + queryLength;
+          
+          range.setStart(startNode, startOffset);
+          range.setEnd(endNode, endOffset);
+          range.deleteContents();
+        }
+      } catch (err) {
+        console.error('Error removing slash command text:', err);
+      }
+    }
+
+    this._syncBlock(blockId);
 
     switch (type) {
       case 'paragraph':
@@ -614,11 +926,24 @@ export class BlockEditor {
   _handleSelectionChange() {
     const sel = window.getSelection();
     if (!sel.rangeCount || sel.isCollapsed) {
+      clearTimeout(this._toolbarDebounce);
       this._hideToolbar();
       return;
     }
 
-    // Check if selection is within editor
+    clearTimeout(this._toolbarDebounce);
+    this._toolbarDebounce = setTimeout(() => {
+      this._updateToolbarPosition();
+    }, 150);
+  }
+
+  _updateToolbarPosition() {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) {
+      this._hideToolbar();
+      return;
+    }
+
     const range = sel.getRangeAt(0);
     const block = range.commonAncestorContainer.nodeType === 1
       ? range.commonAncestorContainer.closest('.block')
@@ -635,11 +960,28 @@ export class BlockEditor {
       return;
     }
 
-    // Position toolbar above selection
     const rect = range.getBoundingClientRect();
     const tbWidth = 280; // approximate toolbar width
-    this.toolbarEl.style.top = `${rect.top - 44}px`;
-    this.toolbarEl.style.left = `${Math.max(8, rect.left + rect.width / 2 - tbWidth / 2)}px`;
+    const tbHeight = 44; // toolbar height
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    let top = rect.top - tbHeight - 8;
+    let left = rect.left + rect.width / 2 - tbWidth / 2;
+
+    // Boundary check: if not enough space above, position below
+    if (top < 8) {
+      top = rect.bottom + 8;
+    }
+
+    // Horizontal boundary check
+    if (left < 8) left = 8;
+    if (left + tbWidth > viewportWidth - 8) {
+      left = viewportWidth - tbWidth - 8;
+    }
+
+    this.toolbarEl.style.top = `${top}px`;
+    this.toolbarEl.style.left = `${left}px`;
     this.toolbarEl.classList.add('visible');
   }
 
@@ -679,12 +1021,30 @@ export class BlockEditor {
         break;
       }
     }
+
+    // Immediately sync block content and trigger onUpdate for bold/italic/underline formatting
+    const sel = window.getSelection();
+    if (sel.rangeCount) {
+      const blockEl = sel.getRangeAt(0).commonAncestorContainer.nodeType === 1
+        ? sel.getRangeAt(0).commonAncestorContainer.closest('.block')
+        : sel.getRangeAt(0).commonAncestorContainer.parentElement?.closest('.block');
+      if (blockEl) {
+        this._syncBlock(blockEl.dataset.id);
+        this.onUpdate();
+      }
+    }
+
     this._hideToolbar();
   }
 
   // ─── Drag & Drop ──────────────────────────────
 
   _onDragStart(e) {
+    // Only allow drag from the handle, not from contenteditable areas
+    if (!e.target.closest('.block-handle')) {
+      e.preventDefault();
+      return;
+    }
     const blockEl = e.target.closest('.block');
     if (!blockEl) return;
 
@@ -745,12 +1105,21 @@ export class BlockEditor {
 
     this.blocks.splice(targetIdx, 0, draggedBlock);
 
-    // Clean up and re-render
+    // Clean up drag classes
     this.editorEl.querySelectorAll('.block').forEach(b => {
       b.classList.remove('drag-over-top', 'drag-over-bottom', 'dragging');
     });
 
-    this.render();
+    // Incrementally move DOM element if target is inside the DOM tree
+    const dragEl = this._getBlockEl(this.draggedBlockId);
+    if (dragEl && targetEl.parentNode) {
+      if (insertBefore) {
+        targetEl.before(dragEl);
+      } else {
+        targetEl.after(dragEl);
+      }
+    }
+
     this.onUpdate();
   }
 
@@ -759,6 +1128,52 @@ export class BlockEditor {
     this.editorEl.querySelectorAll('.block').forEach(b => {
       b.classList.remove('drag-over-top', 'drag-over-bottom', 'dragging');
     });
+  }
+
+  // ─── Cursor Utilities ──────────────────────────
+
+  /** Get cursor offset (character count) within a contenteditable element */
+  _getCursorOffset(el) {
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return 0;
+    const range = sel.getRangeAt(0);
+    const preRange = document.createRange();
+    preRange.selectNodeContents(el);
+    preRange.setEnd(range.startContainer, range.startOffset);
+    return preRange.toString().length;
+  }
+
+  /** Set cursor at a specific character offset within a block's content element */
+  _setCursorAt(blockId, offset) {
+    const el = this.editorEl.querySelector(`[data-id="${blockId}"] .block-content`);
+    if (!el) return;
+    el.focus();
+
+    const sel = window.getSelection();
+    const range = document.createRange();
+
+    // Walk text nodes to find the correct position
+    let remaining = offset;
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    let node = walker.nextNode();
+
+    while (node) {
+      if (remaining <= node.textContent.length) {
+        range.setStart(node, remaining);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        return;
+      }
+      remaining -= node.textContent.length;
+      node = walker.nextNode();
+    }
+
+    // Fallback: place cursor at end
+    range.selectNodeContents(el);
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
   }
 
   // ─── Data Sync ────────────────────────────────
@@ -777,7 +1192,7 @@ export class BlockEditor {
     if (!el) return;
 
     if (block.type === 'heading' || block.type === 'paragraph') {
-      block.content = el.textContent || '';
+      block.content = sanitizeHtml(el.innerHTML || '');
     }
   }
 }
