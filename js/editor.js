@@ -182,25 +182,8 @@ export class BlockEditor {
     }
     this.tocEl.style.display = 'flex';
 
-    const counters = [0, 0, 0];
-
     headings.forEach(heading => {
       const level = heading.level || 1;
-      let numberStr = '';
-
-      if (level === 1) {
-        // Level 1 headings are usually page/document titles. We don't number them.
-        numberStr = '';
-      } else if (level === 2) {
-        counters[0]++;
-        counters[1] = 0;
-        counters[2] = 0;
-        numberStr = `${counters[0]}`;
-      } else if (level === 3) {
-        counters[1]++;
-        counters[2] = 0;
-        numberStr = `${counters[0]}.${counters[1]}`;
-      }
 
       const item = document.createElement('div');
       item.className = `toc-item level-${level}`;
@@ -208,13 +191,8 @@ export class BlockEditor {
       const tempEl = document.createElement('div');
       tempEl.innerHTML = heading.content || '';
       const text = tempEl.textContent.trim() || 'Untitled Heading';
-      const cleanText = text.replace(/^[0-9.]+\s*/, '');
       
-      if (numberStr) {
-        item.textContent = `${numberStr}. ${cleanText}`;
-      } else {
-        item.textContent = cleanText;
-      }
+      item.textContent = text;
       
       item.addEventListener('click', () => {
         const blockEl = this._getBlockEl(heading.id);
