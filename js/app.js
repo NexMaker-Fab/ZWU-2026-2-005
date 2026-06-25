@@ -2,7 +2,7 @@
  * App Module — Main orchestrator. Wires together all modules and DOM elements.
  */
 
-import { loadContent, saveToLocalStorage, exportAsJson, generateId, getTheme, setTheme } from './storage.js';
+import { loadContent, saveToLocalStorage, exportAsJson, generateId, getTheme, setTheme, exportPageAsMarkdown } from './storage.js';
 import { BlockEditor } from './editor.js';
 import { PageManager } from './pages.js';
 import { getGitHubSettings, saveGitHubSettings, isGitHubConfigured, saveToGitHub } from './github.js';
@@ -986,6 +986,17 @@ class App {
       window.location.href = 'landing.html';
     });
 
+    // Export Markdown button
+    document.getElementById('export-md-btn')?.addEventListener('click', () => {
+      const page = this.pageManager.getActivePage();
+      if (page) {
+        if (this.editor) {
+          page.blocks = this.editor.getData();
+        }
+        exportPageAsMarkdown(page);
+      }
+    });
+
     // Save buttons
     document.getElementById('save-local-btn').addEventListener('click', () => this._saveToLocal());
     document.getElementById('save-github-btn').addEventListener('click', () => this._saveToGitHub());
@@ -1043,9 +1054,38 @@ class App {
       const parseMarkdownToBlocks = (text) => {
         const lines = text.split(/\r?\n/);
         const blocks = [];
+        let inCodeBlock = false;
+        let codeContent = [];
+
         for (const line of lines) {
           const trimmed = line.trim();
+
+          // Handle Code Block delimiters
+          if (trimmed.startsWith('```')) {
+            if (inCodeBlock) {
+              // End of code block
+              blocks.push({
+                id: generateId(),
+                type: 'code',
+                content: codeContent.join('\n')
+              });
+              codeContent = [];
+              inCodeBlock = false;
+            } else {
+              // Start of code block
+              inCodeBlock = true;
+            }
+            continue;
+          }
+
+          if (inCodeBlock) {
+            codeContent.push(line);
+            continue;
+          }
+
           if (!trimmed) continue;
+
+          // Heading 1
           if (trimmed.startsWith('# ')) {
             blocks.push({
               id: generateId(),
@@ -1053,26 +1093,69 @@ class App {
               level: 1,
               content: trimmed.substring(2).trim()
             });
-          } else if (trimmed.startsWith('## ')) {
+          }
+          // Heading 2
+          else if (trimmed.startsWith('## ')) {
             blocks.push({
               id: generateId(),
               type: 'heading',
               level: 2,
               content: trimmed.substring(3).trim()
             });
-          } else if (trimmed.startsWith('### ')) {
+          }
+          // Heading 3
+          else if (trimmed.startsWith('### ')) {
             blocks.push({
               id: generateId(),
               type: 'heading',
               level: 3,
               content: trimmed.substring(4).trim()
             });
-          } else if (trimmed === '---') {
+          }
+          // Divider
+          else if (trimmed === '---') {
             blocks.push({
               id: generateId(),
               type: 'divider'
             });
-          } else {
+          }
+          // Blockquote
+          else if (trimmed.startsWith('>')) {
+            const content = line.substring(line.indexOf('>') + 1).trim();
+            blocks.push({
+              id: generateId(),
+              type: 'quote',
+              content: content
+            });
+          }
+          // Todo list item checked
+          else if (trimmed.startsWith('- [x]') || trimmed.startsWith('- [X]') || trimmed.startsWith('* [x]') || trimmed.startsWith('* [X]')) {
+            blocks.push({
+              id: generateId(),
+              type: 'todo',
+              checked: true,
+              content: trimmed.substring(5).trim()
+            });
+          }
+          // Todo list item unchecked
+          else if (trimmed.startsWith('- [ ]') || trimmed.startsWith('* [ ]')) {
+            blocks.push({
+              id: generateId(),
+              type: 'todo',
+              checked: false,
+              content: trimmed.substring(5).trim()
+            });
+          }
+          // Bullet list item
+          else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+            blocks.push({
+              id: generateId(),
+              type: 'bullet-list',
+              content: trimmed.substring(2).trim()
+            });
+          }
+          // Image
+          else {
             const imgMatch = trimmed.match(/^!\[(.*?)\]\((.*?)\)$/);
             if (imgMatch) {
               blocks.push({
@@ -1090,6 +1173,16 @@ class App {
             }
           }
         }
+
+        // Handle unclosed code block
+        if (inCodeBlock && codeContent.length > 0) {
+          blocks.push({
+            id: generateId(),
+            type: 'code',
+            content: codeContent.join('\n')
+          });
+        }
+
         if (blocks.length === 0) {
           blocks.push({
             id: generateId(),

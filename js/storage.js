@@ -131,3 +131,103 @@ export function getTheme() {
 export function setTheme(theme) {
   localStorage.setItem('teamflow_theme', theme);
 }
+
+/**
+ * Helper to convert HTML content back to standard Markdown syntax
+ */
+function convertHtmlToMarkdown(html) {
+  if (!html) return '';
+  let text = html;
+  
+  // Replace standard formatting tags
+  text = text.replace(/<(strong|b)[^>]*>([\s\S]*?)<\/\1>/gi, '**$2**');
+  text = text.replace(/<(em|i)[^>]*>([\s\S]*?)<\/\1>/gi, '*$2*');
+  text = text.replace(/<del[^>]*>([\s\S]*?)<\/del>/gi, '~~$2~~');
+  text = text.replace(/<code[^>]*>([\s\S]*?)<\/code>/gi, '`$2`');
+  text = text.replace(/<a\s+[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi, '[$2]($1)');
+  
+  // Strip any remaining HTML tags
+  text = text.replace(/<[^>]+>/g, '');
+  
+  // Decode HTML entities safely
+  if (typeof document !== 'undefined') {
+    const temp = document.createElement('div');
+    temp.innerHTML = text;
+    return temp.textContent || temp.innerText || text;
+  }
+  return text;
+}
+
+/**
+ * Export page content as a Markdown file download
+ * @param {object} page
+ */
+export function exportPageAsMarkdown(page) {
+  if (!page) return;
+  
+  let md = '';
+  if (page.icon) {
+    md += `# ${page.icon} ${page.title}\n\n`;
+  } else {
+    md += `# ${page.title}\n\n`;
+  }
+
+  page.blocks.forEach(block => {
+    switch (block.type) {
+      case 'heading': {
+        const hashes = '#'.repeat(block.level || 1);
+        md += `${hashes} ${convertHtmlToMarkdown(block.content)}\n\n`;
+        break;
+      }
+      case 'paragraph': {
+        md += `${convertHtmlToMarkdown(block.content)}\n\n`;
+        break;
+      }
+      case 'quote': {
+        md += `> ${convertHtmlToMarkdown(block.content)}\n\n`;
+        break;
+      }
+      case 'code': {
+        md += `\`\`\`\n${block.content || ''}\n\`\`\`\n\n`;
+        break;
+      }
+      case 'bullet-list': {
+        md += `- ${convertHtmlToMarkdown(block.content)}\n`;
+        break;
+      }
+      case 'todo': {
+        const checkbox = block.checked ? '[x]' : '[ ]';
+        md += `- ${checkbox} ${convertHtmlToMarkdown(block.content)}\n`;
+        break;
+      }
+      case 'image': {
+        md += `![${block.caption || ''}](${block.src || ''})\n\n`;
+        break;
+      }
+      case 'divider': {
+        md += `---\n\n`;
+        break;
+      }
+      default: {
+        if (block.content) {
+          md += `${convertHtmlToMarkdown(block.content)}\n\n`;
+        }
+        break;
+      }
+    }
+  });
+
+  md = md.trim() + '\n';
+
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  const cleanTitle = (page.title || 'untitled').replace(/[/\\?%*:|"<>\s]/g, '_');
+  a.download = `${cleanTitle}.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}

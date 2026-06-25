@@ -47,8 +47,17 @@ export const translations = {
     'menu.h3.desc': 'Small section heading',
     'menu.image': 'Image',
     'menu.image.desc': 'Upload or embed an image',
+    'menu.quote': 'Quote',
+    'menu.quote.desc': 'Add a block quote',
+    'menu.code': 'Code Block',
+    'menu.code.desc': 'Write code blocks',
+    'menu.bullet': 'Bullet List',
+    'menu.bullet.desc': 'Simple bulleted list',
+    'menu.todo': 'To-do List',
+    'menu.todo.desc': 'List with checkboxes',
     'menu.divider': 'Divider',
     'menu.divider.desc': 'Horizontal line separator',
+    'export.markdown': 'Export to Markdown',
 
     // Placeholders
     'placeholder.page': 'Untitled',
@@ -57,6 +66,10 @@ export const translations = {
     'placeholder.caption': 'Write a caption...',
     'placeholder.image.upload': 'Click to upload an image or paste a URL below',
     'placeholder.image.url': 'Paste image URL and press Enter',
+    'placeholder.quote': 'Empty quote...',
+    'placeholder.code': '// Write code here...',
+    'placeholder.bullet': 'List item...',
+    'placeholder.todo': 'To-do item...',
 
     // JS alerts / Toasts
     'toast.saved.local': 'Content downloaded as content.json',
@@ -244,8 +257,17 @@ export const translations = {
     'menu.h3.desc': '三级小标题',
     'menu.image': '图片',
     'menu.image.desc': '上传或嵌入网络图片',
+    'menu.quote': '引用',
+    'menu.quote.desc': '插入段落引用块',
+    'menu.code': '代码块',
+    'menu.code.desc': '插入多行代码块',
+    'menu.bullet': '无序列表',
+    'menu.bullet.desc': '插入圆点列表项',
+    'menu.todo': '待办事项',
+    'menu.todo.desc': '插入带勾选框的待办项',
     'menu.divider': '分隔线',
     'menu.divider.desc': '横向分隔线',
+    'export.markdown': '导出为 Markdown',
 
     // Placeholders
     'placeholder.page': '无标题',
@@ -254,6 +276,10 @@ export const translations = {
     'placeholder.caption': '写一点图片描述...',
     'placeholder.image.upload': '点击上传图片，或在下方输入链接',
     'placeholder.image.url': '输入图片链接并按回车 (Enter)',
+    'placeholder.quote': '空引用块...',
+    'placeholder.code': '// 在此输入代码...',
+    'placeholder.bullet': '列表项...',
+    'placeholder.todo': '待办事项...',
 
     // JS alerts / Toasts
     'toast.saved.local': '内容已下载为 content.json',

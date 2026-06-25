@@ -1362,9 +1362,8 @@ export class BlockEditor {
     return preRange.toString().length;
   }
 
-  /** Set cursor at a specific character offset within a block's content element */
-  _setCursorAt(blockId, offset) {
-    const el = this.editorEl.querySelector(`[data-id="${blockId}"] .block-content`);
+  /** Set cursor at a specific character offset within an element */
+  _setCursorAtElement(el, offset) {
     if (!el) return;
     el.focus();
 
@@ -1395,6 +1394,12 @@ export class BlockEditor {
     sel.addRange(range);
   }
 
+  /** Set cursor at a specific character offset within a block's content element */
+  _setCursorAt(blockId, offset) {
+    const el = this.editorEl.querySelector(`[data-id="${blockId}"] .block-content, [data-id="${blockId}"] .image-caption`);
+    this._setCursorAtElement(el, offset);
+  }
+
   // ─── Data Sync ────────────────────────────────
 
   /** Sync all visible blocks' content from DOM to data */
@@ -1410,8 +1415,106 @@ export class BlockEditor {
     const el = this.editorEl.querySelector(`[data-id="${id}"] .block-content`);
     if (!el) return;
 
-    if (block.type === 'heading' || block.type === 'paragraph') {
+    if (block.type === 'code') {
+      block.content = el.textContent || '';
+    } else if (['heading', 'paragraph', 'quote', 'bullet-list', 'todo'].includes(block.type)) {
       block.content = sanitizeHtml(el.innerHTML || '');
+    }
+  }
+}
+
+export class UndoManager {
+  constructor(editor) {
+    this.editor = editor;
+    this.undoStack = [];
+    this.redoStack = [];
+    this.maxDepth = 100;
+    this.isApplying = false;
+  }
+
+  clear() {
+    this.undoStack = [];
+    this.redoStack = [];
+  }
+
+  saveState() {
+    if (this.isApplying) return;
+
+    this.editor._syncAllBlocks();
+    const blocksCopy = JSON.parse(JSON.stringify(this.editor.blocks));
+
+    // Capture cursor state
+    let activeBlockId = null;
+    let offset = 0;
+    const activeEl = document.activeElement;
+    if (activeEl && this.editor.editorEl.contains(activeEl)) {
+      const blockEl = activeEl.closest('.block');
+      if (blockEl) {
+        activeBlockId = blockEl.dataset.id;
+        const contentEl = blockEl.querySelector('.block-content, .image-caption');
+        if (contentEl) {
+          offset = this.editor._getCursorOffset(contentEl);
+        }
+      }
+    }
+
+    const state = {
+      blocks: blocksCopy,
+      activeBlockId,
+      offset
+    };
+
+    // Prevent saving consecutive identical states
+    if (this.undoStack.length > 0) {
+      const lastState = this.undoStack[this.undoStack.length - 1];
+      if (JSON.stringify(lastState.blocks) === JSON.stringify(state.blocks)) {
+        // Just update cursor state
+        lastState.activeBlockId = activeBlockId;
+        lastState.offset = offset;
+        return;
+      }
+    }
+
+    this.undoStack.push(state);
+    if (this.undoStack.length > this.maxDepth) {
+      this.undoStack.shift();
+    }
+    this.redoStack = [];
+  }
+
+  undo() {
+    if (this.undoStack.length <= 1) return; // Always keep the initial or first state
+
+    // Pop the current state and push it to redo
+    const currentState = this.undoStack.pop();
+    this.redoStack.push(currentState);
+
+    const previousState = this.undoStack[this.undoStack.length - 1];
+    this._applyState(previousState);
+  }
+
+  redo() {
+    if (this.redoStack.length === 0) return;
+
+    const nextState = this.redoStack.pop();
+    this.undoStack.push(nextState);
+    this._applyState(nextState);
+  }
+
+  _applyState(state) {
+    this.isApplying = true;
+    try {
+      this.editor.blocks = JSON.parse(JSON.stringify(state.blocks));
+      this.editor.render();
+      this.editor.onUpdate();
+
+      if (state.activeBlockId) {
+        requestAnimationFrame(() => {
+          this.editor._setCursorAt(state.activeBlockId, state.offset);
+        });
+      }
+    } finally {
+      this.isApplying = false;
     }
   }
 }
