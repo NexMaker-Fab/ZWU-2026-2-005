@@ -67,7 +67,11 @@ export async function loadContent() {
       const hkzIsNotFirst = parsed.pages?.filter(p => p.parentId === 'root-team')[0]?.id !== 'member-hkz';
       const hasOldHomework = parsed.pages?.some(p => p.id === 'homework-cad-design' && p.blocks?.some(b => b.content && b.content.includes('本章学习如何利用三维建模软件')));
       const hasAbsoluteImages = parsed.pages?.some(p => p.blocks?.some(b => b.type === 'image' && b.src && b.src.startsWith('/')));
-      if (hasBluePrince || lacksArduino || lacksRootHomework || lacksHkz || hkzIsNotFirst || hasOldHomework || hasAbsoluteImages) {
+      const hasMockHomework = parsed.pages?.some(p => 
+        (p.id === 'homework-project-manage' || p.id === 'homework-arduino-app' || p.id === 'homework-iot-interaction') && 
+        p.blocks && p.blocks.length < 20
+      );
+      if (hasBluePrince || lacksArduino || lacksRootHomework || lacksHkz || hkzIsNotFirst || hasOldHomework || hasAbsoluteImages || hasMockHomework) {
         console.info('Stale cache detected, forcing reload from content.json');
         localStorage.removeItem(STORAGE_KEY);
       } else {
