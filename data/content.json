@@ -71,6 +71,7 @@
       "id": "project-arduino",
       "title": "Arduino基础实践教程",
       "icon": "🤖",
+      "favorite": true,
       "parentId": "root-projects",
       "blocks": [
         {
@@ -90,6 +91,7 @@
       "id": "project-teamflow-wiki",
       "title": "TeamFlow Wiki本地化展示平台",
       "icon": "📝",
+      "favorite": true,
       "parentId": "root-projects",
       "blocks": [
         {

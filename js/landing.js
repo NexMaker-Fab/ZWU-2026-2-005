@@ -321,8 +321,11 @@ async function initPortalShowcase() {
     const rootCategories = pages.filter(p => p.parentId === null && p.id !== 'welcome');
 
     rootCategories.forEach(category => {
-      // Filter out root pages with no children to avoid empty sections
-      const subPages = pages.filter(p => p.parentId === category.id);
+      // For projects showcase section, select pages that are marked as favorite.
+      // Otherwise, filter by parentId matching the root category ID.
+      const subPages = category.id === 'root-projects'
+        ? pages.filter(p => p.favorite === true)
+        : pages.filter(p => p.parentId === category.id);
       if (subPages.length === 0) return;
 
       const section = document.createElement('section');
