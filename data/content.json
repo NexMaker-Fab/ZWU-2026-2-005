@@ -301,13 +301,13 @@
         {
           "id": "b_auto_19",
           "type": "image",
-          "src": "/images/homework/cad/lQDPJwAx3s9YpLfNArrNBQCwg2e-8I_lMZAKETHdSls_AA_1280_698.jpg",
+          "src": "images/homework/cad/lQDPJwAx3s9YpLfNArrNBQCwg2e-8I_lMZAKETHdSls_AA_1280_698.jpg",
           "caption": "蘑菇灯草图绘制"
         },
         {
           "id": "b_auto_20",
           "type": "image",
-          "src": "/images/homework/cad/lQDPJwKUJCAR0rfNAtTNBQCwwQFv8baSzx4KETHcuvOUAA_1280_724.jpg",
+          "src": "images/homework/cad/lQDPJwKUJCAR0rfNAtTNBQCwwQFv8baSzx4KETHcuvOUAA_1280_724.jpg",
           "caption": "蘑菇灯截面草图"
         },
         {
@@ -324,13 +324,13 @@
         {
           "id": "b_auto_23",
           "type": "image",
-          "src": "/images/homework/cad/lQDPJwC7NFSMmLfNAf7NAeGwD-NwleOuXnwKETHigzvfAA_481_510.jpg",
+          "src": "images/homework/cad/lQDPJwC7NFSMmLfNAf7NAeGwD-NwleOuXnwKETHigzvfAA_481_510.jpg",
           "caption": "旋转生成实体"
         },
         {
           "id": "b_auto_24",
           "type": "image",
-          "src": "/images/homework/cad/lQDPKHCvkeLjZjfNBBjNAfiwT-9m_E-QO10KETHjDXLoAA_504_1048.jpg",
+          "src": "images/homework/cad/lQDPKHCvkeLjZjfNBBjNAfiwT-9m_E-QO10KETHjDXLoAA_504_1048.jpg",
           "caption": "实体模型视图"
         },
         {
@@ -347,13 +347,13 @@
         {
           "id": "b_auto_27",
           "type": "image",
-          "src": "/images/homework/cad/lQDPKILXFn-mpzfNA_zNAf-wdXP7cWBl9OMKETHkA0OXAA_511_1020.jpg",
+          "src": "images/homework/cad/lQDPKILXFn-mpzfNA_zNAf-wdXP7cWBl9OMKETHkA0OXAA_511_1020.jpg",
           "caption": "抽壳操作"
         },
         {
           "id": "b_auto_28",
           "type": "image",
-          "src": "/images/homework/cad/lQDPJwvF6eahNbfNA97NBQCwxQwe834vPP8KETHemtjvAA_1280_990.jpg",
+          "src": "images/homework/cad/lQDPJwvF6eahNbfNA97NBQCwxQwe834vPP8KETHemtjvAA_1280_990.jpg",
           "caption": "模型细化"
         },
         {
@@ -370,13 +370,13 @@
         {
           "id": "b_auto_31",
           "type": "image",
-          "src": "/images/homework/cad/lQDPJxB_iroP-LfNBCDNBMOweegIrJPEXkQKETHgkRleAA_1219_1056.jpg",
+          "src": "images/homework/cad/lQDPJxB_iroP-LfNBCDNBMOweegIrJPEXkQKETHgkRleAA_1219_1056.jpg",
           "caption": "渲染效果图"
         },
         {
           "id": "b_auto_32",
           "type": "image",
-          "src": "/images/homework/cad/lQDPKekWtxSttrfNBE7NBPawlmO5TityvUwKETHffGVXAA_1270_1102.jpg",
+          "src": "images/homework/cad/lQDPKekWtxSttrfNBE7NBPawlmO5TityvUwKETHffGVXAA_1270_1102.jpg",
           "caption": "模型多角度展示"
         },
         {
@@ -393,13 +393,13 @@
         {
           "id": "b_auto_35",
           "type": "image",
-          "src": "/images/homework/cad/lQDPJwmS76o6eTfNAt7NBQCwZ8Sah0hPZqkKETHlXE7VAA_1280_734.jpg",
+          "src": "images/homework/cad/lQDPJwmS76o6eTfNAt7NBQCwZ8Sah0hPZqkKETHlXE7VAA_1280_734.jpg",
           "caption": "最终设计效果"
         },
         {
           "id": "b_auto_36",
           "type": "image",
-          "src": "/images/homework/cad/291.png.JPG",
+          "src": "images/homework/cad/291.png.JPG",
           "caption": "设计完成界面"
         },
         {
@@ -624,7 +624,7 @@
         {
           "id": "b_auto_79",
           "type": "image",
-          "src": "/images/homework/3dprint/c8b0b6bf7baf908568e0867cde1706e1.jpg",
+          "src": "images/homework/3dprint/c8b0b6bf7baf908568e0867cde1706e1.jpg",
           "caption": "Bambu Studio 方块模型界面"
         },
         {
@@ -641,7 +641,7 @@
         {
           "id": "b_auto_82",
           "type": "image",
-          "src": "/images/homework/3dprint/7e0fbc17ef1296416a6b36e035717d19.jpg",
+          "src": "images/homework/3dprint/7e0fbc17ef1296416a6b36e035717d19.jpg",
           "caption": "Bambu Studio 越野车模型界面"
         },
         {
@@ -658,7 +658,7 @@
         {
           "id": "b_auto_85",
           "type": "image",
-          "src": "/images/homework/3dprint/lQDPKHUMbhUCd5fND8DNC9CwHZdRwELqwP0KET1iheypAA_3024_4032.jpg",
+          "src": "images/homework/3dprint/lQDPKHUMbhUCd5fND8DNC9CwHZdRwELqwP0KET1iheypAA_3024_4032.jpg",
           "caption": "Bambu Studio 蘑菇灯模型界面"
         },
         {
@@ -675,7 +675,7 @@
         {
           "id": "b_auto_88",
           "type": "image",
-          "src": "/images/homework/3dprint/lQDPJw_4Bt_0fBfNELzNFlCw_Q5TqnGSkmUKET1p_etSAA_5712_4284.jpg",
+          "src": "images/homework/3dprint/lQDPJw_4Bt_0fBfNELzNFlCw_Q5TqnGSkmUKET1p_etSAA_5712_4284.jpg",
           "caption": "3D 打印机整机实拍"
         },
         {
@@ -713,7 +713,7 @@
         {
           "id": "b_auto_95",
           "type": "image",
-          "src": "/images/homework/3dprint/c8b0b6bf7baf908568e0867cde1706e1.jpg",
+          "src": "images/homework/3dprint/c8b0b6bf7baf908568e0867cde1706e1.jpg",
           "caption": "方块成品实拍图"
         },
         {
@@ -730,7 +730,7 @@
         {
           "id": "b_auto_98",
           "type": "image",
-          "src": "/images/homework/3dprint/7e0fbc17ef1296416a6b36e035717d19.jpg",
+          "src": "images/homework/3dprint/7e0fbc17ef1296416a6b36e035717d19.jpg",
           "caption": "越野车成品实拍图"
         },
         {
@@ -747,7 +747,7 @@
         {
           "id": "b_auto_101",
           "type": "image",
-          "src": "/images/homework/3dprint/lQDPKHUMbhUCd5fND8DNC9CwHZdRwELqwP0KET1iheypAA_3024_4032.jpg",
+          "src": "images/homework/3dprint/lQDPKHUMbhUCd5fND8DNC9CwHZdRwELqwP0KET1iheypAA_3024_4032.jpg",
           "caption": "蘑菇灯成品实拍图"
         },
         {
