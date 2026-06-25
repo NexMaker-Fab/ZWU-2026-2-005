@@ -9,21 +9,39 @@ const DATA_PATH = 'data/content.json';
 function createDefaultContent() {
   return {
     site: { name: 'TeamFlow Wiki', theme: 'light' },
-    pages: [{
-      id: generateId(),
-      title: 'Untitled',
-      icon: '📄',
-      blocks: [{
-        id: generateId(),
-        type: 'heading',
-        level: 1,
-        content: 'Untitled Page'
-      }, {
-        id: generateId(),
-        type: 'paragraph',
-        content: 'Start typing here...'
-      }]
-    }]
+    pages: [
+      {
+        id: 'welcome',
+        title: 'Welcome to TeamFlow',
+        icon: '👋',
+        parentId: null,
+        blocks: [
+          { id: 'w1', type: 'heading', level: 1, content: 'Welcome to TeamFlow Wiki' },
+          { id: 'w2', type: 'paragraph', content: '这是一个专为团队项目进程展示和协作打造的门户网站后台。' }
+        ]
+      },
+      {
+        id: 'root-projects',
+        title: '项目展示 / Projects Showcase',
+        icon: '🚀',
+        parentId: null,
+        blocks: [{ id: 'rp1', type: 'paragraph', content: '在此新建子页面来展示完成的项目成果。' }]
+      },
+      {
+        id: 'root-team',
+        title: '团队成员 / Team Members',
+        icon: '👥',
+        parentId: null,
+        blocks: [{ id: 'rt1', type: 'paragraph', content: '在此新建成员的独立子页面来更新团队分工。' }]
+      },
+      {
+        id: 'root-timeline',
+        title: '项目进程 / Timeline',
+        icon: '📅',
+        parentId: null,
+        blocks: [{ id: 'rtl1', type: 'paragraph', content: '在此新建进程记录（如“2026-06-25 上线”）来丰富项目进展。' }]
+      }
+    ]
   };
 }
 

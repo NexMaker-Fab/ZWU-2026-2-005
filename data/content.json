@@ -6,19 +6,20 @@
   "pages": [
     {
       "id": "welcome",
-      "title": "Welcome",
+      "title": "Welcome to TeamFlow",
       "icon": "👋",
+      "parentId": null,
       "blocks": [
         {
           "id": "w1",
           "type": "heading",
           "level": 1,
-          "content": "Welcome to TeamFlow"
+          "content": "Welcome to TeamFlow Wiki"
         },
         {
           "id": "w2",
           "type": "paragraph",
-          "content": "TeamFlow is a lightweight collaborative wiki that lets your team edit content directly in the browser. Click any text to start editing — it's that simple."
+          "content": "这是一个专为开发与汉化小组成员打造的“无头协作知识库”与“项目成果展示门户”。在这里，我们能够直接编辑修改成果卡片、管理团队人员构成，并追踪整体开发进程。"
         },
         {
           "id": "w3",
@@ -28,153 +29,270 @@
           "id": "w4",
           "type": "heading",
           "level": 2,
-          "content": "✨ Features"
+          "content": "💡 如何作为 CMS 协作"
         },
         {
           "id": "w5",
           "type": "paragraph",
-          "content": "📝 Inline Editing — Click any text and start typing to edit"
+          "content": "1. 🚀 项目展示：在左侧导航的“项目展示”分类下新建子页面，即可动态生成展示门户的卡片。"
         },
         {
           "id": "w6",
           "type": "paragraph",
-          "content": "🧱 Block-based — Add headings, paragraphs, images, and dividers"
+          "content": "2. 👥 团队成员：在“团队成员”下新建成员的独立子页面，前台会自动生成带有悬浮详情的个人主页卡片。"
         },
         {
           "id": "w7",
           "type": "paragraph",
-          "content": "⚡ Slash Commands — Type / to quickly insert new block types"
-        },
-        {
-          "id": "w8",
-          "type": "paragraph",
-          "content": "🖼️ Image Support — Upload images or paste URLs"
-        },
-        {
-          "id": "w9",
-          "type": "paragraph",
-          "content": "💾 Save to GitHub — Commit changes directly from the browser"
-        },
-        {
-          "id": "w10",
-          "type": "paragraph",
-          "content": "🌙 Dark Mode — Toggle between light and dark themes"
-        },
-        {
-          "id": "w11",
-          "type": "divider"
-        },
-        {
-          "id": "w12",
-          "type": "heading",
-          "level": 2,
-          "content": "🚀 Quick Start"
-        },
-        {
-          "id": "w13",
-          "type": "paragraph",
-          "content": "1. Click on any text block to edit it"
-        },
-        {
-          "id": "w14",
-          "type": "paragraph",
-          "content": "2. Use the + button or type / to add new blocks"
-        },
-        {
-          "id": "w15",
-          "type": "paragraph",
-          "content": "3. Drag blocks using the ⠿ handle to reorder them"
-        },
-        {
-          "id": "w16",
-          "type": "paragraph",
-          "content": "4. Click 'Save to Local' to download your content, or configure GitHub to save directly to your repository"
+          "content": "3. 📅 项目进程：在“项目进程”下以“时间 节点名称”作为页面标题新建进程，即会自动在时间轴渲染。"
         }
       ]
     },
     {
-      "id": "guide",
-      "title": "User Guide",
-      "icon": "📖",
+      "id": "root-projects",
+      "title": "项目展示 / Projects Showcase",
+      "icon": "🚀",
+      "parentId": null,
       "blocks": [
         {
-          "id": "g1",
+          "id": "rp1",
+          "type": "heading",
+          "level": 2,
+          "content": "项目展示库"
+        },
+        {
+          "id": "rp2",
+          "type": "paragraph",
+          "content": "在此根页面下的所有子页面均会被识别为具体项目，并在展示门户中进行卡片化呈现。"
+        }
+      ]
+    },
+    {
+      "id": "project-blue-prince",
+      "title": "Blue Prince (2025) 汉化与重构",
+      "icon": "🎮",
+      "parentId": "root-projects",
+      "blocks": [
+        {
+          "id": "bp1",
           "type": "heading",
           "level": 1,
-          "content": "User Guide"
+          "content": "Blue Prince (2025) 汉化与重构项目"
         },
         {
-          "id": "g2",
+          "id": "bp2",
           "type": "paragraph",
-          "content": "This guide covers all the features available in TeamFlow Wiki."
+          "content": "基于 Unity IL2CPP 架构的游戏本地化汉化。成功解决了代理 SSL 认证翻译错误，保障自动化翻译接口长期可用。"
         },
         {
-          "id": "g3",
-          "type": "divider"
-        },
-        {
-          "id": "g4",
+          "id": "bp3",
           "type": "heading",
           "level": 2,
-          "content": "Block Types"
+          "content": "🛠️ 技术成果"
         },
         {
-          "id": "g5",
+          "id": "bp4",
           "type": "paragraph",
-          "content": "TeamFlow supports several block types that you can mix and match to create rich content:"
+          "content": "• 插件架构：部署了 BepInEx 插件框架与 XUnity.AutoTranslator 本地化翻译套件。"
         },
         {
-          "id": "g6",
+          "id": "bp5",
+          "type": "paragraph",
+          "content": "• 字体包重制：采用 Unity TMP 1.4.0 重新压制并打包生成了 chinesefont 资源包。完美收录了常用 3500 汉字、全角中文标点符号以及罗马数字，彻底解决了游戏中字体缺失显示为小方块（豆腐块）的历史问题。"
+        },
+        {
+          "id": "bp6",
+          "type": "paragraph",
+          "content": "• SSL 与网络代理：通过配置 GoogleTranslateCompat 以及代理 127.0.0.1:7897，成功绕过了 SSL 握手阻断，大幅提升了文本在线拉取的稳定性。"
+        }
+      ]
+    },
+    {
+      "id": "project-teamflow-wiki",
+      "title": "TeamFlow Wiki 本地化展示平台",
+      "icon": "📝",
+      "parentId": "root-projects",
+      "blocks": [
+        {
+          "id": "tf1",
           "type": "heading",
-          "level": 3,
-          "content": "Text Blocks"
+          "level": 1,
+          "content": "TeamFlow Wiki 本地化展示平台"
         },
         {
-          "id": "g7",
+          "id": "tf2",
           "type": "paragraph",
-          "content": "Heading 1/2/3 — Use headings to organize your content hierarchy. Paragraph — Standard text blocks for your main content."
+          "content": "一个轻量级类 Notion 的团队知识库系统。具有无编译阶段、无外部 node 模块依赖、完全依靠原生 ES Modules 与 CSS Variables 支撑的纯静态前端架构。"
         },
         {
-          "id": "g8",
-          "type": "heading",
-          "level": 3,
-          "content": "Media Blocks"
-        },
-        {
-          "id": "g9",
-          "type": "paragraph",
-          "content": "Image — Add images by uploading files or pasting URLs. Each image can have an optional caption."
-        },
-        {
-          "id": "g10",
-          "type": "heading",
-          "level": 3,
-          "content": "Layout Blocks"
-        },
-        {
-          "id": "g11",
-          "type": "paragraph",
-          "content": "Divider — A horizontal line to visually separate sections of content."
-        },
-        {
-          "id": "g12",
-          "type": "divider"
-        },
-        {
-          "id": "g13",
+          "id": "tf3",
           "type": "heading",
           "level": 2,
-          "content": "Saving Your Work"
+          "content": "⚡ 核心亮点"
         },
         {
-          "id": "g14",
+          "id": "tf4",
           "type": "paragraph",
-          "content": "Save to Local — Downloads a content.json file to your computer. Replace the existing file in the data/ folder to update the site."
+          "content": "• 块级编辑器：支持 Heading 1~3、段落、图片、横线的自由增删，并支持 ⠿ 拖拽改变内容块层级顺序。"
         },
         {
-          "id": "g15",
+          "id": "tf5",
           "type": "paragraph",
-          "content": "Save to GitHub — Configure your GitHub access token in Settings (⚙️) to commit changes directly to your repository."
+          "content": "• 树状嵌套页面：支持无限层级的子页面组织形式，带本地存储状态记忆。"
+        },
+        {
+          "id": "tf6",
+          "type": "paragraph",
+          "content": "• 全自动 GitHub 同步：用户配置个人令牌（Token）后，平台可在浏览器中一键拉取并推送最新数据，无需搭建本地编译环境。"
+        }
+      ]
+    },
+    {
+      "id": "root-team",
+      "title": "团队成员 / Team Members",
+      "icon": "👥",
+      "parentId": null,
+      "blocks": [
+        {
+          "id": "rt1",
+          "type": "heading",
+          "level": 2,
+          "content": "团队构成"
+        },
+        {
+          "id": "rt2",
+          "type": "paragraph",
+          "content": "在此根页面下的所有子页面均会被识别为小组成员，自动提取并在展示门户中显示头像和分工。"
+        }
+      ]
+    },
+    {
+      "id": "member-xiping",
+      "title": "Xiping Chen",
+      "icon": "🧑‍💻",
+      "parentId": "root-team",
+      "blocks": [
+        {
+          "id": "mx1",
+          "type": "heading",
+          "level": 2,
+          "content": "陈熙平 — 项目负责人 & 核心开发"
+        },
+        {
+          "id": "mx2",
+          "type": "paragraph",
+          "content": "• 职责分工：负责核心编辑器引擎开发、多层嵌套页面树架构以及 GitHub API 集成。"
+        },
+        {
+          "id": "mx3",
+          "type": "paragraph",
+          "content": "• 主要贡献：重构了设置模态框为二级选项卡面板，实现了拖放式的子页面组织和层级状态持久化；为数据上传加入了大图拦截与 Canvas 自动压缩降级机制，确保浏览器 localStorage 存储不发生溢出；引入全站 CSP 安全元信息保护敏感 Token 安全。"
+        }
+      ]
+    },
+    {
+      "id": "member-purple",
+      "title": "Purple Zhou",
+      "icon": "👩‍💻",
+      "parentId": "root-team",
+      "blocks": [
+        {
+          "id": "mp1",
+          "type": "heading",
+          "level": 2,
+          "content": "Purple Zhou — 前端架构师"
+        },
+        {
+          "id": "mp2",
+          "type": "paragraph",
+          "content": "• 职责分工：负责系统的基础架构设计、i18n 翻译层设计与跨平台兼容测试。"
+        },
+        {
+          "id": "mp3",
+          "type": "paragraph",
+          "content": "• 主要贡献：编写并维护了基于浏览器原生模块系统的轻量级单元测试框架，在 tests 目录下独立实现了 i18n 完整性校对、存储读写边界与编辑器操作断言套件，大幅降低了本地代码出错的可能性。"
+        }
+      ]
+    },
+    {
+      "id": "member-xiaoyuan",
+      "title": "Xiaoyuan Zhang",
+      "icon": "👩‍🎨",
+      "parentId": "root-team",
+      "blocks": [
+        {
+          "id": "my1",
+          "type": "heading",
+          "level": 2,
+          "content": "Xiaoyuan Zhang — UI / 交互设计师"
+        },
+        {
+          "id": "my2",
+          "type": "paragraph",
+          "content": "• 职责分工：负责平台 UI 视觉规范制定、暗黑模式色彩调配及交互动效设计。"
+        },
+        {
+          "id": "my3",
+          "type": "paragraph",
+          "content": "• 主要贡献：设计了展示前台毛玻璃磨砂效果、粒子连接动画背景，以及在 app 中实现了无缝的侧边栏拉伸适配与快捷键响应方案，确保视觉效果优雅高端。"
+        }
+      ]
+    },
+    {
+      "id": "root-timeline",
+      "title": "项目进程 / Timeline",
+      "icon": "📅",
+      "parentId": null,
+      "blocks": [
+        {
+          "id": "rtl1",
+          "type": "heading",
+          "level": 2,
+          "content": "进程时间轴"
+        },
+        {
+          "id": "rtl2",
+          "type": "paragraph",
+          "content": "在此根页面下的所有子页面均会被识别为时间线节点，页面标题格式推荐为：“YYYY-MM-DD 节点名称”。"
+        }
+      ]
+    },
+    {
+      "id": "milestone-1",
+      "title": "2026-06-12 全站安全与图片性能拦截",
+      "icon": "🔒",
+      "parentId": "root-timeline",
+      "blocks": [
+        {
+          "id": "ms1_1",
+          "type": "paragraph",
+          "content": "在项目中部署了全站 Content-Security-Policy (CSP) 规则限制脚本来源，防止 token 被 XSS 恶意脚本窃取；同时成功实现了图片自动 Canvas 压缩，超过 500KB 自动降质为 JPEG 0.7 格式，超过 5MB 直接进行硬性拦截，完美规避了 localStorage 爆仓漏洞。"
+        }
+      ]
+    },
+    {
+      "id": "milestone-2",
+      "title": "2026-06-05 设置中心重构与回收站上线",
+      "icon": "🗑️",
+      "parentId": "root-timeline",
+      "blocks": [
+        {
+          "id": "ms2_1",
+          "type": "paragraph",
+          "content": "完成了原本拥挤的模态框向二级页面的彻底转化，集成了同步配置、回收站、偏好设置和团队管理四大模块。引入了级联删除机制，父页面被删除时，其所有后代子页面都会一并移入回收站，并支持单页恢复至根目录的 Orphan 恢复模式。"
+        }
+      ]
+    },
+    {
+      "id": "milestone-3",
+      "title": "2026-05-22 子页面无限层级树与拖拽排序",
+      "icon": "🌿",
+      "parentId": "root-timeline",
+      "blocks": [
+        {
+          "id": "ms3_1",
+          "type": "paragraph",
+          "content": "在 pages.js 和 app.js 中重构了侧边栏渲染机制，改写为递归树，支持无限层级的子页面 nesting 关系；同时实现了基于 HTML5 Drag and Drop 的节点拖拽排序与重新划分层级功能，折叠状态能够完美保存在 localStorage 中。"
         }
       ]
     }

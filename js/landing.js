@@ -1,4 +1,5 @@
 import { applyTranslations, getLang, setLang } from './i18n.js';
+import { loadContent } from './storage.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Theme
@@ -10,11 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Canvas Particle Background
   initParticleBackground();
 
-  // Initialize 3D Card Hover Effects
-  initCardInteractivity();
-
   // Initialize Troubleshooting Accordion
   initAccordions();
+
+  // Load and Render Portal Showcase (Dynamic CMS data)
+  initPortalShowcase();
+
+  // Initialize Developer Onboarding Collapsible
+  initOnboardingCollapsible();
 });
 
 // ─── Theme Management ──────────────────────────────
@@ -34,6 +38,9 @@ function initTheme() {
     document.documentElement.setAttribute('data-theme', nextTheme);
     localStorage.setItem('teamflow_theme', nextTheme);
     updateThemeIcon(nextTheme);
+    
+    // Dispatch custom event to let other UI components know if needed
+    window.dispatchEvent(new CustomEvent('theme-changed', { detail: nextTheme }));
   });
 }
 
@@ -58,6 +65,8 @@ function initLanguage() {
     
     setLang(nextLang);
     updateLanguageLabel();
+    applyTranslations();
+    window.dispatchEvent(new CustomEvent('language-changed', { detail: nextLang }));
   });
 }
 
@@ -222,20 +231,18 @@ function initParticleBackground() {
   animate();
 }
 
-// ─── 3D Card Interactivity ─────────────────────────
-function initCardInteractivity() {
-  const cards = document.querySelectorAll('.glass-card');
-  
+// ─── 3D Card Hover Interactivity Helper ────────────
+function applyCardHoverEffects(selector) {
+  const cards = document.querySelectorAll(selector);
   cards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left; // x coordinate inside element
-      const y = e.clientY - rect.top;  // y coordinate inside element
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
       
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
       
-      // Calculate tilt degrees (max 6deg)
       const tiltX = ((y - centerY) / centerY) * -5;
       const tiltY = ((x - centerX) / centerX) * 5;
       
@@ -273,4 +280,359 @@ function initAccordions() {
       }
     });
   });
+}
+
+// ─── Onboarding Collapsible Section ────────────────
+function initOnboardingCollapsible() {
+  const toggleBtn = document.getElementById('onboarding-toggle-btn');
+  const content = document.getElementById('onboarding-content');
+  const chevron = toggleBtn?.querySelector('.collapsible-chevron');
+
+  toggleBtn?.addEventListener('click', () => {
+    const isHidden = content.style.display === 'none';
+    if (isHidden) {
+      content.style.display = 'grid';
+      toggleBtn.classList.add('active');
+      if (chevron) chevron.textContent = '▲';
+      // Smooth scroll to onboarding section
+      setTimeout(() => {
+        toggleBtn.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    } else {
+      content.style.display = 'none';
+      toggleBtn.classList.remove('active');
+      if (chevron) chevron.textContent = '▼';
+    }
+  });
+}
+
+// ─── Dynamic CMS Showcase Loading ──────────────────
+async function initPortalShowcase() {
+  const projectsGrid = document.getElementById('projects-grid');
+  const teamGrid = document.getElementById('team-showcase-grid');
+  const timelineContainer = document.getElementById('timeline-container');
+
+  try {
+    const contentData = await loadContent();
+    const pages = contentData.pages || [];
+
+    // 1. Render Projects
+    const projectPages = pages.filter(p => p.parentId === 'root-projects');
+    renderProjectsList(projectPages, projectsGrid);
+
+    // 2. Render Team Members
+    const teamPages = pages.filter(p => p.parentId === 'root-team');
+    renderTeamList(teamPages, teamGrid);
+
+    // 3. Render Chronological Progress Timeline
+    const timelinePages = pages.filter(p => p.parentId === 'root-timeline');
+    renderTimelineList(timelinePages, timelineContainer);
+
+    // Re-bind theme listener to redraw cards with updated colors if theme changes
+    window.addEventListener('theme-changed', () => {
+      // Re-trigger cards effect
+      applyCardHoverEffects('.glass-card');
+    });
+
+  } catch (error) {
+    console.error('Error rendering portal showcase:', error);
+    if (projectsGrid) projectsGrid.innerHTML = `<div class="error-placeholder">Failed to load content.</div>`;
+    if (teamGrid) teamGrid.innerHTML = `<div class="error-placeholder">Failed to load content.</div>`;
+    if (timelineContainer) timelineContainer.innerHTML = `<div class="error-placeholder">Failed to load content.</div>`;
+  }
+
+  // Setup Reader Modal closing handlers
+  initReaderModal();
+}
+
+/** Helper to extract a summary paragraph from page blocks */
+function getPageSummary(page) {
+  if (!page.blocks || page.blocks.length === 0) return 'No description available.';
+  // Find first paragraph block
+  const pBlock = page.blocks.find(b => b.type === 'paragraph' && b.content.trim() !== '');
+  if (pBlock) {
+    const content = pBlock.content.trim();
+    return content.length > 120 ? content.substring(0, 117) + '...' : content;
+  }
+  return 'No description available.';
+}
+
+/** Render project cards */
+function renderProjectsList(projects, container) {
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (projects.length === 0) {
+    container.innerHTML = `<div class="empty-placeholder">No projects posted yet. Click "管理后台" to add one!</div>`;
+    return;
+  }
+
+  projects.forEach(project => {
+    const card = document.createElement('div');
+    card.className = 'info-card glass-card project-showcase-card';
+    card.style.cursor = 'pointer';
+
+    const icon = project.icon || '📄';
+    const summary = getPageSummary(project);
+
+    // Detect technical keywords for mock tag pills
+    const tags = [];
+    const allContentText = (project.blocks || []).map(b => b.content || '').join(' ').toLowerCase();
+    if (allContentText.includes('il2cpp') || allContentText.includes('unity')) tags.push('Unity');
+    if (allContentText.includes('ssl') || allContentText.includes('github')) tags.push('Web Security');
+    if (allContentText.includes('canvas') || allContentText.includes('compress')) tags.push('Canvas');
+    if (allContentText.includes('testing') || allContentText.includes('runner')) tags.push('Automation');
+    if (tags.length === 0) tags.push('Team Wiki');
+
+    const tagsHtml = tags.map(tag => `<span class="project-tag">${tag}</span>`).join('');
+
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="card-icon">${icon}</span>
+        <h3>${project.title || 'Untitled'}</h3>
+      </div>
+      <p class="card-description">${summary}</p>
+      <div class="project-tags-area">
+        ${tagsHtml}
+      </div>
+      <div class="project-card-footer">
+        <span class="read-more-text">Browse Project →</span>
+      </div>
+    `;
+
+    card.addEventListener('click', () => {
+      openReaderModal(project);
+    });
+
+    container.appendChild(card);
+  });
+
+  applyCardHoverEffects('.project-showcase-card');
+}
+
+/** Render team member cards */
+function renderTeamList(members, container) {
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (members.length === 0) {
+    container.innerHTML = `<div class="empty-placeholder">No team members registered yet.</div>`;
+    return;
+  }
+
+  members.forEach(member => {
+    const card = document.createElement('div');
+    card.className = 'info-card glass-card team-member-card';
+    card.style.cursor = 'pointer';
+
+    const icon = member.icon || '🧑‍💻';
+    const summary = getPageSummary(member);
+
+    // Find heading or first line for role details
+    let roleText = 'Team Member';
+    const headingBlock = (member.blocks || []).find(b => b.type === 'heading');
+    if (headingBlock) {
+      // Split by '—' or ':'
+      const parts = headingBlock.content.split(/[—:]/);
+      if (parts.length > 1) {
+        roleText = parts[1].trim();
+      } else {
+        roleText = headingBlock.content.trim();
+      }
+    }
+
+    card.innerHTML = `
+      <div class="team-member-header">
+        <div class="member-avatar">${icon}</div>
+        <div class="member-meta">
+          <h3 class="member-name">${member.title || 'Anonymous'}</h3>
+          <span class="member-role">${roleText}</span>
+        </div>
+      </div>
+      <p class="member-summary">${summary}</p>
+      <div class="member-card-footer">
+        <span class="read-more-text">View Contributions →</span>
+      </div>
+    `;
+
+    card.addEventListener('click', () => {
+      openReaderModal(member);
+    });
+
+    container.appendChild(card);
+  });
+
+  applyCardHoverEffects('.team-member-card');
+}
+
+/** Render project progress timeline */
+function renderTimelineList(milestones, container) {
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (milestones.length === 0) {
+    container.innerHTML = `<div class="empty-placeholder">No progress milestones recorded yet.</div>`;
+    return;
+  }
+
+  // Parse YYYY-MM-DD from title and sort descending (newest first)
+  const dateRegex = /^(\d{4}-\d{2}-\d{2})/;
+  milestones.sort((a, b) => {
+    const matchA = (a.title || '').match(dateRegex);
+    const matchB = (b.title || '').match(dateRegex);
+    const dateA = matchA ? matchA[1] : '0000-00-00';
+    const dateB = matchB ? matchB[1] : '0000-00-00';
+    return dateB.localeCompare(dateA); // Newest first
+  });
+
+  milestones.forEach((milestone, idx) => {
+    const item = document.createElement('div');
+    item.className = 'timeline-item';
+
+    const milestoneTitle = milestone.title || '';
+    const match = milestoneTitle.match(dateRegex);
+    const dateStr = match ? match[1] : 'Recent';
+    let titleStr = milestoneTitle;
+    if (match) {
+      // Strip date from display title
+      titleStr = milestoneTitle.substring(match[0].length).trim();
+    }
+
+    const icon = milestone.icon || '✨';
+    const summary = getPageSummary(milestone);
+
+    item.innerHTML = `
+      <div class="timeline-dot-icon">${icon}</div>
+      <div class="timeline-content glass-card">
+        <div class="timeline-header">
+          <span class="timeline-date">${dateStr}</span>
+          <h4 class="timeline-title">${titleStr}</h4>
+        </div>
+        <p class="timeline-desc">${summary}</p>
+        <div class="timeline-footer">
+          <button class="timeline-details-btn">Details →</button>
+        </div>
+      </div>
+    `;
+
+    item.querySelector('.timeline-details-btn').addEventListener('click', () => {
+      openReaderModal(milestone);
+    });
+
+    container.appendChild(item);
+  });
+}
+
+// ─── Reader Modal Display Engine ───────────────────
+function initReaderModal() {
+  const modal = document.getElementById('reader-modal');
+  const closeBtn = document.getElementById('reader-modal-close-btn');
+
+  closeBtn?.addEventListener('click', () => {
+    closeReaderModal();
+  });
+
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeReaderModal();
+    }
+  });
+
+  // Escape key closes modal
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.style.display === 'flex') {
+      closeReaderModal();
+    }
+  });
+}
+
+function openReaderModal(page) {
+  const modal = document.getElementById('reader-modal');
+  const iconEl = document.getElementById('reader-modal-icon');
+  const titleEl = document.querySelector('.reader-modal-title');
+  const bodyEl = document.getElementById('reader-modal-body');
+
+  if (!modal || !bodyEl) return;
+
+  iconEl.textContent = page.icon || '📄';
+  titleEl.textContent = page.title;
+  bodyEl.innerHTML = '';
+
+  // Render blocks
+  const blocks = page.blocks || [];
+  if (blocks.length === 0) {
+    bodyEl.innerHTML = `<p class="reader-paragraph text-empty">Empty page.</p>`;
+  } else {
+    blocks.forEach(block => {
+      const el = compileBlockToHtml(block);
+      if (el) bodyEl.appendChild(el);
+    });
+  }
+
+  // Display modal
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden'; // Lock background scroll
+  
+  // Animation entrance trigger
+  requestAnimationFrame(() => {
+    modal.classList.add('visible');
+  });
+}
+
+function closeReaderModal() {
+  const modal = document.getElementById('reader-modal');
+  if (!modal) return;
+
+  modal.classList.remove('visible');
+  document.body.style.overflow = ''; // Restore background scroll
+
+  // Hide after transition completes
+  setTimeout(() => {
+    modal.style.display = 'none';
+  }, 300);
+}
+
+/** Parses editor block object to corresponding DOM nodes */
+function compileBlockToHtml(block) {
+  switch (block.type) {
+    case 'heading': {
+      const heading = document.createElement(`h${block.level || 2}`);
+      heading.className = `reader-heading h${block.level || 2}`;
+      heading.textContent = block.content || '';
+      return heading;
+    }
+    case 'paragraph': {
+      const p = document.createElement('p');
+      p.className = 'reader-paragraph';
+      
+      // Parse markdown-like bold/italic/underline links or HTML
+      let html = block.content || '';
+      p.innerHTML = html;
+      return p;
+    }
+    case 'image': {
+      const wrap = document.createElement('div');
+      wrap.className = 'reader-image-wrap';
+      if (block.src) {
+        const img = document.createElement('img');
+        img.src = block.src;
+        img.alt = block.caption || 'Project Image';
+        wrap.appendChild(img);
+      }
+      if (block.caption) {
+        const cap = document.createElement('p');
+        cap.className = 'reader-image-caption';
+        cap.textContent = block.caption;
+        wrap.appendChild(cap);
+      }
+      return wrap;
+    }
+    case 'divider': {
+      const hr = document.createElement('hr');
+      hr.className = 'reader-divider';
+      return hr;
+    }
+    default:
+      return null;
+  }
 }

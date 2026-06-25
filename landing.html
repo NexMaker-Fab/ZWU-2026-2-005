@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TeamFlow Wiki — Presentation</title>
+  <title>TeamFlow Wiki — Portal</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
   <meta name="description" content="Welcome to TeamFlow Wiki. A lightweight modular collaboration knowledge base.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com;">
@@ -29,6 +29,11 @@
       <span class="brand-title">TeamFlow Wiki</span>
     </div>
     <div class="header-actions">
+      <!-- Admin Workspace Entry -->
+      <a href="app.html" class="nav-workspace-btn" id="header-workspace-btn" title="Admin Workspace">
+        <span>📝</span>
+        <span data-i18n="landing.header.workspace">协作后台</span>
+      </a>
       <!-- Theme Switch Button -->
       <button class="icon-btn" id="theme-toggle-btn" title="Toggle Theme">
         <span id="theme-icon">🌙</span>
@@ -53,200 +58,217 @@
       <p class="hero-subtitle" data-i18n="landing.subtitle">为现代开发团队打造的轻量级、卡片模块化协作知识库</p>
       
       <div class="action-buttons">
-        <a href="app.html" class="btn btn-primary btn-glow" id="enter-project-btn">
+        <a href="#projects-section" class="btn btn-primary btn-glow" id="view-projects-btn">
           <span class="btn-icon">⚡</span>
-          <span data-i18n="landing.action.enter">进入项目</span>
+          <span data-i18n="landing.action.browse">浏览项目</span>
         </a>
-        <a href="app.html?open=settings" class="btn btn-secondary" id="configure-sync-btn">
+        <a href="app.html" class="btn btn-secondary" id="enter-workspace-btn">
           <span class="btn-icon">⚙️</span>
-          <span data-i18n="landing.action.settings">配置同步</span>
+          <span data-i18n="landing.action.enter">管理后台</span>
         </a>
       </div>
     </section>
 
-    <!-- Content Grid -->
-    <div class="content-grid">
+    <!-- Dynamic Section: Projects Showcase -->
+    <section class="portal-section" id="projects-section">
+      <h2 class="section-title">
+        <span class="title-icon">🚀</span>
+        <span data-i18n="landing.section.projects">项目成果展示 / Projects Showcase</span>
+      </h2>
+      <div class="projects-grid" id="projects-grid">
+        <!-- Loaded dynamically from content.json -->
+        <div class="loading-placeholder">Loading projects...</div>
+      </div>
+    </section>
+
+    <!-- Dynamic Section: Team Members -->
+    <section class="portal-section" id="team-section">
+      <h2 class="section-title">
+        <span class="title-icon">👥</span>
+        <span data-i18n="landing.section.team">项目构建成员 / Team Members</span>
+      </h2>
+      <div class="team-showcase-grid" id="team-showcase-grid">
+        <!-- Loaded dynamically from content.json -->
+        <div class="loading-placeholder">Loading team members...</div>
+      </div>
+    </section>
+
+    <!-- Dynamic Section: Project Progress Timeline -->
+    <section class="portal-section" id="timeline-section">
+      <h2 class="section-title">
+        <span class="title-icon">📅</span>
+        <span data-i18n="landing.section.timeline">开发与项目进展 / Project Progress</span>
+      </h2>
+      <div class="timeline-wrapper">
+        <div class="timeline-container" id="timeline-container">
+          <!-- Loaded dynamically from content.json -->
+          <div class="loading-placeholder">Loading timeline...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Collapsible Section: Developer Onboarding & Guides -->
+    <section class="portal-section collapsible-section" id="developer-onboarding-section">
+      <button class="collapsible-header" id="onboarding-toggle-btn">
+        <span class="title-icon">🛠️</span>
+        <h3 data-i18n="landing.section.onboarding">开发者配置与使用指南 / Developer Setup & Guides</h3>
+        <span class="collapsible-chevron">▼</span>
+      </button>
       
-      <!-- Card: Team Members -->
-      <div class="info-card glass-card team-card">
-        <div class="card-header">
-          <span class="card-icon">👥</span>
-          <h3 data-i18n="landing.team.title">项目构建成员</h3>
-        </div>
-        <p class="card-description" data-i18n="landing.team.desc">感谢为 TeamFlow Wiki 项目付出心血的开发与设计小组成员：</p>
-        
-        <div class="team-grid">
-          <div class="team-member">
-            <div class="avatar avatar-purple">X</div>
-            <div class="member-detail">
-              <span class="member-name">Xiping Chen</span>
-              <span class="member-role" data-i18n="landing.team.role.lead">项目负责人 / 核心开发</span>
-            </div>
+      <div class="collapsible-content content-grid" id="onboarding-content" style="display: none;">
+        <!-- Card: Steps Guide -->
+        <div class="info-card glass-card guide-card">
+          <div class="card-header">
+            <span class="card-icon">📖</span>
+            <h3 data-i18n="landing.guide.title">使用指南</h3>
           </div>
+          <p class="card-description" data-i18n="landing.guide.desc">快速掌握 TeamFlow Wiki 的核心协作工作流：</p>
           
-          <div class="team-member">
-            <div class="avatar avatar-blue">P</div>
-            <div class="member-detail">
-              <span class="member-name">Purple Zhou</span>
-              <span class="member-role" data-i18n="landing.team.role.frontend">前端架构师</span>
-            </div>
-          </div>
-          
-          <div class="team-member">
-            <div class="avatar avatar-green">X</div>
-            <div class="member-detail">
-              <span class="member-name">Xiaoyuan Zhang</span>
-              <span class="member-role" data-i18n="landing.team.role.designer">UI / 交互设计师</span>
-            </div>
-          </div>
-          
-          <div class="team-member">
-            <div class="avatar avatar-orange">X</div>
-            <div class="member-detail">
-              <span class="member-name">Xiping Chen</span>
-              <span class="member-role" data-i18n="landing.team.role.ai">AI 配对程序员</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card: Steps Guide -->
-      <div class="info-card glass-card guide-card">
-        <div class="card-header">
-          <span class="card-icon">📖</span>
-          <h3 data-i18n="landing.guide.title">使用指南</h3>
-        </div>
-        <p class="card-description" data-i18n="landing.guide.desc">快速掌握 TeamFlow Wiki 的核心协作工作流：</p>
-        
-        <div class="guide-steps">
-          <div class="step-item">
-            <div class="step-badge">1</div>
-            <div class="step-info">
-              <h4 data-i18n="landing.guide.step1.title">模块化块级编辑</h4>
-              <p data-i18n="landing.guide.step1.desc">点击任意文本块即可直接编辑，按 Enter 键换行。每一行都是独立积木，可自由修改。</p>
-            </div>
-          </div>
-          
-          <div class="step-item">
-            <div class="step-badge">2</div>
-            <div class="step-info">
-              <h4 data-i18n="landing.guide.step2.title">斜杠命令 (Slash Command)</h4>
-              <p data-i18n="landing.guide.step2.desc">在新行输入 / 即可呼出快捷菜单，一键插入标题、分隔线、图片或普通段落。</p>
-            </div>
-          </div>
-          
-          <div class="step-item">
-            <div class="step-badge">3</div>
-            <div class="step-info">
-              <h4 data-i18n="landing.guide.step3.title">拖拽手柄排序</h4>
-              <p data-i18n="landing.guide.step3.desc">悬停于每一行左侧可显现 ⠿ 手柄，长按即可上下拖拽块重新排布内容顺序。</p>
-            </div>
-          </div>
-          
-          <div class="step-item">
-            <div class="step-badge">4</div>
-            <div class="step-info">
-              <h4 data-i18n="landing.guide.step4.title">GitHub 自动云同步</h4>
-              <p data-i18n="landing.guide.step4.desc">在设置 (⚙️) 中输入 GitHub Token 及仓库信息后，即可免安装 Git，一键向远端推送更新。</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card: Sync Configuration Guide -->
-      <div class="info-card glass-card sync-guide-card">
-        <div class="card-header">
-          <span class="card-icon">🔄</span>
-          <h3 data-i18n="landing.sync_guide.title">云端协作配置向导</h3>
-        </div>
-        <p class="card-description" data-i18n="landing.sync_guide.desc">只需 3 步，即可在团队中建立共同的 GitHub 云端数据同步闭环，实现免安装协同：</p>
-        
-        <div class="sync-steps-grid">
-          <div class="sync-step-item">
-            <div class="sync-step-badge">1</div>
-            <div class="sync-step-info">
-              <h4 data-i18n="landing.sync_guide.step1.title">1. 共同建库</h4>
-              <p data-i18n="landing.sync_guide.step1.desc">团队主导者在 GitHub 上新建仓库（推荐初始化 README.md），并在 Settings -> Collaborators 中将团队成员添加为协作者（私有库必须），使大家获得写入权限。</p>
-            </div>
-          </div>
-          
-          <div class="sync-step-item">
-            <div class="sync-step-badge">2</div>
-            <div class="sync-step-info">
-              <h4 data-i18n="landing.sync_guide.step2.title">2. 创建 Access Token</h4>
-              <p data-i18n="landing.sync_guide.step2.desc">每个成员在个人 GitHub 设置中生成 Token。Classic 令牌需勾选 repo 权限；Fine-grained 令牌需授予该仓库 Contents 属性的 Read and write 读写权限。</p>
-            </div>
-          </div>
-          
-          <div class="sync-step-item">
-            <div class="sync-step-badge">3</div>
-            <div class="sync-step-info">
-              <h4 data-i18n="landing.sync_guide.step3.title">3. 同步配置与提交</h4>
-              <p data-i18n="landing.sync_guide.step3.desc">进入 Wiki 点击 ⚙️ 设置，填入相同的 Owner、Repo 与个人的 Token 保存。点击顶部“同步到 GitHub”，即可推送本地修改并实时拉取同步，完成闭环！</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Troubleshooting Accordion -->
-        <div class="troubleshooting-section">
-          <h4 class="section-subtitle">
-            <span class="card-icon" style="font-size: 1.1rem; margin-right: 2px;">⚠️</span>
-            <span data-i18n="landing.sync_guide.trouble.title">常见错误与故障排查</span>
-          </h4>
-          <div class="accordion-container">
-            <div class="accordion-item">
-              <button class="accordion-header">
-                <span class="error-badge">404</span>
-                <span data-i18n="landing.sync_guide.err404.title">GitHub API Error: Not Found (404 错误)</span>
-                <span class="accordion-icon">+</span>
-              </button>
-              <div class="accordion-content">
-                <p data-i18n="landing.sync_guide.err404.desc"><strong>可能原因：</strong>仓库所有者 (Owner) 或仓库名称 (Repo) 拼写错误；或者 Token 没有访问该仓库的权限；或者协作者尚未接受仓库的合作邀请。<br><strong>解决方案：</strong>仔细核对 Owner 和 Repo 拼写；检查 Token 作用范围是否包含该仓库；协作者需先访问 <code>https://github.com/用户名/仓库名/invitations</code> 接受邀请。</p>
+          <div class="guide-steps">
+            <div class="step-item">
+              <div class="step-badge">1</div>
+              <div class="step-info">
+                <h4 data-i18n="landing.guide.step1.title">模块化块级编辑</h4>
+                <p data-i18n="landing.guide.step1.desc">点击任意文本块即可直接编辑，按 Enter 键换行。每一行都是独立积木，可自由修改。</p>
               </div>
             </div>
             
-            <div class="accordion-item">
-              <button class="accordion-header">
-                <span class="error-badge">401</span>
-                <span data-i18n="landing.sync_guide.err401.title">GitHub API Error: Bad credentials (401 错误)</span>
-                <span class="accordion-icon">+</span>
-              </button>
-              <div class="accordion-content">
-                <p data-i18n="landing.sync_guide.err401.desc"><strong>可能原因：</strong>输入的 Personal Access Token（个人访问令牌）不正确、已失效或已过期。<br><strong>解决方案：</strong>前往 GitHub 开发者设置重新生成 Token，复制并完整填入，确保没有复制多余的空格或换行符。</p>
+            <div class="step-item">
+              <div class="step-badge">2</div>
+              <div class="step-info">
+                <h4 data-i18n="landing.guide.step2.title">斜杠命令 (Slash Command)</h4>
+                <p data-i18n="landing.guide.step2.desc">在新行输入 / 即可呼出快捷菜单，一键插入标题、分隔线、图片或普通段落。</p>
               </div>
             </div>
-
-            <div class="accordion-item">
-              <button class="accordion-header">
-                <span class="error-badge">403</span>
-                <span data-i18n="landing.sync_guide.err403.title">GitHub API Error: Write access denied / Blocked by branch protection (403 错误)</span>
-                <span class="accordion-icon">+</span>
-              </button>
-              <div class="accordion-content">
-                <p data-i18n="landing.sync_guide.err403.desc"><strong>可能原因：</strong>Token 校验成功但没有写入权限（Classic 令牌未勾选 repo，或 Fine-grained 令牌未在 Contents 中赋予 Read and write）；或者主分支设置了分支保护规则，阻止了直接推送。<br><strong>解决方案：</strong>在 GitHub 修改该 Token 的权限，确保选中 repo 写入或 Contents 读写；或在仓库设置中暂时调整分支保护规则。</p>
+            
+            <div class="step-item">
+              <div class="step-badge">3</div>
+              <div class="step-info">
+                <h4 data-i18n="landing.guide.step3.title">拖拽手柄排序</h4>
+                <p data-i18n="landing.guide.step3.desc">悬停于每一行左侧可显现 ⠿ 手柄，长按即可上下拖拽块重新排布内容顺序。</p>
               </div>
             </div>
+            
+            <div class="step-item">
+              <div class="step-badge">4</div>
+              <div class="step-info">
+                <h4 data-i18n="landing.guide.step4.title">GitHub 自动云同步</h4>
+                <p data-i18n="landing.guide.step4.desc">在设置 (⚙️) 中输入 GitHub Token 及仓库信息后，即可免安装 Git，一键向远端推送更新。</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <div class="accordion-item">
-              <button class="accordion-header">
-                <span class="error-badge">Network</span>
-                <span data-i18n="landing.sync_guide.errnet.title">SSL / Connection Timeout / 网络连接失败</span>
-                <span class="accordion-icon">+</span>
-              </button>
-              <div class="accordion-content">
-                <p data-i18n="landing.sync_guide.errnet.desc"><strong>可能原因：</strong>本地网络访问 GitHub API 失败或超时；或者是 SSL 证书验证在部分本地中继代理中出错。<br><strong>解决方案：</strong>检查本地网络。如果使用了代理客户端，请确保其处于全局/规则代理状态并能正常连通 <code>api.github.com</code>；或参考文档调整 BepInEx/代理配置文件。</p>
+        <!-- Card: Sync Configuration Guide -->
+        <div class="info-card glass-card sync-guide-card">
+          <div class="card-header">
+            <span class="card-icon">🔄</span>
+            <h3 data-i18n="landing.sync_guide.title">云端协作配置向导</h3>
+          </div>
+          <p class="card-description" data-i18n="landing.sync_guide.desc">只需 3 步，即可在团队中建立共同的 GitHub 云端数据同步闭环，实现免安装协同：</p>
+          
+          <div class="sync-steps-grid">
+            <div class="sync-step-item">
+              <div class="sync-step-badge">1</div>
+              <div class="sync-step-info">
+                <h4 data-i18n="landing.sync_guide.step1.title">1. 共同建库</h4>
+                <p data-i18n="landing.sync_guide.step1.desc">团队主导者在 GitHub 上新建仓库（推荐初始化 README.md），并在 Settings -> Collaborators 中将团队成员添加为协作者（私有库必须），使大家获得写入权限。</p>
+              </div>
+            </div>
+            
+            <div class="sync-step-item">
+              <div class="sync-step-badge">2</div>
+              <div class="sync-step-info">
+                <h4 data-i18n="landing.sync_guide.step2.title">2. 创建 Access Token</h4>
+                <p data-i18n="landing.sync_guide.step2.desc">每个成员在个人 GitHub 设置中生成 Token。Classic 令牌需勾选 repo 权限；Fine-grained 令牌需授予该仓库 Contents 属性的 Read and write 读写权限。</p>
+              </div>
+            </div>
+            
+            <div class="sync-step-item">
+              <div class="sync-step-badge">3</div>
+              <div class="sync-step-info">
+                <h4 data-i18n="landing.sync_guide.step3.title">3. 同步配置与提交</h4>
+                <p data-i18n="landing.sync_guide.step3.desc">进入 Wiki 点击 ⚙️ 设置，填入相同的 Owner、Repo 与个人的 Token 保存。点击顶部“同步到 GitHub”，即可推送本地修改并实时拉取同步，完成闭环！</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Troubleshooting Accordion -->
+          <div class="troubleshooting-section">
+            <h4 class="section-subtitle">
+              <span class="card-icon" style="font-size: 1.1rem; margin-right: 2px;">⚠️</span>
+              <span data-i18n="landing.sync_guide.trouble.title">常见错误与故障排查</span>
+            </h4>
+            <div class="accordion-container">
+              <div class="accordion-item">
+                <button class="accordion-header">
+                  <span class="error-badge">404</span>
+                  <span data-i18n="landing.sync_guide.err404.title">GitHub API Error: Not Found (404 错误)</span>
+                  <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-content">
+                  <p data-i18n="landing.sync_guide.err404.desc"><strong>可能原因：</strong>仓库所有者 (Owner) 或仓库名称 (Repo) 拼写错误；或者 Token 没有访问该仓库的权限；或者协作者尚未接受仓库的合作邀请。<br><strong>解决方案：</strong>仔细核对 Owner 和 Repo 拼写；检查 Token 作用范围是否包含该仓库；协作者需先访问 <code>https://github.com/用户名/仓库名/invitations</code> 接受邀请。</p>
+                </div>
+              </div>
+              
+              <div class="accordion-item">
+                <button class="accordion-header">
+                  <span class="error-badge">401</span>
+                  <span data-i18n="landing.sync_guide.err401.title">GitHub API Error: Bad credentials (401 错误)</span>
+                  <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-content">
+                  <p data-i18n="landing.sync_guide.err401.desc"><strong>可能原因：</strong>输入的 Personal Access Token（个人访问令牌）不正确、已失效或已过期。<br><strong>解决方案：</strong>前往 GitHub 开发者设置重新生成 Token，复制并完整填入，确保没有复制多余的空格或换行符。</p>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <button class="accordion-header">
+                  <span class="error-badge">403</span>
+                  <span data-i18n="landing.sync_guide.err403.title">GitHub API Error: Write access denied / Blocked by branch protection (403 错误)</span>
+                  <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-content">
+                  <p data-i18n="landing.sync_guide.err403.desc"><strong>可能原因：</strong>Token 校验成功但没有写入权限（Classic 令牌未勾选 repo，或 Fine-grained 令牌未在 Contents 中赋予 Read and write）；或者主分支设置了分支保护规则，阻止了直接推送。<br><strong>解决方案：</strong>在 GitHub 修改该 Token 的权限，确保选中 repo 写入或 Contents 读写；或在仓库设置中暂时调整分支保护规则。</p>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <button class="accordion-header">
+                  <span class="error-badge">Network</span>
+                  <span data-i18n="landing.sync_guide.errnet.title">SSL / Connection Timeout / 网络连接失败</span>
+                  <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-content">
+                  <p data-i18n="landing.sync_guide.errnet.desc"><strong>可能原因：</strong>本地网络访问 GitHub API 失败或超时；或者是 SSL 证书验证在部分本地中继代理中出错。<br><strong>解决方案：</strong>检查本地网络。如果使用了代理客户端，请确保其处于全局/规则代理状态并能正常连通 <code>api.github.com</code>；或参考文档调整 BepInEx/代理配置文件。</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-    </div>
+    </section>
 
     <!-- Page Footer -->
     <footer class="landing-footer">
       <p class="footer-text">Made by ZWU-2026-2-005 2026</p>
     </footer>
+  </div>
+
+  <!-- Universal Reader Modal -->
+  <div class="reader-modal-overlay" id="reader-modal">
+    <div class="reader-modal glass-card">
+      <div class="reader-modal-header">
+        <div class="reader-modal-title-area">
+          <span class="reader-modal-icon" id="reader-modal-icon">📄</span>
+          <h2 class="reader-modal-title" id="reader-modal-title">Project Title</h2>
+        </div>
+        <button class="reader-modal-close" id="reader-modal-close-btn">✕</button>
+      </div>
+      <div class="reader-modal-body" id="reader-modal-body">
+        <!-- Dynamic blocks content generated by JS -->
+      </div>
+    </div>
   </div>
 
   <script type="module" src="js/landing.js"></script>
