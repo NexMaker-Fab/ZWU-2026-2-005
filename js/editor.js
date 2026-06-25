@@ -1339,6 +1339,7 @@ export class BlockEditor {
     }
 
     this.onUpdate();
+    this.undoManager.saveState();
   }
 
   _onDragEnd(e) {
