@@ -1,319 +1,124 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>周波 (Purple Zhou) — 个人主页 / Personal Homepage</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍💻</text></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #07090e;
-      --card-bg: rgba(12, 16, 26, 0.85);
-      --border-color: rgba(16, 185, 129, 0.15);
-      --text-main: #e2e8f0;
-      --text-muted: #64748b;
-      --primary: #10b981;
-      --secondary: #06b6d4;
-      --accent: #f59e0b;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
-      background-color: var(--bg);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    .grid-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
-      background-size: 30px 30px;
-      z-index: -1;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 800px;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      backdrop-filter: blur(12px);
-      padding: 40px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(16, 185, 129, 0.05);
-      position: relative;
-    }
-
-    .container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      border-radius: 20px 20px 0 0;
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      margin-bottom: 32px;
-    }
-
-    .avatar {
-      width: 90px;
-      height: 90px;
-      border-radius: 24px;
-      background: rgba(16, 185, 129, 0.1);
-      border: 2px solid var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
-    }
-
-    .meta h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: #fff;
-    }
-
-    .meta .title {
-      font-size: 1rem;
-      color: var(--secondary);
-      font-weight: 600;
-      margin-top: 4px;
-      font-family: 'Fira Code', monospace;
-    }
-
-    .section-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-top: 24px;
-      margin-bottom: 12px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'Fira Code', monospace;
-    }
-
-    .section-title::before {
-      content: '>';
-      color: var(--primary);
-    }
-
-    .content-box {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: #94a3b8;
-      margin-bottom: 20px;
-    }
-
-    .highlight-list {
-      list-style: none;
-    }
-
-    .highlight-list li {
-      position: relative;
-      padding-left: 24px;
-      margin-bottom: 12px;
-    }
-
-    .highlight-list li::before {
-      content: '■';
-      position: absolute;
-      left: 0;
-      top: 2px;
-      color: var(--primary);
-      font-size: 0.8rem;
-    }
-
-    /* Terminal Simulator */
-    .terminal {
-      background: #04060a;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      font-family: 'Fira Code', monospace;
-      padding: 20px;
-      margin-top: 30px;
-      text-align: left;
-      font-size: 0.85rem;
-      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
-    }
-
-    .terminal-header {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-    .dot-red { background: #ef4444; }
-    .dot-yellow { background: #f59e0b; }
-    .dot-green { background: #10b981; }
-
-    .terminal-body {
-      color: #34d399;
-      min-height: 120px;
-    }
-
-    .terminal-line {
-      margin-bottom: 8px;
-      line-height: 1.5;
-    }
-
-    .terminal-input-line {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #fff;
-    }
-
-    .terminal-cursor {
-      width: 8px;
-      height: 15px;
-      background: #10b981;
-      display: inline-block;
-      animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 32px;
-      color: var(--text-main);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      padding: 10px 20px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      background: rgba(16, 185, 129, 0.02);
-      font-family: 'Fira Code', monospace;
-    }
-
-    .back-btn:hover {
-      background: rgba(16, 185, 129, 0.08);
-      border-color: var(--primary);
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
-      transform: translateY(-2px);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Purple - 个人介绍</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-  <div class="grid-bg"></div>
-
-  <div class="container">
-    <div class="header">
-      <div class="avatar">👩‍💻</div>
-      <div class="meta">
-        <h1>周波 (Purple Zhou)</h1>
-        <div class="title">前端架构师 & QA / Frontend Architect & QA</div>
-      </div>
-    </div>
-
-    <h2 class="section-title">about.md</h2>
-    <div class="content-box">
-      我专注于项目的基础脚手架搭建、i18n 多语言系统的翻译层设计以及平台全方位的兼容性测试工作。崇尚代码的可测试性与优雅度。
-    </div>
-
-    <h2 class="section-title">contributions.log</h2>
-    <div class="content-box">
-      <ul class="highlight-list">
-        <li><strong>测试框架自研</strong>：在不添加任何外部 npm 包的前提下，使用原生 ESM 编写了轻量测试套件，全面覆盖了 i18n 完整性验证和编辑撤销队列等单元测试。</li>
-        <li><strong>多语言模块</strong>：重构并维护了 `js/i18n.js` 层，支持全站的中文/英文无感切换与翻译节点递归映射。</li>
-        <li><strong>工程质量保障</strong>：严格审查代码边界条件，包括 API 响应回落机制与 localStorage 的兼容性降级。</li>
-      </ul>
-    </div>
-
-    <div class="terminal">
-      <div class="terminal-header">
-        <div class="dot dot-red"></div>
-        <div class="dot dot-yellow"></div>
-        <div class="dot dot-green"></div>
-      </div>
-      <div class="terminal-body" id="term-body">
-        <div class="terminal-line" style="color: #64748b;">// Running self-test suite...</div>
-        <div class="terminal-line">Unit tests loaded successfully from /tests/runner.html.</div>
-        <div class="terminal-line">i18n validation: <span style="color:#10b981;">PASSED</span> (32 keys)</div>
-        <div class="terminal-line">Storage limits: <span style="color:#10b981;">PASSED</span> (5.0MB safety check)</div>
-        <div class="terminal-line">Undo/Redo Stack size: <span style="color:#10b981;">PASSED</span> (20 actions depth)</div>
-        <div class="terminal-input-line">
-          <span>purple@zwu-blog:~$</span>
-          <span id="typed-cmd"></span><span class="terminal-cursor"></span>
+<div class="wrap">
+    <div class="td">
+        <div class="logo">Purple</div>
+        <div class="dh">
+            <a href="index.html">个人信息</a>
+            <a href="pages/major.html">专业介绍</a>
+            <a href="pages/plan.html">学习规划</a>
         </div>
-      </div>
     </div>
-
-    <a href="../../team.html" class="back-btn">
-      <span>&lt;--</span> 返回团队成员列表 / Back to Team
-    </a>
-  </div>
-
-  <script>
-    window.addEventListener('load', () => {
-      const command = "npm run test:verify --silent";
-      const typed = document.getElementById('typed-cmd');
-      let i = 0;
-      
-      function type() {
-        if (i < command.length) {
-          typed.textContent += command.charAt(i);
-          i++;
-          setTimeout(type, 100);
-        } else {
-          setTimeout(() => {
-            const newLine = document.createElement('div');
-            newLine.className = 'terminal-line';
-            newLine.style.color = '#38bdf8';
-            newLine.style.marginTop = '6px';
-            newLine.textContent = "✔ All checkmarks green. Ready for production deployment!";
-            document.getElementById('term-body').insertBefore(newLine, typed.parentElement);
-          }, 500);
-        }
-      }
-      setTimeout(type, 1200);
-    });
-  </script>
+    <div class="hero">
+        <img src="images/hf1.jpg" alt="banner">
+        <div class="hero-name">PURPLE</div>
+        <div class="hero-sub">Art & Technology / Sino-German Program</div>
+    </div>
+    <div class="zn">
+        <div class="qk">
+            <div class="qk-title">PROFILE</div>
+            <div class="sec-line"></div>
+            <div class="info-grid">
+                <div class="info-col-l">
+                    <div class="qk-title-big">个人基础信息</div>
+                    <div class="xx-list">
+                        <div class="xx-item">
+                            <div class="xx-label">姓名</div>
+                            <div class="xx-val">Purple</div>
+                        </div>
+                        <div class="xx-item">
+                            <div class="xx-label">就读院校</div>
+                            <div class="xx-val">浙江万里学院</div>
+                        </div>
+                        <div class="xx-item">
+                            <div class="xx-label">所属学部</div>
+                            <div class="xx-val">中德品牌学部</div>
+                        </div>
+                        <div class="xx-item">
+                            <div class="xx-label">专业班级</div>
+                            <div class="xx-val">艺术与科技 中德(2+2) 24A2</div>
+                        </div>
+                        <div class="xx-item">
+                            <div class="xx-label">培养模式</div>
+                            <div class="xx-val">中德双学位2+2联合培养项目</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-col-r">
+                    <div class="side-pic">
+                        <img src="images/tp1.jpg" alt="个人照片">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="qk qk-bg">
+            <div class="qk-title">ABOUT ME</div>
+            <div class="sec-line"></div>
+            <div class="qk-title-big">关于我</div>
+            <p class="txt-box">我是Purple，目前就读于浙江万里学院中德品牌学部，专业为艺术与科技中德2+2联合培养项目。在校期间，我同步学习国内艺术设计专业课程与德国前沿品牌设计、数字艺术相关内容，致力于将艺术审美与品牌实践相结合。</p>
+            <div class="gap15"></div>
+            <p class="txt-box">作为中德合作项目的一员，我在学习过程中不仅接触到国内设计教育的基础训练，也接轨欧洲现代品牌设计体系。这种跨文化的学习经历让我对设计有了更广阔的视角和更深入的思考。</p>
+        </div>
+        <div class="qk">
+            <div class="qk-title">FEATURES</div>
+            <div class="sec-line"></div>
+            <div class="qk-title-big">专业特色</div>
+            <div class="kp-row">
+                <div class="kp">
+                    <div class="kp-title">中德联合培养</div>
+                    <div class="kp-desc">采用2+2培养模式，前两年在国内完成基础学习，后两年赴德国合作院校深造，毕业获双方学位证书。</div>
+                </div>
+                <div class="kp">
+                    <div class="kp-title">跨学科融合</div>
+                    <div class="kp-desc">专业融合视觉设计、数字媒体、品牌策划、交互艺术等多领域知识，培养复合型设计人才。</div>
+                </div>
+                <div class="kp">
+                    <div class="kp-title">国际化视野</div>
+                    <div class="kp-desc">同步接触国内外设计教育资源，在跨文化语境中提升设计思维与品牌实践能力。</div>
+                </div>
+            </div>
+        </div>
+        <div class="qk qk-dark">
+            <div class="qk-title">CAMPUS</div>
+            <div class="sec-line"></div>
+            <div class="qk-title-big">校园印象</div>
+            <div class="grid-mix">
+                <div class="grid-big">
+                    <img src="images/tp2.jpg" alt="校园风景">
+                </div>
+                <div class="grid-side">
+                    <div class="grid-sm">
+                        <img src="images/tp3.jpg" alt="学习环境">
+                    </div>
+                    <div class="grid-sm">
+                        <img src="images/tp4.jpg" alt="设计工作">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="qk">
+            <div class="qk-title">INTERESTS</div>
+            <div class="sec-line"></div>
+            <div class="qk-title-big">个人兴趣</div>
+            <div class="img-txt-r">
+                <div class="pic">
+                    <img src="images/tp5.jpg" alt="兴趣爱好">
+                </div>
+                <div class="wenzi">
+                    <p class="txt-box">课余时间，我喜欢探索城市中的独立咖啡馆与创意空间，观察不同品牌的视觉呈现方式，从生活细节中汲取设计灵感。摄影也是我日常记录生活的一种方式，用镜头捕捉光影与色彩的变化。</p>
+                    <div class="gap15"></div>
+                    <p class="txt-box">我也热衷于阅读设计类书籍和浏览国内外优秀的设计作品集，了解不同文化背景下的设计语言差异，这些都为我的专业学习提供了丰富的养分。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="db">© 2026 Purple | 浙江万里学院 中德品牌学部 24A2</div>
+</div>
 </body>
 </html>

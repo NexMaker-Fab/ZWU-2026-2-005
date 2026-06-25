@@ -124,10 +124,11 @@ export function processImageFile(file) {
 }
 
 export class BlockEditor {
-  constructor({ editorEl, slashMenuEl, floatingToolbarEl, onUpdate }) {
+  constructor({ editorEl, slashMenuEl, floatingToolbarEl, tocEl, onUpdate }) {
     this.editorEl = editorEl;
     this.slashMenuEl = slashMenuEl;
     this.toolbarEl = floatingToolbarEl;
+    this.tocEl = tocEl;
     this.onUpdate = onUpdate || (() => {});
     this.blocks = [];
     this.activeBlockId = null;
@@ -162,6 +163,65 @@ export class BlockEditor {
     this.blocks.forEach((block, index) => {
       const el = this._createBlockEl(block, index);
       this.editorEl.appendChild(el);
+    });
+    this.updateTOC();
+  }
+
+  /** Regenerate and render Table of Contents index */
+  updateTOC() {
+    if (!this.tocEl) return;
+    const listEl = this.tocEl.querySelector('.toc-list');
+    if (!listEl) return;
+
+    listEl.innerHTML = '';
+    const headings = this.blocks.filter(b => b.type === 'heading');
+
+    if (headings.length === 0) {
+      this.tocEl.style.display = 'none';
+      return;
+    }
+    this.tocEl.style.display = 'flex';
+
+    const counters = [0, 0, 0];
+
+    headings.forEach(heading => {
+      const level = heading.level || 1;
+      let numberStr = '';
+
+      if (level === 1) {
+        counters[0]++;
+        counters[1] = 0;
+        counters[2] = 0;
+        numberStr = `${counters[0]}`;
+      } else if (level === 2) {
+        counters[1]++;
+        counters[2] = 0;
+        numberStr = `${counters[0]}.${counters[1]}`;
+      } else if (level === 3) {
+        counters[2]++;
+        numberStr = `${counters[0]}.${counters[1]}.${counters[2]}`;
+      }
+
+      const item = document.createElement('div');
+      item.className = `toc-item level-${level}`;
+      
+      const tempEl = document.createElement('div');
+      tempEl.innerHTML = heading.content || '';
+      const text = tempEl.textContent.trim() || 'Untitled Heading';
+      const cleanText = text.replace(/^[0-9.]+\s*/, '');
+      
+      item.textContent = `${numberStr}. ${cleanText}`;
+      
+      item.addEventListener('click', () => {
+        const blockEl = this._getBlockEl(heading.id);
+        if (blockEl) {
+          blockEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          blockEl.classList.add('block-highlight-flash');
+          setTimeout(() => blockEl.classList.remove('block-highlight-flash'), 1000);
+        }
+      });
+
+      listEl.appendChild(item);
     });
   }
 
@@ -238,6 +298,7 @@ export class BlockEditor {
       this.blocks.push(block);
     }
     this._insertDomBlockAfter(afterId, block);
+    this.updateTOC();
     this.onUpdate();
     this.undoManager.saveState();
 
@@ -258,6 +319,7 @@ export class BlockEditor {
     if (idx === -1) return;
     this.blocks.splice(idx, 1);
     this._removeDomBlock(id);
+    this.updateTOC();
     this.onUpdate();
     this.undoManager.saveState();
   }
@@ -288,6 +350,7 @@ export class BlockEditor {
     }
 
     this._replaceDomBlock(block);
+    this.updateTOC();
     this.onUpdate();
     this.undoManager.saveState();
 
@@ -571,6 +634,7 @@ export class BlockEditor {
       clearTimeout(saveTimer);
       saveTimer = setTimeout(() => {
         this._syncAllBlocks();
+        this.updateTOC();
         this.onUpdate();
         this.undoManager.saveState(); // Save state on typing pause
       }, 500);

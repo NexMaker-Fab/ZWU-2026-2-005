@@ -1,5 +1,6 @@
 import { applyTranslations, getLang, setLang } from './i18n.js';
 import { BlockEditor } from './editor.js';
+import { loadContent, saveToLocalStorage } from './storage.js';
 
 // Default mock content to seed if no localStorage data exists
 const defaultHomeworkData = {
@@ -260,37 +261,62 @@ function initParticleBackground() {
 }
 
 // ─── Homework Workspace Logic ─────────────────────
-function initHomeworkWorkspace() {
-  loadHomeworkData();
+async function initHomeworkWorkspace() {
+  await loadHomeworkData();
   renderSidebarList();
   initBlockEditor();
   loadHomeworkIntoEditor(activeHomeworkId);
   setupEditorListeners();
 }
 
-function loadHomeworkData() {
-  const cached = localStorage.getItem('teamflow_homework');
-  if (cached) {
-    try {
-      homeworkData = JSON.parse(cached);
-      // Ensure all 6 homework keys exist
-      homeworkKeys.forEach(k => {
-        if (!homeworkData[k]) {
-          homeworkData[k] = JSON.parse(JSON.stringify(defaultHomeworkData[k]));
-        }
-      });
-    } catch (e) {
-      console.error("Failed to parse homework data, resetting to default", e);
-      homeworkData = JSON.parse(JSON.stringify(defaultHomeworkData));
-    }
-  } else {
-    homeworkData = JSON.parse(JSON.stringify(defaultHomeworkData));
-    saveHomeworkData();
+let mainContentData = null;
+
+async function loadHomeworkData() {
+  mainContentData = await loadContent();
+  const pages = mainContentData.pages || [];
+
+  // Find if root-homework exists, if not create it
+  let rootHwPage = pages.find(p => p.id === 'root-homework');
+  if (!rootHwPage) {
+    rootHwPage = {
+      id: "root-homework",
+      title: "平时作业 / Homework",
+      icon: "📝",
+      parentId: null,
+      blocks: [
+        { id: "rhw1", type: "heading", level: 2, content: "平时作业分类" },
+        { id: "rhw2", type: "paragraph", content: "在此根分类下的所有子页面即代表平时的各个作业模块内容。" }
+      ]
+    };
+    pages.push(rootHwPage);
   }
+
+  homeworkData = {};
+  homeworkKeys.forEach(k => {
+    const pageId = `homework-${k}`;
+    let hwPage = pages.find(p => p.id === pageId);
+
+    if (!hwPage) {
+      const def = defaultHomeworkData[k];
+      hwPage = {
+        id: pageId,
+        title: def.title,
+        icon: def.icon,
+        parentId: 'root-homework',
+        blocks: JSON.parse(JSON.stringify(def.blocks))
+      };
+      pages.push(hwPage);
+    }
+    homeworkData[k] = hwPage;
+  });
+
+  saveHomeworkData();
 }
 
 function saveHomeworkData() {
-  localStorage.setItem('teamflow_homework', JSON.stringify(homeworkData));
+  if (mainContentData) {
+    saveToLocalStorage(mainContentData);
+  }
 }
 
 function renderSidebarList() {
@@ -349,6 +375,7 @@ function initBlockEditor() {
     editorEl,
     slashMenuEl,
     floatingToolbarEl,
+    tocEl: document.getElementById('editor-toc'),
     onUpdate: () => {
       triggerAutosave();
     }
@@ -440,6 +467,15 @@ function saveCurrentHomeworkImmediate() {
 
   if (editor) {
     hw.blocks = editor.getData();
+  }
+
+  if (mainContentData) {
+    const idx = mainContentData.pages.findIndex(p => p.id === hw.id);
+    if (idx !== -1) {
+      mainContentData.pages[idx] = hw;
+    } else {
+      mainContentData.pages.push(hw);
+    }
   }
 
   saveHomeworkData();

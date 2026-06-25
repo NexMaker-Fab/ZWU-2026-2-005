@@ -35,6 +35,7 @@ class App {
       editorEl: document.getElementById('editor'),
       slashMenuEl: document.getElementById('slash-menu'),
       floatingToolbarEl: document.getElementById('floating-toolbar'),
+      tocEl: document.getElementById('editor-toc'),
       onUpdate: () => this._onContentUpdate()
     });
 

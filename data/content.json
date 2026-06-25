@@ -167,8 +167,8 @@
       ]
     },
     {
-      "id": "member-xiping",
-      "title": "Xiping Chen",
+      "id": "member-dorado",
+      "title": "Jianyu Zhang",
       "icon": "🧑‍💻",
       "parentId": "root-team",
       "blocks": [
@@ -176,7 +176,7 @@
           "id": "mx1",
           "type": "heading",
           "level": 2,
-          "content": "陈熙平 — 项目负责人 & 核心开发"
+          "content": "张建宇 — 项目负责人 & 硬件开发"
         },
         {
           "id": "mx2",
@@ -186,7 +186,7 @@
         {
           "id": "mx3",
           "type": "paragraph",
-          "content": "• 主要贡献：重构了设置模态框为二级选项卡面板，实现了拖放式的子页面组织和层级状态持久化；为数据上传加入了大图拦截与 Canvas 自动压缩降级机制，确保浏览器 localStorage 存储不发生溢出；引入全站 CSP 安全元信息保护敏感 Token 安全。"
+          "content": "• 主要贡献：负责硬件电路搭建与传感器接线，编写 Arduino 控制逻辑与表情 OLED 显示脚本；同时主导了全站核心架构重构与个人静态作品集的融合。"
         }
       ]
     },
@@ -200,7 +200,7 @@
           "id": "mp1",
           "type": "heading",
           "level": 2,
-          "content": "Purple Zhou — 前端架构师"
+          "content": "周波 — 前端架构师"
         },
         {
           "id": "mp2",
@@ -215,7 +215,7 @@
       ]
     },
     {
-      "id": "member-xiaoyuan",
+      "id": "member-yoyo",
       "title": "Xiaoyuan Zhang",
       "icon": "👩‍🎨",
       "parentId": "root-team",
@@ -224,7 +224,7 @@
           "id": "my1",
           "type": "heading",
           "level": 2,
-          "content": "Xiaoyuan Zhang — UI / 交互设计师"
+          "content": "张潇原 — UI / 交互设计师"
         },
         {
           "id": "my2",
@@ -234,7 +234,7 @@
         {
           "id": "my3",
           "type": "paragraph",
-          "content": "• 主要贡献：设计了展示前台毛玻璃磨砂效果、粒子连接动画背景，以及在 app 中实现了无缝的侧边栏拉伸适配与快捷键响应方案，确保视觉效果优雅高端。"
+          "content": "• 主要贡献：负责最终项目的手册设计、界面交互动效以及展示前台毛玻璃磨砂效果；设计并制作了响应式个人主页与 3D 卡片倾斜跟随效果。"
         }
       ]
     },

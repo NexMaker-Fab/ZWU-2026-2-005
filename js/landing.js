@@ -506,7 +506,11 @@ function renderTeamList(members, container) {
     `;
 
     card.addEventListener('click', () => {
-      openReaderModal(member);
+      let folderName = member.id.replace('member-', '').toLowerCase();
+      if (!member.id.startsWith('member-')) {
+        folderName = (member.title || '').replace(/\s+/g, '').toLowerCase();
+      }
+      window.open(`members/${folderName}/index.html`, '_blank');
     });
 
     container.appendChild(card);

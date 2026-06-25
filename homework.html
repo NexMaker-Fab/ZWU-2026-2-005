@@ -77,19 +77,27 @@
         <div class="save-indicator" id="homework-save-status" data-i18n="save.status.ready">Saved to local cache</div>
       </div>
       
-      <div class="homework-editor-wrapper">
-        <!-- Page Header -->
-        <div class="page-header">
-          <div class="page-header-top" style="display: flex; align-items: center; gap: 12px;">
-            <div class="page-icon-display" id="page-icon-display" role="button" tabindex="0" title="Change icon">📅</div>
-            <div class="page-title" id="page-title" contenteditable="true" data-placeholder="Untitled" role="textbox" aria-label="Page title">Project Manage</div>
+      <div class="homework-editor-wrapper" style="display: flex; gap: 40px; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%;">
+        <div style="flex: 1; min-width: 0; margin: 0;">
+          <!-- Page Header -->
+          <div class="page-header">
+            <div class="page-header-top" style="display: flex; align-items: center; gap: 12px;">
+              <div class="page-icon-display" id="page-icon-display" role="button" tabindex="0" title="Change icon">📅</div>
+              <div class="page-title" id="page-title" contenteditable="true" data-placeholder="Untitled" role="textbox" aria-label="Page title">Project Manage</div>
+            </div>
+          </div>
+
+          <!-- Block Editor Container -->
+          <div class="editor" id="editor" role="document">
+            <!-- Rendered dynamically by BlockEditor -->
           </div>
         </div>
 
-        <!-- Block Editor Container -->
-        <div class="editor" id="editor" role="document">
-          <!-- Rendered dynamically by BlockEditor -->
-        </div>
+        <!-- Right Outline Sidebar -->
+        <aside class="editor-toc" id="editor-toc" style="display: none;">
+          <h4 data-i18n="editor.toc.title">文章大纲 / Outline</h4>
+          <div class="toc-list" id="toc-list"></div>
+        </aside>
       </div>
     </main>
 
