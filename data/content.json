@@ -822,40 +822,40 @@
           "id": "b_auto_3d_2",
           "type": "heading",
           "level": 1,
-          "content": "Exercise 5: 3D Printing"
+          "content": "实验 5：3D 打印"
         },
         {
           "id": "b_auto_3d_3",
           "type": "heading",
           "level": 2,
-          "content": "Technical Introduction"
+          "content": "技术介绍"
         },
         {
           "id": "b_auto_3d_4",
           "type": "paragraph",
-          "content": "3D printing is an additive manufacturing technology that creates solid physical objects by stacking printing materials layer by layer. Compared with traditional processing methods, it has higher design freedom and less material waste, and can realize the production of various complex structural models."
+          "content": "3D 打印是一种增材制造技术，通过逐层堆叠打印材料来制造实体物理对象。相比传统的切削加工方法，它具有更高的设计自由度和更少的材料浪费，能够实现各种复杂结构模型的生产。"
         },
         {
           "id": "b_auto_3d_5",
           "type": "paragraph",
-          "content": "This practice uses the Bambu Lab X2D desktop 3D printer with an AMS 2 Pro multi-material feeding system. The printer has multiple intelligent automatic functions, stable printing speed and good compatibility with different printing materials. We completed two groups of model printing in Bambu Studio software: test cube and mushroom lamp shell."
+          "content": "本次实践使用 Bambu Lab X2D 桌面级 3D 打印机，配备 AMS 2 Pro 多材料供料系统。该打印机具备多项智能自动功能，打印速度稳定，且对不同打印材料具有良好的兼容性。我们在 Bambu Studio 软件中完成了两组模型的打印：测试方块和蘑菇灯外壳。"
         },
         {
           "id": "b_auto_3d_6",
           "type": "heading",
           "level": 2,
-          "content": "Operation Process"
+          "content": "操作过程"
         },
         {
           "id": "b_auto_3d_7",
           "type": "heading",
           "level": 3,
-          "content": "1. Build the test model in Bambu Studio"
+          "content": "1. 在 Bambu Studio 中创建测试模型"
         },
         {
           "id": "b_auto_3d_8",
           "type": "paragraph",
-          "content": "Create a basic cube model directly in the software, adjust its size parameters to make a test piece for printing practice."
+          "content": "在软件中直接创建基础的立方体模型，调整其尺寸参数，作为打印练习的测试件。"
         },
         {
           "id": "b_auto_3d_9",
@@ -867,12 +867,12 @@
           "id": "b_auto_3d_10",
           "type": "heading",
           "level": 3,
-          "content": "2. Import and arrange mushroom lamp model"
+          "content": "2. 导入并排版蘑菇灯模型"
         },
         {
           "id": "b_auto_3d_11",
           "type": "paragraph",
-          "content": "Import the pre-designed mushroom lamp shell model into the software, and reasonably adjust its size, position and placement angle on the printing platform to ensure stable printing."
+          "content": "将预先设计的蘑菇灯外壳模型导入软件中，合理调整其在打印平台上的尺寸、位置和摆放角度，以确保稳定打印。"
         },
         {
           "id": "b_auto_3d_12",
@@ -884,12 +884,12 @@
           "id": "b_auto_3d_13",
           "type": "heading",
           "level": 3,
-          "content": "3. Set slicing parameters"
+          "content": "3. 设置切片参数"
         },
         {
           "id": "b_auto_3d_14",
           "type": "paragraph",
-          "content": "After completing the model layout, set professional slicing and printing parameters in the software, and generate the standard printing file for the device."
+          "content": "完成模型排版后，在软件中设置专业的切片和打印参数，并生成设备的标准打印文件。"
         },
         {
           "id": "b_auto_3d_15",
@@ -901,12 +901,12 @@
           "id": "b_auto_3d_16",
           "type": "heading",
           "level": 3,
-          "content": "4. Send the printing task"
+          "content": "4. 下发打印任务"
         },
         {
           "id": "b_auto_3d_17",
           "type": "paragraph",
-          "content": "Connect the device through wireless network, and upload the sliced printing file to the Bambu Lab X2D printer via mobile App."
+          "content": "通过无线网络连接设备，利用手机 App 将切片后的打印文件上传至 Bambu Lab X2D 打印机。"
         },
         {
           "id": "b_auto_3d_18",
@@ -918,12 +918,12 @@
           "id": "b_auto_3d_19",
           "type": "heading",
           "level": 3,
-          "content": "5. Formal printing and observation"
+          "content": "5. 正式打印与观察"
         },
         {
           "id": "b_auto_3d_20",
           "type": "paragraph",
-          "content": "The printer automatically performs layered printing. We observe the nozzle operation status, printing speed and real-time progress of the device throughout the whole process."
+          "content": "打印机自动执行分层打印。我们全程观察喷头运行状态、打印速度以及设备的实时进度。"
         },
         {
           "id": "b_auto_3d_21",
@@ -940,7 +940,7 @@
         {
           "id": "b_auto_3d_23",
           "type": "paragraph",
-          "content": "Here are more details of the printing process and infill test:"
+          "content": "以下是打印过程与填充测试的更多细节："
         },
         {
           "id": "b_auto_3d_24",
@@ -958,18 +958,18 @@
           "id": "b_auto_3d_26",
           "type": "heading",
           "level": 2,
-          "content": "Finished Product Display"
+          "content": "成品展示"
         },
         {
           "id": "b_auto_3d_27",
           "type": "heading",
           "level": 3,
-          "content": "1. Test cube finished product"
+          "content": "1. 测试方块成品"
         },
         {
           "id": "b_auto_3d_28",
           "type": "paragraph",
-          "content": "The printed test cube has a complete structure, regular shape and smooth surface, which verifies the normal operation of the printer."
+          "content": "打印出的测试方块结构完整，形状规整，表面光滑，验证了打印机的正常运行。"
         },
         {
           "id": "b_auto_3d_29",
@@ -981,12 +981,12 @@
           "id": "b_auto_3d_30",
           "type": "heading",
           "level": 3,
-          "content": "2. Mushroom lamp finished product"
+          "content": "2. 蘑菇灯成品"
         },
         {
           "id": "b_auto_3d_31",
           "type": "paragraph",
-          "content": "The printed mushroom lamp shell has smooth radian, complete outline and no obvious printing defects, which meets the design and production requirements."
+          "content": "打印出的蘑菇灯外壳弧度流畅，轮廓完整，无明显打印缺陷，符合设计与制作要求。"
         },
         {
           "id": "b_auto_3d_32",
