@@ -176,18 +176,18 @@
         },
         {
           "id": "b_auto_5",
-          "type": "paragraph",
+          "type": "bullet-list",
           "content": "<strong>项目名称</strong>：团队作业的展示门户与协作博客系统"
         },
         {
           "id": "b_auto_6",
-          "type": "paragraph",
+          "type": "bullet-list",
           "content": "<strong>设计角色</strong>：项目管理与全栈开发"
         },
         {
           "id": "b_auto_7",
-          "type": "paragraph",
-          "content": "<strong>涉及技术</strong>：Git 分支管理、ES Modules 静态无头 CMS、localStorage 缓存控制、GitHub Actions/Pages 持续部署"
+          "type": "bullet-list",
+          "content": "<strong>涉及技术</strong>：Git 分支管理、ES Modules 静态无头 CMS、localStorage 缓存控制、GitHub Actions/Pages 持续部署、Pre-commit 安全检查"
         },
         {
           "id": "b_auto_8",
@@ -197,7 +197,7 @@
           "id": "b_auto_9",
           "type": "heading",
           "level": 2,
-          "content": "二、技术介绍"
+          "content": "二、技术介绍与架构设计"
         },
         {
           "id": "b_auto_10",
@@ -217,225 +217,285 @@
         {
           "id": "b_auto_13",
           "type": "bullet-list",
-          "content": "<strong>本地缓存自愈算法</strong>：通过判定特定页面特征和正则表达式检查，自动失效和重构客户端 <code>localStorage</code> 缓存，消除版本冲突导致的脏数据。"
+          "content": "<strong>本地缓存自愈算法</strong>：通过判定特定页面特征 and 正则表达式检查，自动失效和重构客户端 <code>localStorage</code> 缓存，消除版本冲突导致的脏数据。"
         },
         {
           "id": "b_auto_14",
-          "type": "divider"
+          "type": "bullet-list",
+          "content": "<strong>路径兼容性与 Pre-commit 体检</strong>：对所有的静态资源图片使用相对路径适配 GitHub Pages 部署，并利用 Git 钩子在代码提交前执行自动校验体检。"
         },
         {
           "id": "b_auto_15",
-          "type": "heading",
-          "level": 2,
-          "content": "三、开发与管理过程"
+          "type": "divider"
         },
         {
           "id": "b_auto_16",
           "type": "heading",
-          "level": 3,
-          "content": "3.1 敏捷开发规划与任务分解"
+          "level": 2,
+          "content": "三、开发与管理阶段回溯"
         },
         {
           "id": "b_auto_17",
           "type": "paragraph",
-          "content": "在项目初期，对整体系统的重构工作进行了任务拆解，设立了四大核心开发模块，并定义了开发节点："
+          "content": "为了帮您清晰地回溯整个网站的演进与制作过程，我们选取了以下 5 个具有里程碑意义的历史版本，展示了网站从最初的雏形到最终成品的完整进化路径："
         },
         {
           "id": "b_auto_18",
-          "type": "paragraph",
-          "content": "1. <strong>模块一</strong>：团队成员门户（<code>team.html</code> & <code>team.js</code>）—— 完成成员头像展示与个人介绍，并支持置顶主创。"
+          "type": "heading",
+          "level": 3,
+          "content": "3.1 【第 1 阶段：主页改版为卡片式动态门户】"
         },
         {
           "id": "b_auto_19",
           "type": "paragraph",
-          "content": "2. <strong>模块二</strong>：平时作业展示本（<code>homework.html</code> & <code>homework.js</code>）—— 实现左侧作业导航，右侧文章渲染，大纲目录生成。"
+          "content": "👉 本地访问地址：http://localhost:8001/ (对应 Commit: 2ef12e0)"
         },
         {
           "id": "b_auto_20",
           "type": "paragraph",
-          "content": "3. <strong>模块三</strong>：协作管理后台（<code>app.html</code> & <code>editor.js</code>）—— 提供可视化拖拽编辑器与标准的 JSON/Markdown 导出支持。"
+          "content": "<strong>节点背景</strong>：将原先简单的静态页面全面重构成玻璃态的高颜值动态卡片门户，打下了整个项目的视觉基调。在此阶段，最简版的主页卡片和最简版的后台块级编辑器开始初步成型。"
         },
         {
           "id": "b_auto_21",
-          "type": "paragraph",
-          "content": "4. <strong>模块四</strong>：多端同步与环境兼容 —— 处理静态托管平台的特殊部署逻辑。"
+          "type": "image",
+          "src": "images/homework/project/ddd723cac568618b118f7f067bdcd923.png",
+          "caption": "TeamFlow Wiki 1.2 玻璃态卡片动态门户"
         },
         {
           "id": "b_auto_22",
-          "type": "heading",
-          "level": 3,
-          "content": "3.2 旧代码归档与代码库精简"
+          "type": "image",
+          "src": "images/homework/project/85acca04d6736cd2e5a109dd01625d10.png",
+          "caption": "后台编辑器最简版原型"
         },
         {
           "id": "b_auto_23",
-          "type": "paragraph",
-          "content": "为了防止遗留的原型设计和旧代码干扰开发，采用 Git 分支进行环境清理："
+          "type": "divider"
         },
         {
           "id": "b_auto_24",
-          "type": "bullet-list",
-          "content": "将旧的 TeamFlow Wiki 代码整理打包，推送到 <code>archive/teamflow-wiki</code> 分支进行归档。"
+          "type": "heading",
+          "level": 3,
+          "content": "3.2 【第 2 阶段：后台块编辑器 + 机器人表情模拟器上线】"
         },
         {
           "id": "b_auto_25",
-          "type": "bullet-list",
-          "content": "在 <code>main</code> 分支上删除全部多余的 HTML 原型文件，保证核心页面（<code>index.html</code>、<code>landing.html</code>、<code>team.html</code>、<code>homework.html</code>、<code>project.html</code>）的纯净度。"
+          "type": "paragraph",
+          "content": "👉 本地访问地址：http://localhost:8002/ (对应 Commit: a2d8b6b)"
         },
         {
           "id": "b_auto_26",
-          "type": "heading",
-          "level": 3,
-          "content": "3.3 本地自愈与全局同步策略"
+          "type": "paragraph",
+          "content": "<strong>节点背景</strong>：正式确立了“介绍页 - 成员页 - 平时作业 - 最终项目”的导航栏；开发了最初分栏的块级（类 Notion）文本编辑器原型，并加入了最终项目里可交互的机器人面部 Canvas 模拟器。"
         },
         {
           "id": "b_auto_27",
-          "type": "paragraph",
-          "content": "为了实现无需数据库的内容动态管理，系统设计了 <code>localStorage</code> 本地缓存方案："
+          "type": "image",
+          "src": "images/homework/project/0454cabf459d9cc7ba3edc461170a2df.png",
+          "caption": "重构后带有顶部导航栏的展示门户主页"
         },
         {
           "id": "b_auto_28",
-          "type": "bullet-list",
-          "content": "本地编辑的内容会自动序列化并缓存在客户端浏览器。"
+          "type": "image",
+          "src": "images/homework/project/7d71b736b798551b768448c30c7008b2.png",
+          "caption": "平时作业分栏块级文本编辑器最初原型"
         },
         {
           "id": "b_auto_29",
-          "type": "bullet-list",
-          "content": "<strong>缓存失效（自愈）算法设计</strong>：当系统升级或修复了底层结构时，为了防止老用户的浏览器一直加载旧格式缓存导致页面崩坏，我们编写了条件判断。如果本地缓存缺少核心页（如 Hkz 的名片）或图片仍为绝对路径，则系统将自动删除当前缓存并强制向 GitHub 服务器拉取最新的 <code>content.json</code> 数据。"
+          "type": "divider"
         },
         {
           "id": "b_auto_30",
           "type": "heading",
           "level": 3,
-          "content": "3.4 部署路径适配（GitHub Pages 404 修复）"
+          "content": "3.3 【第 3 阶段：平时作业并入 CMS 管理 + 自动编号目录】"
         },
         {
           "id": "b_auto_31",
           "type": "paragraph",
-          "content": "在部署至 GitHub Pages 时，遭遇了图片无法正常加载的 Bug。项目管理排查流程如下："
+          "content": "👉 本地访问地址：http://localhost:8003/ (对应 Commit: f64f4e7)"
         },
         {
           "id": "b_auto_32",
-          "type": "bullet-list",
-          "content": "<strong>发现问题</strong>：由于 GitHub Pages 的项目托管在子目录下（<code>/ZWU-2026-2-005/</code>），而数据中的图片路径写的是绝对路径（<code>/images/homework/...</code>），导致浏览器寻找图片时越过了子目录，直接去主域名根目录下获取资源。"
+          "type": "paragraph",
+          "content": "<strong>节点背景</strong>：把零散的作业文稿整合进入 CMS 数据源统一管理，平时作业阅读页侧边新增了支持多级自动阿拉伯数字编号的大纲（TOC）目录。"
         },
         {
           "id": "b_auto_33",
-          "type": "bullet-list",
-          "content": "<strong>解决问题</strong>：编写了批量转换脚本，将数据文件 <code>data/content.json</code> 中所有的绝对图片路径批量修复为相对路径（去掉了开头的 <code>/</code>）。"
+          "type": "image",
+          "src": "images/homework/project/b32722b37e132dedc6f2ccbaaf92dab7.png",
+          "caption": "平时作业右下角侧边自动多级编号大纲目录"
         },
         {
           "id": "b_auto_34",
-          "type": "bullet-list",
-          "content": "<strong>结合自愈机制</strong>：在 <code>js/storage.js</code> 中增加判定规则，凡是检测到缓存中含有绝对图片路径的客户端，一律清空缓存并重新拉取服务器相对路径数据，成功解决了 GitHub 页面上线后图片大面积无法显示的兼容性问题。"
-        },
-        {
-          "id": "b_auto_35",
           "type": "divider"
         },
         {
+          "id": "b_auto_35",
+          "type": "heading",
+          "level": 3,
+          "content": "3.4 【第 4 阶段：成员板块重构 + 主创 Hkz 调整置首】"
+        },
+        {
           "id": "b_auto_36",
+          "type": "paragraph",
+          "content": "👉 本地访问地址：http://localhost:8004/ (对应 Commit: fa73a88)"
+        },
+        {
+          "id": "b_auto_37",
+          "type": "paragraph",
+          "content": "<strong>节点背景</strong>：重新规划了团队名片，加入照片渲染支持；将名字周波更正为周紫晗（Purple），并将主创 Hkz 的头像名片移到了团队列表的首位，设计了全新的精美毛玻璃个人详细主页。"
+        },
+        {
+          "id": "b_auto_38",
+          "type": "image",
+          "src": "images/homework/project/8730c8edf91e91620c25f297f0af8a88.png",
+          "caption": "主创 Hkz 的精美毛玻璃风格个人主页"
+        },
+        {
+          "id": "b_auto_39",
+          "type": "image",
+          "src": "images/homework/project/df36b6d5a8235739a8ca9e405e826562.png",
+          "caption": "更新后的团队名片列表及主创 Hkz 置首展示"
+        },
+        {
+          "id": "b_auto_40",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_41",
+          "type": "heading",
+          "level": 3,
+          "content": "3.5 【第 5 阶段：最终完成版（收藏即展示 + 顶部大纲 + 拦截验证）】"
+        },
+        {
+          "id": "b_auto_42",
+          "type": "paragraph",
+          "content": "👉 本地访问地址：http://localhost:8005/ (对应 Commit: main)"
+        },
+        {
+          "id": "b_auto_43",
+          "type": "paragraph",
+          "content": "<strong>节点背景</strong>：包含我们最新的所有优化：大纲目录重制为清爽手写体并移至文章上方（取消重复的多级数字前缀）；项目展示逻辑改为只要在后台点亮“星标收藏”即可上线；并加入了 Git Pre-commit 自动拦截的缓存自愈安全体检，防止带病提交。"
+        },
+        {
+          "id": "b_auto_44",
+          "type": "image",
+          "src": "images/homework/project/5298fafd37ff380c33f37aba9f14838b.png",
+          "caption": "移至顶部的清爽手写体大纲目录与虚线框玻璃态呈现"
+        },
+        {
+          "id": "b_auto_45",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_46",
           "type": "heading",
           "level": 2,
           "content": "四、项目成果总结"
         },
         {
-          "id": "b_auto_37",
+          "id": "b_auto_47",
           "type": "bullet-list",
           "content": "<strong>开发阶段</strong>: --------- | <strong>关键操作与修复</strong>: --------- | <strong>完成状态</strong>: ---------"
         },
         {
-          "id": "b_auto_38",
+          "id": "b_auto_48",
           "type": "bullet-list",
           "content": "<strong>开发阶段</strong>: 分支管理 | <strong>关键操作与修复</strong>: 归档旧项目到 `archive` 分支，清理主干无用原型 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_39",
+          "id": "b_auto_49",
           "type": "bullet-list",
           "content": "<strong>开发阶段</strong>: 编辑器核心 | <strong>关键操作与修复</strong>: 实现 BlockEditor，支持行内 Markdown 兼容 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_40",
+          "id": "b_auto_50",
           "type": "bullet-list",
           "content": "<strong>开发阶段</strong>: 成员卡片 | <strong>关键操作与修复</strong>: Hkz 主创置首，动态提取头像和职责 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_41",
+          "id": "b_auto_51",
           "type": "bullet-list",
           "content": "<strong>开发阶段</strong>: 目录大纲 | <strong>关键操作与修复</strong>: 增加 auto-numbering 大纲并移至笔记开头，支持虚线玻璃态 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_42",
+          "id": "b_auto_52",
           "type": "bullet-list",
           "content": "<strong>开发阶段</strong>: 路径兼容性 | <strong>关键操作与修复</strong>: 批量修正图片为相对路径，部署至 GitHub Pages 畅通无阻 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_43",
+          "id": "b_auto_53",
           "type": "bullet-list",
           "content": "<strong>开发阶段</strong>: 缓存失效控制 | <strong>关键操作与修复</strong>: 增加自愈逻辑，避免浏览器本地缓存过期导致图片报错 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_44",
+          "id": "b_auto_54",
+          "type": "bullet-list",
+          "content": "<strong>开发阶段</strong>: 自动化验证 | <strong>关键操作与修复</strong>: 部署 Pre-commit hook，执行全方位缓存与数据安全体检 | <strong>完成状态</strong>: ✅ 完成"
+        },
+        {
+          "id": "b_auto_55",
           "type": "divider"
         },
         {
-          "id": "b_auto_45",
+          "id": "b_auto_56",
           "type": "heading",
           "level": 2,
           "content": "五、项目要点与心得"
         },
         {
-          "id": "b_auto_46",
+          "id": "b_auto_57",
           "type": "paragraph",
-          "content": "1. <strong>分支策略是代码整洁的重要防线</strong>：在进行大规模重构时，及时做好旧代码的归档和新主干的精简，有助于厘清开发头绪。"
+          "content": "1. <strong>分支策略是代码整洁的重要防线</strong>：在进行大规模重构时，及时做好旧代码的归档和新主干的精简，有助于厘清开发头绪，确保核心业务不受历史遗留代码的影响。"
         },
         {
-          "id": "b_auto_47",
+          "id": "b_auto_58",
           "type": "paragraph",
-          "content": "2. <strong>多环境测试的重要性</strong>：本地开发环境（Windows/Live Server）往往对路径大小写、绝对/相对路径宽容度较高；而生产环境（GitHub Pages Linux）有严格的规范。在开发时必须坚持使用规范的相对路径和准确的文件名拼写。"
+          "content": "2. <strong>多环境测试的重要性</strong>：本地开发环境往往对路径大小写、绝对/相对路径宽容度较高；而静态托管生产环境（GitHub Pages）有更严格的规范。在项目管理中，规范化路径与自动化体检必不可少。"
         },
         {
-          "id": "b_auto_48",
+          "id": "b_auto_59",
           "type": "paragraph",
-          "content": "3. <strong>“无数据库”架构的同步挑战</strong>：利用 JSON 和 <code>localStorage</code> 搭建 CMS 能够带来极高的性能与便利，但必须配备完善的“客户端缓存版本管理”与“自愈判定”，才能实现跨版本平滑过渡。"
+          "content": "3. <strong>“无数据库”架构的同步挑战</strong>：利用 JSON 和 <code>localStorage</code> 搭建 CMS 能够带来极高的性能与便利，但必须配备完善 of “客户端缓存版本管理”与“自愈判定”，才能实现跨版本平滑过渡。"
         },
         {
-          "id": "b_auto_49",
+          "id": "b_auto_60",
           "type": "divider"
         },
         {
-          "id": "b_auto_50",
+          "id": "b_auto_61",
           "type": "heading",
           "level": 2,
           "content": "六、与其他作业的衔接"
         },
         {
-          "id": "b_auto_51",
+          "id": "b_auto_62",
           "type": "paragraph",
           "content": "本“项目管理与协作开发”作为整组作业博客的基底和内容发布中枢，为后续的其他作业提供了直观的展示空间。后续的 <strong>CAD设计</strong>、<strong>3D打印</strong>、<strong>Arduino应用</strong>、<strong>IOT交互</strong> 等平时作业和最终项目，均已统一导入到本平台中，实现了学习成果的数字化沉淀与高审美呈现。"
         },
         {
-          "id": "b_auto_52",
+          "id": "b_auto_63",
           "type": "divider"
         },
         {
-          "id": "b_auto_53",
+          "id": "b_auto_64",
           "type": "quote",
           "content": "<strong>项目名称</strong>：项目管理与协作开发汇报"
         },
         {
-          "id": "b_auto_54",
+          "id": "b_auto_65",
           "type": "quote",
           "content": "<strong>技术栈</strong>：HTML5 / Vanilla CSS / JavaScript (ES Modules) / Git / GitHub Pages"
         },
         {
-          "id": "b_auto_55",
+          "id": "b_auto_66",
           "type": "quote",
           "content": "<strong>更新时间</strong>：2026年6月"
         },
         {
-          "id": "b_auto_56",
+          "id": "b_auto_67",
           "type": "quote",
-          "content": "<strong>关键词</strong>：<code>项目管理</code> <code>Git 分支策略</code> <code>块级编辑器</code> <code>路径修复</code> <code>缓存自愈</code> <code>GitHub Pages</code>"
+          "content": "<strong>关键词</strong>：<code>项目管理</code> <code>Git 分支策略</code> <code>块级编辑器</code> <code>路径修复</code> <code>缓存自愈</code> <code>GitHub Pages</code> <code>Pre-commit</code>"
         }
       ]
     },
@@ -446,307 +506,307 @@
       "parentId": "root-homework",
       "blocks": [
         {
-          "id": "b_auto_57",
+          "id": "b_auto_68",
           "type": "heading",
           "level": 1,
           "content": "CAD 设计 — 作业汇报"
         },
         {
-          "id": "b_auto_58",
+          "id": "b_auto_69",
           "type": "divider"
         },
         {
-          "id": "b_auto_59",
+          "id": "b_auto_70",
           "type": "heading",
           "level": 2,
           "content": "一、项目简介"
         },
         {
-          "id": "b_auto_60",
+          "id": "b_auto_71",
           "type": "paragraph",
           "content": "本作业使用 <strong>Fusion 360</strong>（Autodesk 旗下三维 CAD/CAM/CAE 一体化设计平台）完成了一个 <strong>蘑菇灯（Mushroom Lamp）</strong> 的三维建模设计项目，涵盖从草图绘制、实体建模、曲面造型到渲染输出的完整设计流程。"
         },
         {
-          "id": "b_auto_61",
+          "id": "b_auto_72",
           "type": "paragraph",
           "content": "<strong>设计软件</strong>：Fusion 360"
         },
         {
-          "id": "b_auto_62",
+          "id": "b_auto_73",
           "type": "paragraph",
           "content": "<strong>设计对象</strong>：蘑菇灯外壳三维模型"
         },
         {
-          "id": "b_auto_63",
+          "id": "b_auto_74",
           "type": "paragraph",
           "content": "<strong>涉及技术</strong>：参数化草图、旋转实体、曲面放样、抽壳、外观渲染"
         },
         {
-          "id": "b_auto_64",
+          "id": "b_auto_75",
           "type": "divider"
         },
         {
-          "id": "b_auto_65",
+          "id": "b_auto_76",
           "type": "heading",
           "level": 2,
           "content": "二、技术介绍"
         },
         {
-          "id": "b_auto_66",
+          "id": "b_auto_77",
           "type": "paragraph",
           "content": "Fusion 360 是一款基于云的三维设计平台，集成了参数化建模、自由造型、网格编辑、渲染和 CAM 加工等功能。相比传统 CAD 软件，其优势在于："
         },
         {
-          "id": "b_auto_67",
+          "id": "b_auto_78",
           "type": "bullet-list",
           "content": "<strong>云协作</strong>：设计数据云端存储，支持多人协作"
         },
         {
-          "id": "b_auto_68",
+          "id": "b_auto_79",
           "type": "bullet-list",
           "content": "<strong>一体化</strong>：设计-仿真-制造全流程覆盖"
         },
         {
-          "id": "b_auto_69",
+          "id": "b_auto_80",
           "type": "bullet-list",
           "content": "<strong>参数化</strong>：支持历史时间轴，可回溯修改任意步骤"
         },
         {
-          "id": "b_auto_70",
+          "id": "b_auto_81",
           "type": "bullet-list",
           "content": "<strong>多平台</strong>：支持 Windows 和 macOS"
         },
         {
-          "id": "b_auto_71",
+          "id": "b_auto_82",
           "type": "divider"
         },
         {
-          "id": "b_auto_72",
+          "id": "b_auto_83",
           "type": "heading",
           "level": 2,
           "content": "三、设计过程"
         },
         {
-          "id": "b_auto_73",
+          "id": "b_auto_84",
           "type": "heading",
           "level": 3,
           "content": "3.1 草图绘制"
         },
         {
-          "id": "b_auto_74",
+          "id": "b_auto_85",
           "type": "paragraph",
           "content": "在 Fusion 360 中新建草图，使用<strong>直线、圆弧、样条曲线</strong>等工具绘制蘑菇灯主体轮廓的二维截面。"
         },
         {
-          "id": "b_auto_75",
+          "id": "b_auto_86",
           "type": "image",
           "src": "images/homework/cad/lQDPJwAx3s9YpLfNArrNBQCwg2e-8I_lMZAKETHdSls_AA_1280_698.jpg",
           "caption": "蘑菇灯草图绘制"
         },
         {
-          "id": "b_auto_76",
+          "id": "b_auto_87",
           "type": "image",
           "src": "images/homework/cad/lQDPJwKUJCAR0rfNAtTNBQCwwQFv8baSzx4KETHcuvOUAA_1280_724.jpg",
           "caption": "蘑菇灯截面草图"
         },
         {
-          "id": "b_auto_77",
+          "id": "b_auto_88",
           "type": "heading",
           "level": 3,
           "content": "3.2 实体建模"
         },
         {
-          "id": "b_auto_78",
+          "id": "b_auto_89",
           "type": "paragraph",
           "content": "使用 <strong>Revolve（旋转）</strong> 命令将草图截面绕中心轴旋转 360°，生成蘑菇灯主体的三维实体模型。"
         },
         {
-          "id": "b_auto_79",
+          "id": "b_auto_90",
           "type": "image",
           "src": "images/homework/cad/lQDPJwC7NFSMmLfNAf7NAeGwD-NwleOuXnwKETHigzvfAA_481_510.jpg",
           "caption": "旋转生成实体"
         },
         {
-          "id": "b_auto_80",
+          "id": "b_auto_91",
           "type": "image",
           "src": "images/homework/cad/lQDPKHCvkeLjZjfNBBjNAfiwT-9m_E-QO10KETHjDXLoAA_504_1048.jpg",
           "caption": "实体模型视图"
         },
         {
-          "id": "b_auto_81",
+          "id": "b_auto_92",
           "type": "heading",
           "level": 3,
           "content": "3.3 抽壳与细化"
         },
         {
-          "id": "b_auto_82",
+          "id": "b_auto_93",
           "type": "paragraph",
           "content": "使用 <strong>Shell（抽壳）</strong> 命令对实体进行壁厚处理，使蘑菇灯外壳变为中空结构，适用于后续 3D 打印。"
         },
         {
-          "id": "b_auto_83",
+          "id": "b_auto_94",
           "type": "image",
           "src": "images/homework/cad/lQDPKILXFn-mpzfNA_zNAf-wdXP7cWBl9OMKETHkA0OXAA_511_1020.jpg",
           "caption": "抽壳操作"
         },
         {
-          "id": "b_auto_84",
+          "id": "b_auto_95",
           "type": "image",
           "src": "images/homework/cad/lQDPJwvF6eahNbfNA97NBQCwxQwe834vPP8KETHemtjvAA_1280_990.jpg",
           "caption": "模型细化"
         },
         {
-          "id": "b_auto_85",
+          "id": "b_auto_96",
           "type": "heading",
           "level": 3,
           "content": "3.4 外观与渲染"
         },
         {
-          "id": "b_auto_86",
+          "id": "b_auto_97",
           "type": "paragraph",
           "content": "为模型赋予材质和颜色，设置场景光照，生成高质量渲染效果图。"
         },
         {
-          "id": "b_auto_87",
+          "id": "b_auto_98",
           "type": "image",
           "src": "images/homework/cad/lQDPJxB_iroP-LfNBCDNBMOweegIrJPEXkQKETHgkRleAA_1219_1056.jpg",
           "caption": "渲染效果图"
         },
         {
-          "id": "b_auto_88",
+          "id": "b_auto_99",
           "type": "image",
           "src": "images/homework/cad/lQDPKekWtxSttrfNBE7NBPawlmO5TityvUwKETHffGVXAA_1270_1102.jpg",
           "caption": "模型多角度展示"
         },
         {
-          "id": "b_auto_89",
+          "id": "b_auto_100",
           "type": "heading",
           "level": 3,
           "content": "3.5 设计最终成果"
         },
         {
-          "id": "b_auto_90",
+          "id": "b_auto_101",
           "type": "paragraph",
           "content": "蘑菇灯外壳模型设计完成，具备光滑的曲面过渡和均匀的壁厚，适合进行 3D 打印制造。"
         },
         {
-          "id": "b_auto_91",
+          "id": "b_auto_102",
           "type": "image",
           "src": "images/homework/cad/lQDPJwmS76o6eTfNAt7NBQCwZ8Sah0hPZqkKETHlXE7VAA_1280_734.jpg",
           "caption": "最终设计效果"
         },
         {
-          "id": "b_auto_92",
+          "id": "b_auto_103",
           "type": "image",
           "src": "images/homework/cad/291.png.JPG",
           "caption": "设计完成界面"
         },
         {
-          "id": "b_auto_93",
+          "id": "b_auto_104",
           "type": "divider"
         },
         {
-          "id": "b_auto_94",
+          "id": "b_auto_105",
           "type": "heading",
           "level": 2,
           "content": "四、设计成果总结"
         },
         {
-          "id": "b_auto_95",
+          "id": "b_auto_106",
           "type": "bullet-list",
           "content": "<strong>设计阶段</strong>: --------- | <strong>关键操作</strong>: --------- | <strong>完成状态</strong>: ---------"
         },
         {
-          "id": "b_auto_96",
+          "id": "b_auto_107",
           "type": "bullet-list",
           "content": "<strong>设计阶段</strong>: 草图绘制 | <strong>关键操作</strong>: 直线、圆弧、样条曲线 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_97",
+          "id": "b_auto_108",
           "type": "bullet-list",
           "content": "<strong>设计阶段</strong>: 实体旋转 | <strong>关键操作</strong>: Revolve 命令 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_98",
+          "id": "b_auto_109",
           "type": "bullet-list",
           "content": "<strong>设计阶段</strong>: 抽壳处理 | <strong>关键操作</strong>: Shell 命令 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_99",
+          "id": "b_auto_110",
           "type": "bullet-list",
           "content": "<strong>设计阶段</strong>: 外观渲染 | <strong>关键操作</strong>: 材质、光照设置 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_100",
+          "id": "b_auto_111",
           "type": "bullet-list",
           "content": "<strong>设计阶段</strong>: 导出模型 | <strong>关键操作</strong>: STL 格式导出 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_101",
+          "id": "b_auto_112",
           "type": "divider"
         },
         {
-          "id": "b_auto_102",
+          "id": "b_auto_113",
           "type": "heading",
           "level": 2,
           "content": "五、设计要点与心得"
         },
         {
-          "id": "b_auto_103",
+          "id": "b_auto_114",
           "type": "paragraph",
           "content": "1. <strong>草图约束的重要性</strong>：在绘制二维草图时，充分的几何约束和尺寸标注能保证后续三维建模的精度和可修改性"
         },
         {
-          "id": "b_auto_104",
+          "id": "b_auto_115",
           "type": "paragraph",
           "content": "2. <strong>旋转建模适用场景</strong>：蘑菇灯这种旋转对称的造型非常适合使用 Revolve 命令，一条截面曲线即可生成完整形体"
         },
         {
-          "id": "b_auto_105",
+          "id": "b_auto_116",
           "type": "paragraph",
           "content": "3. <strong>抽壳壁厚选择</strong>：壁厚需要综合考虑 3D 打印精度和结构强度，太薄易碎、太厚浪费材料"
         },
         {
-          "id": "b_auto_106",
+          "id": "b_auto_117",
           "type": "paragraph",
           "content": "4. <strong>渲染让设计更直观</strong>：通过材质和渲染，可以在制造前直观预览产品效果，方便沟通和迭代"
         },
         {
-          "id": "b_auto_107",
+          "id": "b_auto_118",
           "type": "divider"
         },
         {
-          "id": "b_auto_108",
+          "id": "b_auto_119",
           "type": "heading",
           "level": 2,
           "content": "六、与 3D 打印的衔接"
         },
         {
-          "id": "b_auto_109",
+          "id": "b_auto_120",
           "type": "paragraph",
           "content": "本 CAD 设计模型将导出为 <strong>STL 格式</strong>，导入 Bambu Studio 切片软件进行打印参数设置，最终通过 Bambu Lab X2D 3D 打印机完成实物制造，形成\"设计 → 制造\"的完整闭环。"
         },
         {
-          "id": "b_auto_110",
+          "id": "b_auto_121",
           "type": "divider"
         },
         {
-          "id": "b_auto_111",
+          "id": "b_auto_122",
           "type": "quote",
           "content": "<strong>项目名称</strong>：CAD 设计（蘑菇灯三维建模）"
         },
         {
-          "id": "b_auto_112",
+          "id": "b_auto_123",
           "type": "quote",
           "content": "<strong>设计软件</strong>：Fusion 360"
         },
         {
-          "id": "b_auto_113",
+          "id": "b_auto_124",
           "type": "quote",
           "content": "<strong>更新时间</strong>：2026年6月"
         },
         {
-          "id": "b_auto_114",
+          "id": "b_auto_125",
           "type": "quote",
           "content": "<strong>关键词</strong>：<code>Fusion 360</code> <code>CAD</code> <code>三维建模</code> <code>蘑菇灯</code> <code>参数化设计</code> <code>渲染</code>"
         }
@@ -759,235 +819,174 @@
       "parentId": "root-homework",
       "blocks": [
         {
-          "id": "b_auto_115",
+          "id": "b_auto_126",
           "type": "heading",
           "level": 1,
           "content": "3D 打印与原型制造 — 作业汇报"
         },
         {
-          "id": "b_auto_116",
+          "id": "b_auto_127",
           "type": "divider"
         },
         {
-          "id": "b_auto_117",
+          "id": "b_auto_128",
           "type": "heading",
           "level": 2,
           "content": "一、项目简介"
         },
         {
-          "id": "b_auto_118",
+          "id": "b_auto_129",
           "type": "paragraph",
           "content": "本作业围绕 <strong>3D 打印（Additive Manufacturing）</strong> 技术展开，使用 <strong>Bambu Lab X2D</strong> 桌面级 3D 打印机配合 <strong>AMS 2 Pro</strong> 多材料供料系统，完成三组模型的打印制造：<strong>小测试方块、越野车装配模型、蘑菇灯外壳模型</strong>。"
         },
         {
-          "id": "b_auto_119",
+          "id": "b_auto_130",
           "type": "paragraph",
           "content": "<strong>打印设备</strong>：Bambu Lab X2D + AMS 2 Pro"
         },
         {
-          "id": "b_auto_120",
+          "id": "b_auto_131",
           "type": "paragraph",
           "content": "<strong>切片软件</strong>：Bambu Studio"
         },
         {
-          "id": "b_auto_121",
+          "id": "b_auto_132",
           "type": "paragraph",
           "content": "<strong>模型来源</strong>：Fusion 360 设计 + Bambu Studio 内置建模"
         },
         {
-          "id": "b_auto_122",
+          "id": "b_auto_133",
           "type": "paragraph",
           "content": "<strong>打印材料</strong>：PLA"
         },
         {
-          "id": "b_auto_123",
+          "id": "b_auto_134",
           "type": "divider"
         },
         {
-          "id": "b_auto_124",
+          "id": "b_auto_135",
           "type": "heading",
           "level": 2,
           "content": "二、技术介绍"
         },
         {
-          "id": "b_auto_125",
+          "id": "b_auto_136",
           "type": "paragraph",
           "content": "3D 打印是一种增材制造技术，通过逐层堆叠打印材料来制造实体物理对象。相比传统切削加工，它具有<strong>更高的设计自由度</strong>和<strong>更少的材料浪费</strong>，能够制造出许多复杂特殊结构。"
         },
         {
-          "id": "b_auto_126",
+          "id": "b_auto_137",
           "type": "paragraph",
           "content": "Bambu Lab X2D 桌面 3D 打印机具备以下特点："
         },
         {
-          "id": "b_auto_127",
+          "id": "b_auto_138",
           "type": "bullet-list",
           "content": "多种智能自动化功能（自动调平、共振补偿、断料检测）"
         },
         {
-          "id": "b_auto_128",
+          "id": "b_auto_139",
           "type": "bullet-list",
           "content": "稳定的打印速度与精度"
         },
         {
-          "id": "b_auto_129",
+          "id": "b_auto_140",
           "type": "bullet-list",
           "content": "AMS 2 Pro 多材料供料系统，支持多色/多材料打印"
         },
         {
-          "id": "b_auto_130",
+          "id": "b_auto_141",
           "type": "bullet-list",
           "content": "可通过手机 App 远程下发打印任务"
         },
         {
-          "id": "b_auto_131",
+          "id": "b_auto_142",
           "type": "divider"
         },
         {
-          "id": "b_auto_132",
+          "id": "b_auto_143",
           "type": "heading",
           "level": 2,
           "content": "三、操作过程"
         },
         {
-          "id": "b_auto_133",
+          "id": "b_auto_144",
           "type": "heading",
           "level": 3,
           "content": "3.1 小测试方块建模"
         },
         {
-          "id": "b_auto_134",
+          "id": "b_auto_145",
           "type": "paragraph",
           "content": "在 Bambu Studio 软件中直接创建基础方块模型，调整长宽高参数，作为打印测试件进行初步打印练习。"
         },
         {
-          "id": "b_auto_135",
+          "id": "b_auto_146",
           "type": "image",
           "src": "images/homework/3dprint/c8b0b6bf7baf908568e0867cde1706e1.jpg",
           "caption": "Bambu Studio 方块模型界面"
         },
         {
-          "id": "b_auto_136",
+          "id": "b_auto_147",
           "type": "heading",
           "level": 3,
           "content": "3.2 越野车模型导入与布局"
         },
         {
-          "id": "b_auto_137",
+          "id": "b_auto_148",
           "type": "paragraph",
           "content": "将 Fusion 360 设计的越野车模型导入 Bambu Studio，调整车辆各零件的摆放角度以获得更好的打印效果。"
         },
         {
-          "id": "b_auto_138",
+          "id": "b_auto_149",
           "type": "image",
           "src": "images/homework/3dprint/7e0fbc17ef1296416a6b36e035717d19.jpg",
           "caption": "Bambu Studio 越野车模型界面"
         },
         {
-          "id": "b_auto_139",
+          "id": "b_auto_150",
           "type": "heading",
           "level": 3,
           "content": "3.3 蘑菇灯模型导入与布局"
         },
         {
-          "id": "b_auto_140",
+          "id": "b_auto_151",
           "type": "paragraph",
           "content": "将 Fusion 360 制作的蘑菇灯外壳模型导入 Bambu Studio，合理调整尺寸和摆放方向。"
         },
         {
-          "id": "b_auto_141",
+          "id": "b_auto_152",
           "type": "image",
           "src": "images/homework/3dprint/lQDPKHUMbhUCd5fND8DNC9CwHZdRwELqwP0KET1iheypAA_3024_4032.jpg",
           "caption": "Bambu Studio 蘑菇灯模型界面"
         },
         {
-          "id": "b_auto_142",
+          "id": "b_auto_153",
           "type": "heading",
           "level": 3,
           "content": "3.4 切片与任务下发"
         },
         {
-          "id": "b_auto_143",
+          "id": "b_auto_154",
           "type": "paragraph",
           "content": "三组模型全部放入软件后完成切片工作，通过手机 App 将打印任务下发至 Bambu Lab X2D 打印机。"
         },
         {
-          "id": "b_auto_144",
+          "id": "b_auto_155",
           "type": "image",
           "src": "images/homework/3dprint/lQDPJw_4Bt_0fBfNELzNFlCw_Q5TqnGSkmUKET1p_etSAA_5712_4284.jpg",
           "caption": "3D 打印机整机实拍"
         },
         {
-          "id": "b_auto_145",
+          "id": "b_auto_156",
           "type": "heading",
           "level": 3,
           "content": "3.5 实际打印过程"
         },
         {
-          "id": "b_auto_146",
+          "id": "b_auto_157",
           "type": "paragraph",
           "content": "打印机接收任务后开始自动分层打印，观察记录设备工作状态与打印进度。"
-        },
-        {
-          "id": "b_auto_147",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_148",
-          "type": "heading",
-          "level": 2,
-          "content": "四、成品展示"
-        },
-        {
-          "id": "b_auto_149",
-          "type": "heading",
-          "level": 3,
-          "content": "4.1 小测试方块成品"
-        },
-        {
-          "id": "b_auto_150",
-          "type": "paragraph",
-          "content": "打印出的方块测试件结构完整、表面光滑。"
-        },
-        {
-          "id": "b_auto_151",
-          "type": "image",
-          "src": "images/homework/3dprint/c8b0b6bf7baf908568e0867cde1706e1.jpg",
-          "caption": "方块成品实拍图"
-        },
-        {
-          "id": "b_auto_152",
-          "type": "heading",
-          "level": 3,
-          "content": "4.2 越野车成品"
-        },
-        {
-          "id": "b_auto_153",
-          "type": "paragraph",
-          "content": "越野车所有打印部件完好，符合原始设计预期。"
-        },
-        {
-          "id": "b_auto_154",
-          "type": "image",
-          "src": "images/homework/3dprint/7e0fbc17ef1296416a6b36e035717d19.jpg",
-          "caption": "越野车成品实拍图"
-        },
-        {
-          "id": "b_auto_155",
-          "type": "heading",
-          "level": 3,
-          "content": "4.3 蘑菇灯成品"
-        },
-        {
-          "id": "b_auto_156",
-          "type": "paragraph",
-          "content": "打印出的蘑菇灯外壳弧度流畅，外形完整。"
-        },
-        {
-          "id": "b_auto_157",
-          "type": "image",
-          "src": "images/homework/3dprint/lQDPKHUMbhUCd5fND8DNC9CwHZdRwELqwP0KET1iheypAA_3024_4032.jpg",
-          "caption": "蘑菇灯成品实拍图"
         },
         {
           "id": "b_auto_158",
@@ -997,104 +996,165 @@
           "id": "b_auto_159",
           "type": "heading",
           "level": 2,
-          "content": "五、成果总结"
+          "content": "四、成品展示"
         },
         {
           "id": "b_auto_160",
+          "type": "heading",
+          "level": 3,
+          "content": "4.1 小测试方块成品"
+        },
+        {
+          "id": "b_auto_161",
+          "type": "paragraph",
+          "content": "打印出的方块测试件结构完整、表面光滑。"
+        },
+        {
+          "id": "b_auto_162",
+          "type": "image",
+          "src": "images/homework/3dprint/c8b0b6bf7baf908568e0867cde1706e1.jpg",
+          "caption": "方块成品实拍图"
+        },
+        {
+          "id": "b_auto_163",
+          "type": "heading",
+          "level": 3,
+          "content": "4.2 越野车成品"
+        },
+        {
+          "id": "b_auto_164",
+          "type": "paragraph",
+          "content": "越野车所有打印部件完好，符合原始设计预期。"
+        },
+        {
+          "id": "b_auto_165",
+          "type": "image",
+          "src": "images/homework/3dprint/7e0fbc17ef1296416a6b36e035717d19.jpg",
+          "caption": "越野车成品实拍图"
+        },
+        {
+          "id": "b_auto_166",
+          "type": "heading",
+          "level": 3,
+          "content": "4.3 蘑菇灯成品"
+        },
+        {
+          "id": "b_auto_167",
+          "type": "paragraph",
+          "content": "打印出的蘑菇灯外壳弧度流畅，外形完整。"
+        },
+        {
+          "id": "b_auto_168",
+          "type": "image",
+          "src": "images/homework/3dprint/lQDPKHUMbhUCd5fND8DNC9CwHZdRwELqwP0KET1iheypAA_3024_4032.jpg",
+          "caption": "蘑菇灯成品实拍图"
+        },
+        {
+          "id": "b_auto_169",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_170",
+          "type": "heading",
+          "level": 2,
+          "content": "五、成果总结"
+        },
+        {
+          "id": "b_auto_171",
           "type": "bullet-list",
           "content": "<strong>打印项目</strong>: --------- | <strong>模型来源</strong>: --------- | <strong>关键操作</strong>: --------- | <strong>完成状态</strong>: ---------"
         },
         {
-          "id": "b_auto_161",
+          "id": "b_auto_172",
           "type": "bullet-list",
           "content": "<strong>打印项目</strong>: 小测试方块 | <strong>模型来源</strong>: Bambu Studio 内置 | <strong>关键操作</strong>: 基础建模、切片 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_162",
+          "id": "b_auto_173",
           "type": "bullet-list",
           "content": "<strong>打印项目</strong>: 越野车模型 | <strong>模型来源</strong>: Fusion 360 设计 | <strong>关键操作</strong>: 导入、布局、切片 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_163",
+          "id": "b_auto_174",
           "type": "bullet-list",
           "content": "<strong>打印项目</strong>: 蘑菇灯外壳 | <strong>模型来源</strong>: Fusion 360 设计 | <strong>关键操作</strong>: 导入、调整、切片 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_164",
+          "id": "b_auto_175",
           "type": "bullet-list",
           "content": "<strong>打印项目</strong>: 任务下发 | <strong>模型来源</strong>: Bambu Studio | <strong>关键操作</strong>: App 远程下发 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_165",
+          "id": "b_auto_176",
           "type": "divider"
         },
         {
-          "id": "b_auto_166",
+          "id": "b_auto_177",
           "type": "heading",
           "level": 2,
           "content": "六、经验与心得"
         },
         {
-          "id": "b_auto_167",
+          "id": "b_auto_178",
           "type": "paragraph",
           "content": "1. <strong>模型摆放角度影响打印质量</strong>：合理的摆放可以减少支撑结构，提高表面光洁度"
         },
         {
-          "id": "b_auto_168",
+          "id": "b_auto_179",
           "type": "paragraph",
           "content": "2. <strong>切片参数需因模型而异</strong>：不同模型需要调整填充密度、层高、支撑策略等参数"
         },
         {
-          "id": "b_auto_169",
+          "id": "b_auto_180",
           "type": "paragraph",
           "content": "3. <strong>AMS 多材料系统的价值</strong>：支持水溶性支撑材料或多色打印，大大拓展了打印可能性"
         },
         {
-          "id": "b_auto_170",
+          "id": "b_auto_181",
           "type": "paragraph",
           "content": "4. <strong>远程监控提高效率</strong>：通过手机 App 可随时查看打印进度，无需一直守在打印机旁"
         },
         {
-          "id": "b_auto_171",
+          "id": "b_auto_182",
           "type": "paragraph",
           "content": "5. <strong>CAD 设计到 3D 打印的完整链路</strong>：从 Fusion 360 建模 → Bambu Studio 切片 → Bambu Lab 打印，形成完整的数字化制造闭环"
         },
         {
-          "id": "b_auto_172",
+          "id": "b_auto_183",
           "type": "divider"
         },
         {
-          "id": "b_auto_173",
+          "id": "b_auto_184",
           "type": "heading",
           "level": 2,
           "content": "七、与 CAD 设计的衔接"
         },
         {
-          "id": "b_auto_174",
+          "id": "b_auto_185",
           "type": "paragraph",
           "content": "本作业中的蘑菇灯外壳模型来源于 <strong>CAD 设计</strong> 作业中的 Fusion 360 三维建模成果，体现了\"设计 → 制造\"一体化流程：先在 Fusion 360 中完成参数化建模，导出 STL 格式，再导入 Bambu Studio 进行切片和打印，最终获得实体成品。"
         },
         {
-          "id": "b_auto_175",
+          "id": "b_auto_186",
           "type": "divider"
         },
         {
-          "id": "b_auto_176",
+          "id": "b_auto_187",
           "type": "quote",
           "content": "<strong>项目名称</strong>：3D 打印与原型制造"
         },
         {
-          "id": "b_auto_177",
+          "id": "b_auto_188",
           "type": "quote",
           "content": "<strong>打印设备</strong>：Bambu Lab X2D + AMS 2 Pro"
         },
         {
-          "id": "b_auto_178",
+          "id": "b_auto_189",
           "type": "quote",
           "content": "<strong>更新时间</strong>：2026年6月"
         },
         {
-          "id": "b_auto_179",
+          "id": "b_auto_190",
           "type": "quote",
           "content": "<strong>关键词</strong>：<code>3D打印</code> <code>增材制造</code> <code>Bambu Lab</code> <code>Fusion 360</code> <code>切片</code> <code>原型制造</code>"
         }
@@ -1107,65 +1167,10 @@
       "parentId": "root-homework",
       "blocks": [
         {
-          "id": "b_auto_180",
+          "id": "b_auto_191",
           "type": "heading",
           "level": 1,
           "content": "Arduino 传感器编程 — 作业汇报"
-        },
-        {
-          "id": "b_auto_181",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_182",
-          "type": "heading",
-          "level": 2,
-          "content": "一、项目简介"
-        },
-        {
-          "id": "b_auto_183",
-          "type": "paragraph",
-          "content": "本作业围绕 <strong>Arduino 开源电子原型平台</strong> 展开，系统学习并实践了 Arduino 硬件编程的基础知识、传感器数据采集、数字/模拟输入输出控制以及串口通信等核心内容。"
-        },
-        {
-          "id": "b_auto_184",
-          "type": "paragraph",
-          "content": "<strong>实验平台</strong>：Arduino Uno / Nano"
-        },
-        {
-          "id": "b_auto_185",
-          "type": "paragraph",
-          "content": "<strong>开发环境</strong>：Arduino IDE"
-        },
-        {
-          "id": "b_auto_186",
-          "type": "paragraph",
-          "content": "<strong>涉及模块</strong>：LED、按键、电位器、光敏电阻、串口监视器"
-        },
-        {
-          "id": "b_auto_187",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_188",
-          "type": "heading",
-          "level": 2,
-          "content": "二、技术介绍"
-        },
-        {
-          "id": "b_auto_189",
-          "type": "paragraph",
-          "content": "Arduino 是一款开源电子原型平台，搭载简易易用的硬件与软件体系，专为创作者、设计师、创客及电子初学者打造，能够快速开发各类交互式电子项目。"
-        },
-        {
-          "id": "b_auto_190",
-          "type": "bullet-list",
-          "content": "<strong>常用主控板</strong>：Uno、Nano、Mega 2560、ESP8266/ESP32（兼容适配）"
-        },
-        {
-          "id": "b_auto_191",
-          "type": "bullet-list",
-          "content": "<strong>核心优势</strong>：丰富的开源函数库、活跃的全球社区、跨平台兼容（Windows/macOS/Linux）"
         },
         {
           "id": "b_auto_192",
@@ -1175,197 +1180,197 @@
           "id": "b_auto_193",
           "type": "heading",
           "level": 2,
-          "content": "三、实验内容与过程"
+          "content": "一、项目简介"
         },
         {
           "id": "b_auto_194",
+          "type": "paragraph",
+          "content": "本作业围绕 <strong>Arduino 开源电子原型平台</strong> 展开，系统学习并实践了 Arduino 硬件编程的基础知识、传感器数据采集、数字/模拟输入输出控制以及串口通信等核心内容。"
+        },
+        {
+          "id": "b_auto_195",
+          "type": "paragraph",
+          "content": "<strong>实验平台</strong>：Arduino Uno / Nano"
+        },
+        {
+          "id": "b_auto_196",
+          "type": "paragraph",
+          "content": "<strong>开发环境</strong>：Arduino IDE"
+        },
+        {
+          "id": "b_auto_197",
+          "type": "paragraph",
+          "content": "<strong>涉及模块</strong>：LED、按键、电位器、光敏电阻、串口监视器"
+        },
+        {
+          "id": "b_auto_198",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_199",
+          "type": "heading",
+          "level": 2,
+          "content": "二、技术介绍"
+        },
+        {
+          "id": "b_auto_200",
+          "type": "paragraph",
+          "content": "Arduino 是一款开源电子原型平台，搭载简易易用的硬件与软件体系，专为创作者、设计师、创客及电子初学者打造，能够快速开发各类交互式电子项目。"
+        },
+        {
+          "id": "b_auto_201",
+          "type": "bullet-list",
+          "content": "<strong>常用主控板</strong>：Uno、Nano、Mega 2560、ESP8266/ESP32（兼容适配）"
+        },
+        {
+          "id": "b_auto_202",
+          "type": "bullet-list",
+          "content": "<strong>核心优势</strong>：丰富的开源函数库、活跃的全球社区、跨平台兼容（Windows/macOS/Linux）"
+        },
+        {
+          "id": "b_auto_203",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_204",
+          "type": "heading",
+          "level": 2,
+          "content": "三、实验内容与过程"
+        },
+        {
+          "id": "b_auto_205",
           "type": "heading",
           "level": 3,
           "content": "3.1 LED 闪烁实验（入门）"
         },
         {
-          "id": "b_auto_195",
+          "id": "b_auto_206",
           "type": "paragraph",
           "content": "打开 Arduino IDE，加载内置示例 <strong>文件 → 示例 → 01.Basics → Blink</strong>，上传至开发板，板载 LED 自动闪烁。这是验证开发环境是否正常工作的基础实验。"
         },
         {
-          "id": "b_auto_196",
+          "id": "b_auto_207",
           "type": "code",
           "content": "void setup() {\n  pinMode(LED_BUILTIN, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(LED_BUILTIN, HIGH);\n  delay(1000);\n  digitalWrite(LED_BUILTIN, LOW);\n  delay(1000);\n}"
         },
         {
-          "id": "b_auto_197",
+          "id": "b_auto_208",
           "type": "heading",
           "level": 3,
           "content": "3.2 按键控制 LED"
         },
         {
-          "id": "b_auto_198",
+          "id": "b_auto_209",
           "type": "paragraph",
           "content": "使用数字输入引脚配合内部上拉电阻，实现按键控制 LED 亮灭。"
         },
         {
-          "id": "b_auto_199",
+          "id": "b_auto_210",
           "type": "code",
           "content": "const int buttonPin = 2;\nconst int ledPin = 13;\nint buttonState = 0;\n\nvoid setup() {\n  pinMode(ledPin, OUTPUT);\n  pinMode(buttonPin, INPUT_PULLUP);\n}\n\nvoid loop() {\n  buttonState = digitalRead(buttonPin);\n  if (buttonState == LOW) {\n    digitalWrite(ledPin, HIGH);\n  } else {\n    digitalWrite(ledPin, LOW);\n  }\n}"
         },
         {
-          "id": "b_auto_200",
+          "id": "b_auto_211",
           "type": "heading",
           "level": 3,
           "content": "3.3 电位器调节 LED 亮度（PWM 调光）"
         },
         {
-          "id": "b_auto_201",
+          "id": "b_auto_212",
           "type": "paragraph",
           "content": "通过 <code>analogRead()</code> 读取电位器 0-5V 模拟电压（返回 0-1023），利用 <code>map()</code> 函数映射为 PWM 占空比（0-255），实现 LED 无级调光。"
         },
         {
-          "id": "b_auto_202",
+          "id": "b_auto_213",
           "type": "code",
           "content": "const int potPin = A0;\nconst int ledPin = 9;\n\nvoid setup() {\n  pinMode(ledPin, OUTPUT);\n}\n\nvoid loop() {\n  int sensorValue = analogRead(potPin);\n  int brightness = map(sensorValue, 0, 1023, 0, 255);\n  analogWrite(ledPin, brightness);\n  delay(10);\n}"
         },
         {
-          "id": "b_auto_203",
+          "id": "b_auto_214",
           "type": "heading",
           "level": 3,
           "content": "3.4 串口打印传感器数值"
         },
         {
-          "id": "b_auto_204",
+          "id": "b_auto_215",
           "type": "paragraph",
           "content": "使用串口通信实时输出模拟量读数到电脑监视器，验证传感器数据采集的准确性。"
         },
         {
-          "id": "b_auto_205",
+          "id": "b_auto_216",
           "type": "code",
           "content": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int val = analogRead(A0);\n  Serial.print(\"模拟量数值：\");\n  Serial.println(val);\n  delay(500);\n}"
         },
         {
-          "id": "b_auto_206",
+          "id": "b_auto_217",
           "type": "heading",
           "level": 3,
           "content": "3.5 综合实验：智能小夜灯"
         },
         {
-          "id": "b_auto_207",
+          "id": "b_auto_218",
           "type": "paragraph",
           "content": "结合光敏电阻和 LED，实现环境光线昏暗时 LED 自动点亮，亮度随环境光线自适应调节。"
         },
         {
-          "id": "b_auto_208",
+          "id": "b_auto_219",
           "type": "paragraph",
           "content": "<strong>硬件接线</strong>："
         },
         {
-          "id": "b_auto_209",
+          "id": "b_auto_220",
           "type": "bullet-list",
           "content": "光敏电阻（LDR）：接入 A0 模拟引脚（搭配分压电路）"
         },
         {
-          "id": "b_auto_210",
+          "id": "b_auto_221",
           "type": "bullet-list",
           "content": "LED 灯珠：接入 PWM 可调光引脚（9 号引脚）"
         },
         {
-          "id": "b_auto_211",
+          "id": "b_auto_222",
           "type": "code",
           "content": "const int lightPin = A0;\nconst int ledPin = 9;\n\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(ledPin, OUTPUT);\n}\n\nvoid loop() {\n  int lightLevel = analogRead(lightPin);\n  int brightness = map(lightLevel, 0, 1023, 255, 0);\n  brightness = constrain(brightness, 0, 255);\n  analogWrite(ledPin, brightness);\n\n  Serial.print(\"光线数值：\");\n  Serial.print(lightLevel);\n  Serial.print(\" | LED亮度：\");\n  Serial.println(brightness);\n  delay(200);\n}"
         },
         {
-          "id": "b_auto_212",
+          "id": "b_auto_223",
           "type": "divider"
         },
         {
-          "id": "b_auto_213",
+          "id": "b_auto_224",
           "type": "heading",
           "level": 2,
           "content": "四、实验成果总结"
         },
         {
-          "id": "b_auto_214",
+          "id": "b_auto_225",
           "type": "bullet-list",
           "content": "<strong>实验项目</strong>: --------- | <strong>核心知识点</strong>: ----------- | <strong>完成状态</strong>: ---------"
         },
         {
-          "id": "b_auto_215",
+          "id": "b_auto_226",
           "type": "bullet-list",
           "content": "<strong>实验项目</strong>: LED 闪烁 | <strong>核心知识点</strong>: `pinMode()`、`digitalWrite()`、`delay()` | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_216",
+          "id": "b_auto_227",
           "type": "bullet-list",
           "content": "<strong>实验项目</strong>: 按键控制 LED | <strong>核心知识点</strong>: `digitalRead()`、`INPUT_PULLUP` | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_217",
+          "id": "b_auto_228",
           "type": "bullet-list",
           "content": "<strong>实验项目</strong>: 电位器调光 | <strong>核心知识点</strong>: `analogRead()`、`analogWrite()`、`map()`、PWM | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_218",
+          "id": "b_auto_229",
           "type": "bullet-list",
           "content": "<strong>实验项目</strong>: 串口通信 | <strong>核心知识点</strong>: `Serial.begin()`、`Serial.print()` | <strong>完成状态</strong>: ✅ 完成"
         },
         {
-          "id": "b_auto_219",
-          "type": "bullet-list",
-          "content": "<strong>实验项目</strong>: 智能小夜灯 | <strong>核心知识点</strong>: 光敏传感器、`constrain()`、综合应用 | <strong>完成状态</strong>: ✅ 完成"
-        },
-        {
-          "id": "b_auto_220",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_221",
-          "type": "heading",
-          "level": 2,
-          "content": "五、遇到的问题与解决"
-        },
-        {
-          "id": "b_auto_222",
-          "type": "bullet-list",
-          "content": "<strong>编译报错</strong>：检查代码语法、分号、大括号是否缺失，确认所需函数库已正确安装"
-        },
-        {
-          "id": "b_auto_223",
-          "type": "bullet-list",
-          "content": "<strong>代码上传失败</strong>：核对开发板型号与串口是否选择正确，上传前可按下板子复位键重试"
-        },
-        {
-          "id": "b_auto_224",
-          "type": "bullet-list",
-          "content": "<strong>传感器信号干扰</strong>：按键检测增加延时消抖，模拟信号端并联电容滤波降噪"
-        },
-        {
-          "id": "b_auto_225",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_226",
-          "type": "heading",
-          "level": 2,
-          "content": "六、进阶展望"
-        },
-        {
-          "id": "b_auto_227",
-          "type": "bullet-list",
-          "content": "拓展传感器实验：温湿度、超声波测距、振动传感器等外设开发"
-        },
-        {
-          "id": "b_auto_228",
-          "type": "bullet-list",
-          "content": "学习外部中断 <code>attachInterrupt</code>，实现实时响应触发功能"
-        },
-        {
-          "id": "b_auto_229",
-          "type": "bullet-list",
-          "content": "搭载无线模块：HC-05 蓝牙、ESP8266 WiFi，实现设备远程控制"
-        },
-        {
           "id": "b_auto_230",
           "type": "bullet-list",
-          "content": "掌握 I2C/SPI 总线，拓展 OLED 显示屏、RTC 时钟模块等外设"
+          "content": "<strong>实验项目</strong>: 智能小夜灯 | <strong>核心知识点</strong>: 光敏传感器、`constrain()`、综合应用 | <strong>完成状态</strong>: ✅ 完成"
         },
         {
           "id": "b_auto_231",
@@ -1373,16 +1378,71 @@
         },
         {
           "id": "b_auto_232",
+          "type": "heading",
+          "level": 2,
+          "content": "五、遇到的问题与解决"
+        },
+        {
+          "id": "b_auto_233",
+          "type": "bullet-list",
+          "content": "<strong>编译报错</strong>：检查代码语法、分号、大括号是否缺失，确认所需函数库已正确安装"
+        },
+        {
+          "id": "b_auto_234",
+          "type": "bullet-list",
+          "content": "<strong>代码上传失败</strong>：核对开发板型号与串口是否选择正确，上传前可按下板子复位键重试"
+        },
+        {
+          "id": "b_auto_235",
+          "type": "bullet-list",
+          "content": "<strong>传感器信号干扰</strong>：按键检测增加延时消抖，模拟信号端并联电容滤波降噪"
+        },
+        {
+          "id": "b_auto_236",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_237",
+          "type": "heading",
+          "level": 2,
+          "content": "六、进阶展望"
+        },
+        {
+          "id": "b_auto_238",
+          "type": "bullet-list",
+          "content": "拓展传感器实验：温湿度、超声波测距、振动传感器等外设开发"
+        },
+        {
+          "id": "b_auto_239",
+          "type": "bullet-list",
+          "content": "学习外部中断 <code>attachInterrupt</code>，实现实时响应触发功能"
+        },
+        {
+          "id": "b_auto_240",
+          "type": "bullet-list",
+          "content": "搭载无线模块：HC-05 蓝牙、ESP8266 WiFi，实现设备远程控制"
+        },
+        {
+          "id": "b_auto_241",
+          "type": "bullet-list",
+          "content": "掌握 I2C/SPI 总线，拓展 OLED 显示屏、RTC 时钟模块等外设"
+        },
+        {
+          "id": "b_auto_242",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_243",
           "type": "quote",
           "content": "<strong>项目名称</strong>：Arduino 传感器编程"
         },
         {
-          "id": "b_auto_233",
+          "id": "b_auto_244",
           "type": "quote",
           "content": "<strong>更新时间</strong>：2026年6月"
         },
         {
-          "id": "b_auto_234",
+          "id": "b_auto_245",
           "type": "quote",
           "content": "<strong>关键词</strong>：<code>Arduino</code> <code>传感器</code> <code>PWM</code> <code>串口通信</code> <code>智能小夜灯</code> <code>嵌入式开发</code>"
         }
@@ -1395,507 +1455,507 @@
       "parentId": "root-homework",
       "blocks": [
         {
-          "id": "b_auto_235",
+          "id": "b_auto_246",
           "type": "heading",
           "level": 1,
           "content": "IoT 工业 4.0 — 作业汇报"
         },
         {
-          "id": "b_auto_236",
+          "id": "b_auto_247",
           "type": "divider"
         },
         {
-          "id": "b_auto_237",
+          "id": "b_auto_248",
           "type": "heading",
           "level": 2,
           "content": "一、项目简介"
         },
         {
-          "id": "b_auto_238",
+          "id": "b_auto_249",
           "type": "paragraph",
           "content": "本作业围绕 <strong>工业物联网（Industrial IoT）</strong> 主题，系统研究了工业 4.0 核心框架 —— <strong>IoT 四层架构</strong>（感知层、网络层、平台层、应用层），并结合 <strong>一汽红旗智能动力总成工厂</strong> 真实案例进行了完整的对标分析。"
         },
         {
-          "id": "b_auto_239",
+          "id": "b_auto_250",
           "type": "paragraph",
           "content": "<strong>研究方向</strong>：工业 IoT 四层架构"
         },
         {
-          "id": "b_auto_240",
+          "id": "b_auto_251",
           "type": "paragraph",
           "content": "<strong>对标案例</strong>：一汽红旗 × 华为 智能动力总成工厂"
         },
         {
-          "id": "b_auto_241",
+          "id": "b_auto_252",
           "type": "paragraph",
           "content": "<strong>分析维度</strong>：客观资料 + 个人观点 + 行业痛点 + 案例对标"
         },
         {
-          "id": "b_auto_242",
+          "id": "b_auto_253",
           "type": "divider"
         },
         {
-          "id": "b_auto_243",
+          "id": "b_auto_254",
           "type": "heading",
           "level": 2,
           "content": "二、IoT 工业 4.0 四层架构整体解析"
         },
         {
-          "id": "b_auto_244",
+          "id": "b_auto_255",
           "type": "paragraph",
           "content": "物联网（IoT）是工业 4.0 智能制造的底层底座，依靠感知层、网络层、平台层、应用层四层分层架构打通物理设备与数字系统，完成 <strong>数据采集 → 传输 → 处理 → 业务落地</strong> 全链路闭环，实现生产全流程数字化、自动化、预测化管控。"
         },
         {
-          "id": "b_auto_245",
+          "id": "b_auto_256",
           "type": "quote",
           "content": "四层架构不是简单的硬件堆叠，而是一套完整的数据流转体系：感知层\"看见世界\"、网络层\"传递信息\"、平台层\"思考计算\"、应用层\"落地执行\"。"
         },
         {
-          "id": "b_auto_246",
+          "id": "b_auto_257",
           "type": "divider"
         },
         {
-          "id": "b_auto_247",
+          "id": "b_auto_258",
           "type": "heading",
           "level": 2,
           "content": "三、四层架构分层拆解"
         },
         {
-          "id": "b_auto_248",
+          "id": "b_auto_259",
           "type": "heading",
           "level": 3,
           "content": "3.1 感知层（数据源头）"
         },
         {
-          "id": "b_auto_249",
+          "id": "b_auto_260",
           "type": "bullet-list",
           "content": "<strong>类别</strong>: ------ | <strong>核心设备</strong>: --------- | <strong>采集内容</strong>: ---------"
         },
         {
-          "id": "b_auto_250",
+          "id": "b_auto_261",
           "type": "bullet-list",
           "content": "<strong>类别</strong>: 传感采集 | <strong>核心设备</strong>: 温度、振动、压力、电流传感器、RFID 标签、工业视觉摄像头 | <strong>采集内容</strong>: 设备转速、电机温度、车间温湿度"
         },
         {
-          "id": "b_auto_251",
+          "id": "b_auto_262",
           "type": "bullet-list",
           "content": "<strong>类别</strong>: 控制单元 | <strong>核心设备</strong>: PLC 可编程控制器、MCU 微控制器、边缘网关 | <strong>采集内容</strong>: 物料库存、能耗数据、工件质检"
         },
         {
-          "id": "b_auto_252",
+          "id": "b_auto_263",
           "type": "bullet-list",
           "content": "<strong>类别</strong>: 边缘预处理 | <strong>核心设备</strong>: 本地过滤无效数据、统一协议转换 | <strong>采集内容</strong>: 降低云端传输压力"
         },
         {
-          "id": "b_auto_253",
+          "id": "b_auto_264",
           "type": "paragraph",
           "content": "<strong>个人观点</strong>：感知层最大难点是多品牌老旧设备兼容问题，很多传统机床无标准数据接口，需要加装边缘采集模块。传感器定期校准、统一采集标准是保障上层分析准确的基础。"
         },
         {
-          "id": "b_auto_254",
+          "id": "b_auto_265",
           "type": "heading",
           "level": 3,
           "content": "3.2 网络层（数据传输通道）"
         },
         {
-          "id": "b_auto_255",
+          "id": "b_auto_266",
           "type": "bullet-list",
           "content": "<strong>通信方式</strong>: --------- | <strong>技术方案</strong>: --------- | <strong>适用场景</strong>: ---------"
         },
         {
-          "id": "b_auto_256",
+          "id": "b_auto_267",
           "type": "bullet-list",
           "content": "<strong>通信方式</strong>: 有线工业通信 | <strong>技术方案</strong>: 工业以太网、RS485、CAN 总线 | <strong>适用场景</strong>: 产线固定设备，低延迟高稳定"
         },
         {
-          "id": "b_auto_257",
+          "id": "b_auto_268",
           "type": "bullet-list",
           "content": "<strong>通信方式</strong>: 短距离无线 | <strong>技术方案</strong>: Wi-Fi 6、蓝牙、ZigBee | <strong>适用场景</strong>: 车间巡检终端、手持 PDA"
         },
         {
-          "id": "b_auto_258",
+          "id": "b_auto_269",
           "type": "bullet-list",
           "content": "<strong>通信方式</strong>: 广域低功耗 | <strong>技术方案</strong>: 5G 工业专网、NB-IoT、LoRa | <strong>适用场景</strong>: 远距离仓储、户外厂区"
         },
         {
-          "id": "b_auto_259",
+          "id": "b_auto_270",
           "type": "bullet-list",
           "content": "<strong>通信方式</strong>: 传输协议 | <strong>技术方案</strong>: MQTT、OPC UA、Modbus、CoAP | <strong>适用场景</strong>: 统一不同设备数据格式"
         },
         {
-          "id": "b_auto_260",
+          "id": "b_auto_271",
           "type": "paragraph",
           "content": "<strong>个人观点</strong>：工业场景不能单一选用一种网络，必须多网融合。高精度机床质检需要 5G 低时延传输，厂区环境温湿度监测适合 LoRa 低功耗方案，网络选型要平衡带宽、延迟、功耗、部署成本。"
         },
         {
-          "id": "b_auto_261",
+          "id": "b_auto_272",
           "type": "heading",
           "level": 3,
           "content": "3.3 平台层（数据存储与运算中心）"
         },
         {
-          "id": "b_auto_262",
+          "id": "b_auto_273",
           "type": "paragraph",
           "content": "部署在云端/本地私有云，是四层架构核心枢纽，五大核心能力："
         },
         {
-          "id": "b_auto_263",
+          "id": "b_auto_274",
           "type": "paragraph",
           "content": "1. <strong>设备统一管理</strong>：设备注册、远程固件升级、在线状态监控"
         },
         {
-          "id": "b_auto_264",
+          "id": "b_auto_275",
           "type": "paragraph",
           "content": "2. <strong>数据存储</strong>：时序数据库（实时数据流）+ 关系数据库（订单、人员信息）"
         },
         {
-          "id": "b_auto_265",
+          "id": "b_auto_276",
           "type": "paragraph",
           "content": "3. <strong>数据处理</strong>：实时流计算、AI 故障预测、数据清洗去重"
         },
         {
-          "id": "b_auto_266",
+          "id": "b_auto_277",
           "type": "paragraph",
           "content": "4. <strong>标准化 API</strong>：对外统一接口，对接 MES、ERP 等业务系统"
         },
         {
-          "id": "b_auto_267",
+          "id": "b_auto_278",
           "type": "paragraph",
           "content": "5. <strong>安全管控</strong>：设备身份加密、数据传输加密、分级访问权限"
         },
         {
-          "id": "b_auto_268",
+          "id": "b_auto_279",
           "type": "paragraph",
           "content": "<strong>主流工业 IoT 平台</strong>：华为云 IoT、阿里云工业互联网、ThingsBoard、西门子 MindSphere"
         },
         {
-          "id": "b_auto_269",
+          "id": "b_auto_280",
           "type": "heading",
           "level": 3,
           "content": "3.4 应用层（面向用户的业务系统）"
         },
         {
-          "id": "b_auto_270",
+          "id": "b_auto_281",
           "type": "bullet-list",
           "content": "<strong>生产监控</strong>：实时产线看板、产能统计、订单进度追踪"
         },
         {
-          "id": "b_auto_271",
+          "id": "b_auto_282",
           "type": "bullet-list",
           "content": "<strong>预测性维护</strong>：电机故障提前预警、设备寿命预测、自动生成维保工单"
         },
         {
-          "id": "b_auto_272",
+          "id": "b_auto_283",
           "type": "bullet-list",
           "content": "<strong>质量管控</strong>：AI 视觉质检、不良品溯源、工艺参数优化"
         },
         {
-          "id": "b_auto_273",
+          "id": "b_auto_284",
           "type": "bullet-list",
           "content": "<strong>能耗管理</strong>：分设备、分车间用电统计、峰谷节电优化"
         },
         {
-          "id": "b_auto_274",
+          "id": "b_auto_285",
           "type": "bullet-list",
           "content": "<strong>仓储物流</strong>：物料 RFID 定位、库存自动预警、智能分拣调度"
         },
         {
-          "id": "b_auto_275",
+          "id": "b_auto_286",
           "type": "divider"
         },
         {
-          "id": "b_auto_276",
+          "id": "b_auto_287",
           "type": "heading",
           "level": 2,
           "content": "四、IoT 闭环反馈机制"
         },
         {
-          "id": "b_auto_277",
+          "id": "b_auto_288",
           "type": "paragraph",
           "content": "四层架构形成 <strong>采集 → 传输 → 分析 → 决策 → 执行 → 优化</strong> 完整闭环："
         },
         {
-          "id": "b_auto_278",
+          "id": "b_auto_289",
           "type": "paragraph",
           "content": "1. 感知层采集设备、环境原始数据"
         },
         {
-          "id": "b_auto_279",
+          "id": "b_auto_290",
           "type": "paragraph",
           "content": "2. 网络层加密传输至 IoT 云平台"
         },
         {
-          "id": "b_auto_280",
+          "id": "b_auto_291",
           "type": "paragraph",
           "content": "3. 平台层清洗、建模、分析，识别异常、生成优化方案"
         },
         {
-          "id": "b_auto_281",
+          "id": "b_auto_292",
           "type": "paragraph",
           "content": "4. 应用层将方案展示给管理员，下发控制指令"
         },
         {
-          "id": "b_auto_282",
+          "id": "b_auto_293",
           "type": "paragraph",
           "content": "5. 指令经网络层传回感知层 PLC/控制器，自动调整设备参数"
         },
         {
-          "id": "b_auto_283",
+          "id": "b_auto_294",
           "type": "paragraph",
           "content": "6. 持续采集调整后的数据，迭代优化 AI 模型"
         },
         {
-          "id": "b_auto_284",
+          "id": "b_auto_295",
           "type": "quote",
           "content": "闭环的核心是自动反向控制。传统监控只能看数据，无法自动干预设备；完整 IoT 架构可实现无人自主调控。"
         },
         {
-          "id": "b_auto_285",
+          "id": "b_auto_296",
           "type": "divider"
         },
         {
-          "id": "b_auto_286",
+          "id": "b_auto_297",
           "type": "heading",
           "level": 2,
           "content": "五、行业现存痛点"
         },
         {
-          "id": "b_auto_287",
+          "id": "b_auto_298",
           "type": "bullet-list",
           "content": "<strong>痛点</strong>: ------ | <strong>描述</strong>: ------"
         },
         {
-          "id": "b_auto_288",
+          "id": "b_auto_299",
           "type": "bullet-list",
           "content": "<strong>痛点</strong>: 数据孤岛 | <strong>描述</strong>: 机床、传感器、仓储设备分属不同厂商，协议不统一，数据无法互通"
         },
         {
-          "id": "b_auto_289",
+          "id": "b_auto_300",
           "type": "bullet-list",
           "content": "<strong>痛点</strong>: 安全风险 | <strong>描述</strong>: 海量终端设备防护薄弱，易被入侵造成生产线停机"
         },
         {
-          "id": "b_auto_290",
+          "id": "b_auto_301",
           "type": "bullet-list",
           "content": "<strong>痛点</strong>: 标准缺失 | <strong>描述</strong>: 硬件、通信、数据格式无强制规范，系统集成难度高"
         },
         {
-          "id": "b_auto_291",
+          "id": "b_auto_302",
           "type": "bullet-list",
           "content": "<strong>痛点</strong>: 人才缺口 | <strong>描述</strong>: IoT 需要硬件、网络、大数据、工业制造多领域复合知识"
         },
         {
-          "id": "b_auto_292",
+          "id": "b_auto_303",
           "type": "bullet-list",
           "content": "<strong>痛点</strong>: 回报周期长 | <strong>描述</strong>: 前期硬件、平台改造投入大，中小工厂顾虑投入产出比"
         },
         {
-          "id": "b_auto_293",
+          "id": "b_auto_304",
           "type": "divider"
         },
         {
-          "id": "b_auto_294",
+          "id": "b_auto_305",
           "type": "heading",
           "level": 2,
           "content": "六、对标案例：一汽红旗智能动力总成工厂"
         },
         {
-          "id": "b_auto_295",
+          "id": "b_auto_306",
           "type": "heading",
           "level": 3,
           "content": "案例概述"
         },
         {
-          "id": "b_auto_296",
+          "id": "b_auto_307",
           "type": "paragraph",
           "content": "一汽红旗联合华为搭建全套工业 4.0 IoT 四层架构，落地发动机车间数字化改造项目。"
         },
         {
-          "id": "b_auto_297",
+          "id": "b_auto_308",
           "type": "heading",
           "level": 3,
           "content": "感知层部署"
         },
         {
-          "id": "b_auto_298",
+          "id": "b_auto_309",
           "type": "bullet-list",
           "content": "部署 <strong>3000+</strong> 振动、温度、电流传感器"
         },
         {
-          "id": "b_auto_299",
+          "id": "b_auto_310",
           "type": "bullet-list",
           "content": "全部机床加装 RFID 物料标签、AI 视觉质检摄像头"
         },
         {
-          "id": "b_auto_300",
+          "id": "b_auto_311",
           "type": "bullet-list",
           "content": "边缘网关本地过滤 60% 无效重复数据"
         },
         {
-          "id": "b_auto_301",
+          "id": "b_auto_312",
           "type": "heading",
           "level": 3,
           "content": "网络层搭建"
         },
         {
-          "id": "b_auto_302",
+          "id": "b_auto_313",
           "type": "bullet-list",
           "content": "5G 工业专网 + 工业以太网双主线"
         },
         {
-          "id": "b_auto_303",
+          "id": "b_auto_314",
           "type": "bullet-list",
           "content": "高精度质检走 5G 低时延通道，仓储采用 LoRa"
         },
         {
-          "id": "b_auto_304",
+          "id": "b_auto_315",
           "type": "bullet-list",
           "content": "统一 MQTT 协议，网络延迟控制在 <strong>20ms</strong> 内"
         },
         {
-          "id": "b_auto_305",
+          "id": "b_auto_316",
           "type": "heading",
           "level": 3,
           "content": "平台层选型"
         },
         {
-          "id": "b_auto_306",
+          "id": "b_auto_317",
           "type": "bullet-list",
           "content": "华为云 IoT 工业平台搭建本地数据中台"
         },
         {
-          "id": "b_auto_307",
+          "id": "b_auto_318",
           "type": "bullet-list",
           "content": "时序数据库存储全年设备运行数据"
         },
         {
-          "id": "b_auto_308",
+          "id": "b_auto_319",
           "type": "bullet-list",
           "content": "内置 AI 故障预测模型，统一管理三千台终端设备"
         },
         {
-          "id": "b_auto_309",
+          "id": "b_auto_320",
           "type": "heading",
           "level": 3,
           "content": "应用层四大业务系统"
         },
         {
-          "id": "b_auto_310",
+          "id": "b_auto_321",
           "type": "bullet-list",
           "content": "<strong>业务系统</strong>: --------- | <strong>核心功能</strong>: --------- | <strong>成效</strong>: ------"
         },
         {
-          "id": "b_auto_311",
+          "id": "b_auto_322",
           "type": "bullet-list",
           "content": "<strong>业务系统</strong>: 预测性维护 | <strong>核心功能</strong>: 提前 7 天预警轴承、刀具磨损 | <strong>成效</strong>: 设备故障停机 ↓ 80%"
         },
         {
-          "id": "b_auto_312",
+          "id": "b_auto_323",
           "type": "bullet-list",
           "content": "<strong>业务系统</strong>: AI 视觉质检 | <strong>核心功能</strong>: 自动识别零部件瑕疵 | <strong>成效</strong>: 人工质检人力 ↓ 60%"
         },
         {
-          "id": "b_auto_313",
+          "id": "b_auto_324",
           "type": "bullet-list",
           "content": "<strong>业务系统</strong>: 实时生产看板 | <strong>核心功能</strong>: 产能、良品率、订单进度 | <strong>成效</strong>: 可视化管控"
         },
         {
-          "id": "b_auto_314",
+          "id": "b_auto_325",
           "type": "bullet-list",
           "content": "<strong>业务系统</strong>: 智能能耗管理 | <strong>核心功能</strong>: 分产线统计用电，优化排班 | <strong>成效</strong>: 整体能耗 ↓ 12%"
         },
         {
-          "id": "b_auto_315",
+          "id": "b_auto_326",
           "type": "heading",
           "level": 3,
           "content": "项目整体成效"
         },
         {
-          "id": "b_auto_316",
+          "id": "b_auto_327",
           "type": "bullet-list",
           "content": "单车生产工时缩短 <strong>6 分钟</strong>"
         },
         {
-          "id": "b_auto_317",
+          "id": "b_auto_328",
           "type": "bullet-list",
           "content": "产品缺陷率下降 <strong>80%</strong>"
         },
         {
-          "id": "b_auto_318",
+          "id": "b_auto_329",
           "type": "bullet-list",
           "content": "生产综合效率 OEE 提升 <strong>22%</strong>"
         },
         {
-          "id": "b_auto_319",
+          "id": "b_auto_330",
           "type": "divider"
         },
         {
-          "id": "b_auto_320",
+          "id": "b_auto_331",
           "type": "heading",
           "level": 2,
           "content": "七、个人点评"
         },
         {
-          "id": "b_auto_321",
+          "id": "b_auto_332",
           "type": "paragraph",
           "content": "红旗工厂案例完整展示了四层架构协同落地的工业价值。最大亮点是<strong>云边协同</strong>方案——边缘网关本地预处理数据缓解云端压力，同时平台层统一兼容新旧国产、进口机床，完美解决传统制造企业数据孤岛痛点。"
         },
         {
-          "id": "b_auto_322",
+          "id": "b_auto_333",
           "type": "paragraph",
           "content": "该项目没有盲目堆砌高端设备，而是根据车间实际工序分层选型网络与传感器，兼顾改造成本与智能化效果，非常适合国内中小型制造企业参考学习。"
         },
         {
-          "id": "b_auto_323",
+          "id": "b_auto_334",
           "type": "divider"
         },
         {
-          "id": "b_auto_324",
+          "id": "b_auto_335",
           "type": "heading",
           "level": 2,
           "content": "八、总结与展望"
         },
         {
-          "id": "b_auto_325",
+          "id": "b_auto_336",
           "type": "bullet-list",
           "content": "工业 IoT 四层架构是全球工业 4.0 标准化通用方案，适配制造、物流、矿山、农业全行业"
         },
         {
-          "id": "b_auto_326",
+          "id": "b_auto_337",
           "type": "bullet-list",
           "content": "5G、边缘计算、AIoT、数字孪生是架构升级核心趋势，云边协同逐步替代纯云端架构"
         },
         {
-          "id": "b_auto_327",
+          "id": "b_auto_338",
           "type": "bullet-list",
           "content": "2030 年全球工业物联网市场规模将突破万亿，制造业数字化转型需求持续爆发"
         },
         {
-          "id": "b_auto_328",
+          "id": "b_auto_339",
           "type": "bullet-list",
           "content": "国产 IoT 平台、工业传感器逐步替代海外产品，行业标准化规范持续完善"
         },
         {
-          "id": "b_auto_329",
+          "id": "b_auto_340",
           "type": "divider"
         },
         {
-          "id": "b_auto_330",
+          "id": "b_auto_341",
           "type": "quote",
           "content": "<strong>项目名称</strong>：IoT 工业 4.0 四层架构分析"
         },
         {
-          "id": "b_auto_331",
+          "id": "b_auto_342",
           "type": "quote",
           "content": "<strong>对标案例</strong>：一汽红旗 × 华为 智能动力总成工厂"
         },
         {
-          "id": "b_auto_332",
+          "id": "b_auto_343",
           "type": "quote",
           "content": "<strong>更新时间</strong>：2026年6月"
         },
         {
-          "id": "b_auto_333",
+          "id": "b_auto_344",
           "type": "quote",
           "content": "<strong>关键词</strong>：<code>IoT</code> <code>工业4.0</code> <code>四层架构</code> <code>智能制造</code> <code>预测性维护</code> <code>数字孪生</code>"
         }
