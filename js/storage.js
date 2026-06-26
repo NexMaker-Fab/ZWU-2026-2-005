@@ -72,7 +72,8 @@ export async function loadContent() {
         p.blocks && p.blocks.length < 20
       );
       const hasOldPurple = parsed.pages?.some(p => p.id === 'member-purple' && p.title && p.title.includes('周波'));
-      if (hasBluePrince || lacksArduino || lacksRootHomework || lacksHkz || hkzIsNotFirst || hasOldHomework || hasAbsoluteImages || hasMockHomework || hasOldPurple) {
+      const lacksProjectHistory = !parsed.pages?.some(p => p.id === 'homework-project-manage' && p.blocks?.some(b => b.content && b.content.includes('Commit: 2ef12e0')));
+      if (hasBluePrince || lacksArduino || lacksRootHomework || lacksHkz || hkzIsNotFirst || hasOldHomework || hasAbsoluteImages || hasMockHomework || hasOldPurple || lacksProjectHistory) {
         console.info('Stale cache detected, forcing reload from content.json');
         localStorage.removeItem(STORAGE_KEY);
       } else {
