@@ -1,0 +1,2 @@
+#!/bin/sh
+python pre_commit_test.py
