@@ -819,344 +819,180 @@
       "parentId": "root-homework",
       "blocks": [
         {
-          "id": "b_auto_126",
+          "id": "b_auto_3d_2",
           "type": "heading",
           "level": 1,
-          "content": "3D 打印与原型制造 — 作业汇报"
+          "content": "Exercise 5: 3D Printing"
         },
         {
-          "id": "b_auto_127",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_128",
+          "id": "b_auto_3d_3",
           "type": "heading",
           "level": 2,
-          "content": "一、项目简介"
+          "content": "Technical Introduction"
         },
         {
-          "id": "b_auto_129",
+          "id": "b_auto_3d_4",
           "type": "paragraph",
-          "content": "本作业围绕 <strong>3D 打印（Additive Manufacturing）</strong> 技术展开，使用 <strong>Bambu Lab X2D</strong> 桌面级 3D 打印机配合 <strong>AMS 2 Pro</strong> 多材料供料系统，完成三组模型的打印制造：<strong>小测试方块、越野车装配模型、蘑菇灯外壳模型</strong>。"
+          "content": "3D printing is an additive manufacturing technology that creates solid physical objects by stacking printing materials layer by layer. Compared with traditional processing methods, it has higher design freedom and less material waste, and can realize the production of various complex structural models."
         },
         {
-          "id": "b_auto_130",
+          "id": "b_auto_3d_5",
           "type": "paragraph",
-          "content": "<strong>打印设备</strong>：Bambu Lab X2D + AMS 2 Pro"
+          "content": "This practice uses the Bambu Lab X2D desktop 3D printer with an AMS 2 Pro multi-material feeding system. The printer has multiple intelligent automatic functions, stable printing speed and good compatibility with different printing materials. We completed two groups of model printing in Bambu Studio software: test cube and mushroom lamp shell."
         },
         {
-          "id": "b_auto_131",
-          "type": "paragraph",
-          "content": "<strong>切片软件</strong>：Bambu Studio"
-        },
-        {
-          "id": "b_auto_132",
-          "type": "paragraph",
-          "content": "<strong>模型来源</strong>：Fusion 360 设计 + Bambu Studio 内置建模"
-        },
-        {
-          "id": "b_auto_133",
-          "type": "paragraph",
-          "content": "<strong>打印材料</strong>：PLA"
-        },
-        {
-          "id": "b_auto_134",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_135",
+          "id": "b_auto_3d_6",
           "type": "heading",
           "level": 2,
-          "content": "二、技术介绍"
+          "content": "Operation Process"
         },
         {
-          "id": "b_auto_136",
-          "type": "paragraph",
-          "content": "3D 打印是一种增材制造技术，通过逐层堆叠打印材料来制造实体物理对象。相比传统切削加工，它具有<strong>更高的设计自由度</strong>和<strong>更少的材料浪费</strong>，能够制造出许多复杂特殊结构。"
-        },
-        {
-          "id": "b_auto_137",
-          "type": "paragraph",
-          "content": "Bambu Lab X2D 桌面 3D 打印机具备以下特点："
-        },
-        {
-          "id": "b_auto_138",
-          "type": "bullet-list",
-          "content": "多种智能自动化功能（自动调平、共振补偿、断料检测）"
-        },
-        {
-          "id": "b_auto_139",
-          "type": "bullet-list",
-          "content": "稳定的打印速度与精度"
-        },
-        {
-          "id": "b_auto_140",
-          "type": "bullet-list",
-          "content": "AMS 2 Pro 多材料供料系统，支持多色/多材料打印"
-        },
-        {
-          "id": "b_auto_141",
-          "type": "bullet-list",
-          "content": "可通过手机 App 远程下发打印任务"
-        },
-        {
-          "id": "b_auto_142",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_143",
-          "type": "heading",
-          "level": 2,
-          "content": "三、操作过程"
-        },
-        {
-          "id": "b_auto_144",
+          "id": "b_auto_3d_7",
           "type": "heading",
           "level": 3,
-          "content": "3.1 小测试方块建模"
+          "content": "1. Build the test model in Bambu Studio"
         },
         {
-          "id": "b_auto_145",
+          "id": "b_auto_3d_8",
           "type": "paragraph",
-          "content": "在 Bambu Studio 软件中直接创建基础方块模型，调整长宽高参数，作为打印测试件进行初步打印练习。"
+          "content": "Create a basic cube model directly in the software, adjust its size parameters to make a test piece for printing practice."
         },
         {
-          "id": "b_auto_146",
-          "type": "image",
-          "src": "images/homework/3dprint/c8b0b6bf7baf908568e0867cde1706e1.jpg",
-          "caption": "Bambu Studio 方块模型界面"
-        },
-        {
-          "id": "b_auto_147",
-          "type": "heading",
-          "level": 3,
-          "content": "3.2 越野车模型导入与布局"
-        },
-        {
-          "id": "b_auto_148",
-          "type": "paragraph",
-          "content": "将 Fusion 360 设计的越野车模型导入 Bambu Studio，调整车辆各零件的摆放角度以获得更好的打印效果。"
-        },
-        {
-          "id": "b_auto_149",
+          "id": "b_auto_3d_9",
           "type": "image",
           "src": "images/homework/3dprint/7e0fbc17ef1296416a6b36e035717d19.jpg",
-          "caption": "Bambu Studio 越野车模型界面"
+          "caption": "Bambu Studio 软件方块建模界面"
         },
         {
-          "id": "b_auto_150",
+          "id": "b_auto_3d_10",
           "type": "heading",
           "level": 3,
-          "content": "3.3 蘑菇灯模型导入与布局"
+          "content": "2. Import and arrange mushroom lamp model"
         },
         {
-          "id": "b_auto_151",
+          "id": "b_auto_3d_11",
           "type": "paragraph",
-          "content": "将 Fusion 360 制作的蘑菇灯外壳模型导入 Bambu Studio，合理调整尺寸和摆放方向。"
+          "content": "Import the pre-designed mushroom lamp shell model into the software, and reasonably adjust its size, position and placement angle on the printing platform to ensure stable printing."
         },
         {
-          "id": "b_auto_152",
+          "id": "b_auto_3d_12",
           "type": "image",
-          "src": "images/homework/3dprint/lQDPKHUMbhUCd5fND8DNC9CwHZdRwELqwP0KET1iheypAA_3024_4032.jpg",
-          "caption": "Bambu Studio 蘑菇灯模型界面"
+          "src": "images/homework/3dprint/9fafa4cd98d147779772a1b433fb3821.png",
+          "caption": "蘑菇灯模型排版界面"
         },
         {
-          "id": "b_auto_153",
+          "id": "b_auto_3d_13",
           "type": "heading",
           "level": 3,
-          "content": "3.4 切片与任务下发"
+          "content": "3. Set slicing parameters"
         },
         {
-          "id": "b_auto_154",
+          "id": "b_auto_3d_14",
           "type": "paragraph",
-          "content": "三组模型全部放入软件后完成切片工作，通过手机 App 将打印任务下发至 Bambu Lab X2D 打印机。"
+          "content": "After completing the model layout, set professional slicing and printing parameters in the software, and generate the standard printing file for the device."
         },
         {
-          "id": "b_auto_155",
+          "id": "b_auto_3d_15",
           "type": "image",
           "src": "images/homework/3dprint/lQDPJw_4Bt_0fBfNELzNFlCw_Q5TqnGSkmUKET1p_etSAA_5712_4284.jpg",
-          "caption": "3D 打印机整机实拍"
+          "caption": "软件切片参数设置"
         },
         {
-          "id": "b_auto_156",
+          "id": "b_auto_3d_16",
           "type": "heading",
           "level": 3,
-          "content": "3.5 实际打印过程"
+          "content": "4. Send the printing task"
         },
         {
-          "id": "b_auto_157",
+          "id": "b_auto_3d_17",
           "type": "paragraph",
-          "content": "打印机接收任务后开始自动分层打印，观察记录设备工作状态与打印进度。"
+          "content": "Connect the device through wireless network, and upload the sliced printing file to the Bambu Lab X2D printer via mobile App."
         },
         {
-          "id": "b_auto_158",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_159",
-          "type": "heading",
-          "level": 2,
-          "content": "四、成品展示"
-        },
-        {
-          "id": "b_auto_160",
-          "type": "heading",
-          "level": 3,
-          "content": "4.1 小测试方块成品"
-        },
-        {
-          "id": "b_auto_161",
-          "type": "paragraph",
-          "content": "打印出的方块测试件结构完整、表面光滑。"
-        },
-        {
-          "id": "b_auto_162",
+          "id": "b_auto_3d_18",
           "type": "image",
-          "src": "images/homework/3dprint/c8b0b6bf7baf908568e0867cde1706e1.jpg",
-          "caption": "方块成品实拍图"
+          "src": "images/homework/3dprint/9fafa4cd98d147779772a1b433fb3821.png",
+          "caption": "3D打印机整机"
         },
         {
-          "id": "b_auto_163",
+          "id": "b_auto_3d_19",
           "type": "heading",
           "level": 3,
-          "content": "4.2 越野车成品"
+          "content": "5. Formal printing and observation"
         },
         {
-          "id": "b_auto_164",
+          "id": "b_auto_3d_20",
           "type": "paragraph",
-          "content": "越野车所有打印部件完好，符合原始设计预期。"
+          "content": "The printer automatically performs layered printing. We observe the nozzle operation status, printing speed and real-time progress of the device throughout the whole process."
         },
         {
-          "id": "b_auto_165",
-          "type": "image",
-          "src": "images/homework/3dprint/7e0fbc17ef1296416a6b36e035717d19.jpg",
-          "caption": "越野车成品实拍图"
-        },
-        {
-          "id": "b_auto_166",
-          "type": "heading",
-          "level": 3,
-          "content": "4.3 蘑菇灯成品"
-        },
-        {
-          "id": "b_auto_167",
-          "type": "paragraph",
-          "content": "打印出的蘑菇灯外壳弧度流畅，外形完整。"
-        },
-        {
-          "id": "b_auto_168",
+          "id": "b_auto_3d_21",
           "type": "image",
           "src": "images/homework/3dprint/lQDPKHUMbhUCd5fND8DNC9CwHZdRwELqwP0KET1iheypAA_3024_4032.jpg",
-          "caption": "蘑菇灯成品实拍图"
+          "caption": "打印机屏幕进度实拍"
         },
         {
-          "id": "b_auto_169",
-          "type": "divider"
+          "id": "b_auto_3d_22",
+          "type": "image",
+          "src": "images/homework/3dprint/lQDPJwdnPBHLD7fNAtHNBQCwA31ZG6cvRbkKETHYKU5FAA_1280_721.jpg",
+          "caption": "打印喷头工作近景实拍"
         },
         {
-          "id": "b_auto_170",
+          "id": "b_auto_3d_23",
+          "type": "paragraph",
+          "content": "Here are more details of the printing process and infill test:"
+        },
+        {
+          "id": "b_auto_3d_24",
+          "type": "image",
+          "src": "images/homework/3dprint/lQDPKHi2HlTM4LfNAtHNBQCwaiF8DymAF4YKETHZjQIMAA_1280_721.jpg",
+          "caption": "不同填充模式近景"
+        },
+        {
+          "id": "b_auto_3d_25",
+          "type": "image",
+          "src": "images/homework/3dprint/lQDPKGaOmbnX9xfNEXTNDwCw4dFtPt-dotkKET1l1TsEAA_3840_4468.jpg",
+          "caption": "方块矩阵打印过程"
+        },
+        {
+          "id": "b_auto_3d_26",
           "type": "heading",
           "level": 2,
-          "content": "五、成果总结"
+          "content": "Finished Product Display"
         },
         {
-          "id": "b_auto_171",
-          "type": "bullet-list",
-          "content": "<strong>打印项目</strong>: --------- | <strong>模型来源</strong>: --------- | <strong>关键操作</strong>: --------- | <strong>完成状态</strong>: ---------"
-        },
-        {
-          "id": "b_auto_172",
-          "type": "bullet-list",
-          "content": "<strong>打印项目</strong>: 小测试方块 | <strong>模型来源</strong>: Bambu Studio 内置 | <strong>关键操作</strong>: 基础建模、切片 | <strong>完成状态</strong>: ✅ 完成"
-        },
-        {
-          "id": "b_auto_173",
-          "type": "bullet-list",
-          "content": "<strong>打印项目</strong>: 越野车模型 | <strong>模型来源</strong>: Fusion 360 设计 | <strong>关键操作</strong>: 导入、布局、切片 | <strong>完成状态</strong>: ✅ 完成"
-        },
-        {
-          "id": "b_auto_174",
-          "type": "bullet-list",
-          "content": "<strong>打印项目</strong>: 蘑菇灯外壳 | <strong>模型来源</strong>: Fusion 360 设计 | <strong>关键操作</strong>: 导入、调整、切片 | <strong>完成状态</strong>: ✅ 完成"
-        },
-        {
-          "id": "b_auto_175",
-          "type": "bullet-list",
-          "content": "<strong>打印项目</strong>: 任务下发 | <strong>模型来源</strong>: Bambu Studio | <strong>关键操作</strong>: App 远程下发 | <strong>完成状态</strong>: ✅ 完成"
-        },
-        {
-          "id": "b_auto_176",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_177",
+          "id": "b_auto_3d_27",
           "type": "heading",
-          "level": 2,
-          "content": "六、经验与心得"
+          "level": 3,
+          "content": "1. Test cube finished product"
         },
         {
-          "id": "b_auto_178",
+          "id": "b_auto_3d_28",
           "type": "paragraph",
-          "content": "1. <strong>模型摆放角度影响打印质量</strong>：合理的摆放可以减少支撑结构，提高表面光洁度"
+          "content": "The printed test cube has a complete structure, regular shape and smooth surface, which verifies the normal operation of the printer."
         },
         {
-          "id": "b_auto_179",
-          "type": "paragraph",
-          "content": "2. <strong>切片参数需因模型而异</strong>：不同模型需要调整填充密度、层高、支撑策略等参数"
+          "id": "b_auto_3d_29",
+          "type": "image",
+          "src": "images/homework/3dprint/c8b0b6bf7baf908568e0867cde1706e1.jpg",
+          "caption": "方块成品实拍"
         },
         {
-          "id": "b_auto_180",
-          "type": "paragraph",
-          "content": "3. <strong>AMS 多材料系统的价值</strong>：支持水溶性支撑材料或多色打印，大大拓展了打印可能性"
-        },
-        {
-          "id": "b_auto_181",
-          "type": "paragraph",
-          "content": "4. <strong>远程监控提高效率</strong>：通过手机 App 可随时查看打印进度，无需一直守在打印机旁"
-        },
-        {
-          "id": "b_auto_182",
-          "type": "paragraph",
-          "content": "5. <strong>CAD 设计到 3D 打印的完整链路</strong>：从 Fusion 360 建模 → Bambu Studio 切片 → Bambu Lab 打印，形成完整的数字化制造闭环"
-        },
-        {
-          "id": "b_auto_183",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_184",
+          "id": "b_auto_3d_30",
           "type": "heading",
-          "level": 2,
-          "content": "七、与 CAD 设计的衔接"
+          "level": 3,
+          "content": "2. Mushroom lamp finished product"
         },
         {
-          "id": "b_auto_185",
+          "id": "b_auto_3d_31",
           "type": "paragraph",
-          "content": "本作业中的蘑菇灯外壳模型来源于 <strong>CAD 设计</strong> 作业中的 Fusion 360 三维建模成果，体现了\"设计 → 制造\"一体化流程：先在 Fusion 360 中完成参数化建模，导出 STL 格式，再导入 Bambu Studio 进行切片和打印，最终获得实体成品。"
+          "content": "The printed mushroom lamp shell has smooth radian, complete outline and no obvious printing defects, which meets the design and production requirements."
         },
         {
-          "id": "b_auto_186",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_187",
-          "type": "quote",
-          "content": "<strong>项目名称</strong>：3D 打印与原型制造"
-        },
-        {
-          "id": "b_auto_188",
-          "type": "quote",
-          "content": "<strong>打印设备</strong>：Bambu Lab X2D + AMS 2 Pro"
-        },
-        {
-          "id": "b_auto_189",
-          "type": "quote",
-          "content": "<strong>更新时间</strong>：2026年6月"
-        },
-        {
-          "id": "b_auto_190",
-          "type": "quote",
-          "content": "<strong>关键词</strong>：<code>3D打印</code> <code>增材制造</code> <code>Bambu Lab</code> <code>Fusion 360</code> <code>切片</code> <code>原型制造</code>"
+          "id": "b_auto_3d_32",
+          "type": "image",
+          "src": "images/homework/3dprint/62df13f12aaa4a1d858b04abfae702d0.png",
+          "caption": "蘑菇灯成品实拍"
         }
       ]
     },
