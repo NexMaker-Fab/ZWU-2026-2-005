@@ -391,109 +391,397 @@
           "id": "b_auto_46",
           "type": "heading",
           "level": 2,
-          "content": "四、项目成果总结"
+          "content": "四、同步至 GitHub Pages 的功能实现原理"
         },
         {
           "id": "b_auto_47",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: --------- | <strong>关键操作与修复</strong>: --------- | <strong>完成状态</strong>: ---------"
+          "type": "paragraph",
+          "content": "为了在“无数据库”的静态网页中实现后台实时编辑、保存并自动部署，本项目设计了一条“前端配置 -> API落库 -> 自动构建部署 -> 客户端缓存自愈”的闭环数据流链路："
         },
         {
           "id": "b_auto_48",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 分支管理 | <strong>关键操作与修复</strong>: 归档旧项目到 `archive` 分支，清理主干无用原型 | <strong>完成状态</strong>: ✅ 完成"
+          "type": "code",
+          "content": "graph TD\n    A[后台块编辑器] -->|1. 保存| B(本地浏览器 localStorage)\n    A -->|2. 点击 Save to GitHub| C{检查 GitHub 配置}\n    C -->|未配置| D[弹出配置窗口]\n    C -->|已配置| E[\"1. GET 获取 content.json SHA<br>2. Base64 编码 JSON<br>3. PUT 发送更新\"]\n    E -->|写入| F[GitHub API 接口]\n    F -->|触发| G[GitHub Actions 自动构建]\n    G -->|部署静态包| H[GitHub Pages 托管服务]\n    H -->|读取新数据| I[访客浏览器加载]\n    I -->|自愈算法检测脏缓存| J{是否触发失效特征}\n    J -->|是| K[清理 localStorage 缓存] --> L[强制重新 fetch 数据]\n    J -->|否| M[直接渲染页面]"
         },
         {
           "id": "b_auto_49",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 编辑器核心 | <strong>关键操作与修复</strong>: 实现 BlockEditor，支持行内 Markdown 兼容 | <strong>完成状态</strong>: ✅ 完成"
+          "type": "heading",
+          "level": 3,
+          "content": "4.1 核心同步与部署机制"
         },
         {
           "id": "b_auto_50",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 成员卡片 | <strong>关键操作与修复</strong>: Hkz 主创置首，动态提取头像和职责 | <strong>完成状态</strong>: ✅ 完成"
+          "type": "paragraph",
+          "content": "1. <strong>轻量化客户端鉴权</strong>："
         },
         {
           "id": "b_auto_51",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 目录大纲 | <strong>关键操作与修复</strong>: 增加 auto-numbering 大纲并移至笔记开头，支持虚线玻璃态 | <strong>完成状态</strong>: ✅ 完成"
+          "type": "paragraph",
+          "content": "在后台设置面板中，用户可配置 Repository Owner（仓库所有者）、Repository Name（仓库名）、Branch（默认 <code>main</code>）及 GitHub Personal Access Token（个人访问令牌）。出于隐私和安全性考量，该 Token 纯本地化存储于访客浏览器的 <code>localStorage</code> 中，绝不上传到任何中转服务器。"
         },
         {
           "id": "b_auto_52",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 路径兼容性 | <strong>关键操作与修复</strong>: 批量修正图片为相对路径，部署至 GitHub Pages 畅通无阻 | <strong>完成状态</strong>: ✅ 完成"
+          "type": "paragraph",
+          "content": "2. <strong>GitHub Contents API 实现数据落库</strong>："
         },
         {
           "id": "b_auto_53",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 缓存失效控制 | <strong>关键操作与修复</strong>: 增加自愈逻辑，避免浏览器本地缓存过期导致图片报错 | <strong>完成状态</strong>: ✅ 完成"
+          "type": "paragraph",
+          "content": "当用户在后台编辑完成并点击 <code>Save to GitHub</code> 时，前端 JavaScript 模块（[github.js](file:///C:/Users/jxgm/.gemini/antigravity/worktrees/ZWU-2026-2-005/update-3d-print-docs/js/github.js)）执行以下操作："
         },
         {
           "id": "b_auto_54",
           "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 自动化验证 | <strong>关键操作与修复</strong>: 部署 Pre-commit hook，执行全方位缓存与数据安全体检 | <strong>完成状态</strong>: ✅ 完成"
+          "content": "发送 <code>GET</code> 请求获取远端 <code>data/content.json</code> 的最新 <code>sha</code> 校验值（GitHub Contents API 规定修改文件必须携带最新 SHA）。"
         },
         {
           "id": "b_auto_55",
-          "type": "divider"
+          "type": "bullet-list",
+          "content": "将当前页面 JSON 数据序列化，使用 <code>btoa(unescape(encodeURIComponent(content)))</code> 将中文字符安全地转换为 Base64 编码，避免 API 传输过程乱码。"
         },
         {
           "id": "b_auto_56",
-          "type": "heading",
-          "level": 2,
-          "content": "五、项目要点与心得"
+          "type": "bullet-list",
+          "content": "向 <code>https://api.github.com/repos/{owner}/{repo}/contents/data/content.json</code> 发送 <code>PUT</code> 请求，将更新写入仓库。"
         },
         {
           "id": "b_auto_57",
           "type": "paragraph",
-          "content": "1. <strong>分支策略是代码整洁的重要防线</strong>：在进行大规模重构时，及时做好旧代码的归档和新主干的精简，有助于厘清开发头绪，确保核心业务不受历史遗留代码的影响。"
+          "content": "3. <strong>GitHub Actions 持续集成与分钟级构建</strong>："
         },
         {
           "id": "b_auto_58",
           "type": "paragraph",
-          "content": "2. <strong>多环境测试的重要性</strong>：本地开发环境往往对路径大小写、绝对/相对路径宽容度较高；而静态托管生产环境（GitHub Pages）有更严格的规范。在项目管理中，规范化路径与自动化体检必不可少。"
+          "content": "项目配置了自动化流水线（[.github/workflows/static.yml](file:///C:/Users/jxgm/.gemini/antigravity/worktrees/ZWU-2026-2-005/update-3d-print-docs/.github/workflows/static.yml)），监听 <code>main</code> 分支上 <code>data/content.json</code> 等文件的推送事件。工作流在 Ubuntu 虚拟环境中自动执行代码检出（<code>actions/checkout@v4</code>）、配置 Pages 静态部署（<code>actions/configure-pages@v5</code>）、打包并上传制品（<code>actions/upload-pages-artifact@v3</code>）以及最终部署至 GitHub Pages（<code>actions/deploy-pages@v5</code>）。"
         },
         {
           "id": "b_auto_59",
+          "type": "heading",
+          "level": 3,
+          "content": "4.2 客户端缓存自愈算法（Cache Self-Healing）"
+        },
+        {
+          "id": "b_auto_60",
+          "type": "paragraph",
+          "content": "由于静态托管服务器在部署后存在一定的缓存延迟，且各团队成员可能在不同终端、不同版本间频繁操作，本地 <code>localStorage</code> 的旧数据极易与远端 <code>content.json</code> 产生脏数据冲突（如导致图片绝对路径失效、列表显示错误等）。"
+        },
+        {
+          "id": "b_auto_61",
+          "type": "paragraph",
+          "content": "为此，项目在 [storage.js](file:///C:/Users/jxgm/.gemini/antigravity/worktrees/ZWU-2026-2-005/update-3d-print-docs/js/storage.js) 中设计了<strong>缓存失效自愈验证算法</strong>。在加载数据（<code>loadContent()</code>）时，会实时检测缓存对象是否存在以下冲突特征："
+        },
+        {
+          "id": "b_auto_62",
+          "type": "bullet-list",
+          "content": "缓存中是否存在已废弃的测试项目（如 <code>project-blue-prince</code>）；"
+        },
+        {
+          "id": "b_auto_63",
+          "type": "bullet-list",
+          "content": "缓存中是否缺失新版必需页面（如 <code>project-arduino</code>、<code>root-homework</code>）；"
+        },
+        {
+          "id": "b_auto_64",
+          "type": "bullet-list",
+          "content": "缓存中是否包含已废弃的绝对路径图片（以 <code>/images/</code> 开头）；"
+        },
+        {
+          "id": "b_auto_65",
+          "type": "bullet-list",
+          "content": "团队主创 Hkz 的名片是否未被置首；"
+        },
+        {
+          "id": "b_auto_66",
+          "type": "bullet-list",
+          "content": "团队成员 Purple 的姓名是否为已废弃的曾用名“周波”；"
+        },
+        {
+          "id": "b_auto_67",
+          "type": "bullet-list",
+          "content": "缓存中三个核心作业（项目管理、Arduino、IoT交互）的排版块数（<code>blocks</code>）是否少于 20 个（判断为占位符）。"
+        },
+        {
+          "id": "b_auto_68",
+          "type": "paragraph",
+          "content": "一旦满足上述任一特征，系统在控制台抛出 <code>Stale cache detected, forcing reload from content.json</code>，自动执行 <code>localStorage.removeItem('teamflow_content')</code> 强行清空本地缓存，并重新向远端拉取最新数据，完美实现了“零用户感知”的客户端版本自愈。"
+        },
+        {
+          "id": "b_auto_69",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_70",
+          "type": "heading",
+          "level": 2,
+          "content": "五、AI 工具辅助搭建网站的过程与协同开发记录"
+        },
+        {
+          "id": "b_auto_71",
+          "type": "paragraph",
+          "content": "本项目的整体重构与开发是在与 Google DeepMind 的 AI 协同编码助手 <strong>Antigravity</strong> 密切配对编程下完成的。AI 不仅扮演了代码生成器的角色，还作为项目架构师和自动化验证门禁的设计者，协助团队高效推进开发进程。"
+        },
+        {
+          "id": "b_auto_72",
+          "type": "heading",
+          "level": 3,
+          "content": "5.1 AI 协同里程碑与 Progress 进展"
+        },
+        {
+          "id": "b_auto_73",
+          "type": "paragraph",
+          "content": "整个 AI 协同开发过程可以梳理为以下几个关键的迭代周期："
+        },
+        {
+          "id": "b_auto_74",
+          "type": "bullet-list",
+          "content": "<strong>迭代阶段</strong>: <strong>阶段 1</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>分支规整与瘦身</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “清理冗余分支，做网站的经历做成项目管理的 md 文件。” | <strong>解决的技术痛点</strong>: 旧项目残留了大量杂乱代码与过时原型。AI 指导建立了 <code>archive</code> 分支做备份，精简了主分支。"
+        },
+        {
+          "id": "b_auto_75",
+          "type": "bullet-list",
+          "content": "<strong>迭代阶段</strong>: <strong>阶段 2</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>编辑器优化与 Landing 匹配</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “优化 teamflow wiki editor 编辑器，支持修改 homework 页面的目录大纲目录，并且 landing 页自动匹配成员，实现点击跳转。” | <strong>解决的技术痛点</strong>: 完善 Notion 风格编辑器的行内 Markdown 语法渲染，并实现主页名片与个人子页面的自动关联绑定。"
+        },
+        {
+          "id": "b_auto_76",
+          "type": "bullet-list",
+          "content": "<strong>迭代阶段</strong>: <strong>阶段 3</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>资源路径相对化与 GitHub 部署</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “所有团队成员页面的照片都没有上传成功，landing 页是成功的。”<br>“上传对应的作业，自己下载图片对应，本地测试。” | <strong>解决的技术痛点</strong>: 发现部署到 GitHub Pages 后图片资源由于绝对路径 <code>/</code> 无法加载，AI 协助将其全部修正为相对路径，并引入了 Pre-commit 校验脚本。"
+        },
+        {
+          "id": "b_auto_77",
+          "type": "bullet-list",
+          "content": "<strong>迭代阶段</strong>: <strong>阶段 4</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>目录大纲排版重制</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “将 outline 移到笔记开头”<br>“outline 匹配每一级大标题，不要全都是 1.x 版本” | <strong>解决的技术痛点</strong>: 改进作业阅读体验，移除原右侧悬浮且层级混乱的目录，改为文章开头毛玻璃线框包裹的清爽手写体 TOC 大纲。"
+        },
+        {
+          "id": "b_auto_78",
+          "type": "bullet-list",
+          "content": "<strong>迭代阶段</strong>: <strong>阶段 5</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>团队名片重构与星标展示</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “将我（Hkz主创）排在首位，有精美毛玻璃个人详细主页；Purple 拼音更正为周紫晗”<br>“把项目展示的逻辑改为添加到 favorites 中就展示” | <strong>解决的技术痛点</strong>: 动态卡片置顶展示逻辑设计；修正由于历史遗留拼写导致的数据报错；简化后台发布操作为“点亮星标一键上线”。"
+        },
+        {
+          "id": "b_auto_79",
+          "type": "bullet-list",
+          "content": "<strong>迭代阶段</strong>: <strong>阶段 6</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>防带病提交的自动化门禁 (Git Hook)</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “缓存自愈机制进行全方面的增强判定，每次代码提交前都要过这个测试进行缓存刷新，配个 hook，每次上传自动触发。” | <strong>解决的技术痛点</strong>: 团队开发提交前缺乏统一校验，容易把占位符、老缓存或绝对路径图片上传到 GitHub。AI 编写了 <code>pre_commit_test.py</code> 并封装在 Git Pre-commit 钩子中，实现本地强制体检。"
+        },
+        {
+          "id": "b_auto_80",
+          "type": "heading",
+          "level": 3,
+          "content": "5.2 关键 AI Prompt 指令实录"
+        },
+        {
+          "id": "b_auto_81",
+          "type": "paragraph",
+          "content": "为了实现对网站的高质量控制，我们向 AI 发送了多条具有精确架构引导的 Prompt 指令："
+        },
+        {
+          "id": "b_auto_82",
+          "type": "paragraph",
+          "content": "1. <strong>关于缓存自愈与 Pre-commit 构建指令</strong>："
+        },
+        {
+          "id": "b_auto_83",
+          "type": "quote",
+          "content": "<em>“这样，给这个项目配个缓存自愈测试 of hook，每次上传代码自动触发。”</em>"
+        },
+        {
+          "id": "b_auto_84",
+          "type": "quote",
+          "content": "<strong>AI 的响应实现</strong>：在 [.githooks/pre-commit](file:///C:/Users/jxgm/.gemini/antigravity/worktrees/ZWU-2026-2-005/update-3d-print-docs/.githooks/pre-commit) 中注入 Python 脚本执行命令，在本地 <code>git commit</code> 时自动执行 [pre_commit_test.py](file:///C:/Users/jxgm/.gemini/antigravity/worktrees/ZWU-2026-2-005/update-3d-print-docs/pre_commit_test.py)，对 <code>content.json</code> 的合法性和 <code>storage.js</code> 的自愈关键字进行全方位静态体检。"
+        },
+        {
+          "id": "b_auto_85",
+          "type": "paragraph",
+          "content": "2. <strong>关于目录大纲层级与体验重构指令</strong>："
+        },
+        {
+          "id": "b_auto_86",
+          "type": "quote",
+          "content": "<em>“outline匹配每一级大标题，不要全都是1.x版本，重新修改，将outline移到笔记开头”</em>"
+        },
+        {
+          "id": "b_auto_87",
+          "type": "quote",
+          "content": "<strong>AI 的响应实现</strong>：优化了 <code>homework.js</code> 中的目录解析正则与 HTML 构建逻辑，将大纲容器从侧边栏移到文章头部，运用手写艺术字体结合毛玻璃虚线框进行高审美排版。"
+        },
+        {
+          "id": "b_auto_88",
+          "type": "paragraph",
+          "content": "3. <strong>关于多端口本地服务器快照验证指令</strong>："
+        },
+        {
+          "id": "b_auto_89",
+          "type": "quote",
+          "content": "<em>“我需要网站的快照（制作过程），给每一个我所说重大改动的地方的 github 历史分支拉到本地，然后按照顺序开不同端口的本地服务器。”</em>"
+        },
+        {
+          "id": "b_auto_90",
+          "type": "quote",
+          "content": "<strong>AI 的响应实现</strong>：通过 Git 命令拉取 5 个里程碑 Commit 并保存到独立的本地文件夹，利用 Python 的 <code>http.server</code> 依次在 <code>8001</code>-<code>8005</code> 端口并发拉起本地服务，帮助项目进行可视化多版本回溯展示。"
+        },
+        {
+          "id": "b_auto_91",
+          "type": "heading",
+          "level": 3,
+          "content": "5.3 AI 协同开发界面与对话实录"
+        },
+        {
+          "id": "b_auto_92",
+          "type": "paragraph",
+          "content": "为直观展示人机协同的开发状态与迭代记录，以下是协同界面、对话流树以及项目从开始到完成的 prompt 与回答过程截图："
+        },
+        {
+          "id": "b_auto_93",
+          "type": "paragraph",
+          "content": "1. <strong>AI 协同开发与代码实时对比 Review 界面</strong>："
+        },
+        {
+          "id": "b_auto_94",
+          "type": "paragraph",
+          "content": "展示了 AI (Antigravity) 执行任务时的实时 Diff 比对与代码评审过程，右侧以红绿行清晰呈现在本地执行的修改方案。"
+        },
+        {
+          "id": "b_auto_95",
+          "type": "image",
+          "src": "images/homework/project/a1175733a97f9fef87b5859f3a786968.png",
+          "caption": "Antigravity 协同开发与代码对比界面"
+        },
+        {
+          "id": "b_auto_96",
+          "type": "paragraph",
+          "content": "2. <strong>Antigravity 历史对话树 (Conversation History) 管理</strong>："
+        },
+        {
+          "id": "b_auto_97",
+          "type": "paragraph",
+          "content": "记录了团队针对主分支博客维护、编辑器优化、资源相对路径重构等一系列历史任务的迭代会话。"
+        },
+        {
+          "id": "b_auto_98",
+          "type": "image",
+          "src": "images/homework/project/616e118e0daab259460866764dc91815.png",
+          "caption": "Antigravity 历史对话树"
+        },
+        {
+          "id": "b_auto_99",
+          "type": "paragraph",
+          "content": "3. <strong>从项目启动到最终交付的 Prompt 意图与解答过程快照</strong>："
+        },
+        {
+          "id": "b_auto_100",
+          "type": "paragraph",
+          "content": "完整展现了利用 AI 从最初的“冗余文件规整”到最终“编写本地 Git Pre-commit 钩子、自愈缓存校验算法”的架构设计与实现对话脉络。"
+        },
+        {
+          "id": "b_auto_101",
+          "type": "image",
+          "src": "images/homework/project/152870a4dd025167f049d852e39bd1bb.png",
+          "caption": "人机协同 Prompt 与回答全生命周期过程"
+        },
+        {
+          "id": "b_auto_102",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_103",
+          "type": "heading",
+          "level": 2,
+          "content": "六、项目成果总结"
+        },
+        {
+          "id": "b_auto_104",
+          "type": "bullet-list",
+          "content": "<strong>开发阶段</strong>: 分支管理 | <strong>关键操作与修复</strong>: 归档旧项目到 <code>archive</code> 分支，清理主干无用原型 | <strong>完成状态</strong>: ✅ 完成"
+        },
+        {
+          "id": "b_auto_105",
+          "type": "bullet-list",
+          "content": "<strong>开发阶段</strong>: 编辑器核心 | <strong>关键操作与修复</strong>: 实现 BlockEditor，支持行内 Markdown 兼容 | <strong>完成状态</strong>: ✅ 完成"
+        },
+        {
+          "id": "b_auto_106",
+          "type": "bullet-list",
+          "content": "<strong>开发阶段</strong>: 成员卡片 | <strong>关键操作与修复</strong>: Hkz 主创置首，动态提取头像和职责 | <strong>完成状态</strong>: ✅ 完成"
+        },
+        {
+          "id": "b_auto_107",
+          "type": "bullet-list",
+          "content": "<strong>开发阶段</strong>: 目录大纲 | <strong>关键操作与修复</strong>: 增加 auto-numbering 大纲并移至笔记开头，支持虚线玻璃态 | <strong>完成状态</strong>: ✅ 完成"
+        },
+        {
+          "id": "b_auto_108",
+          "type": "bullet-list",
+          "content": "<strong>开发阶段</strong>: 路径兼容性 | <strong>关键操作与修复</strong>: 批量修正图片为相对路径，部署至 GitHub Pages 畅通无阻 | <strong>完成状态</strong>: ✅ 完成"
+        },
+        {
+          "id": "b_auto_109",
+          "type": "bullet-list",
+          "content": "<strong>开发阶段</strong>: 缓存失效控制 | <strong>关键操作与修复</strong>: 增加自愈逻辑，避免浏览器本地缓存过期导致图片报错 | <strong>完成状态</strong>: ✅ 完成"
+        },
+        {
+          "id": "b_auto_110",
+          "type": "bullet-list",
+          "content": "<strong>开发阶段</strong>: 自动化验证 | <strong>关键操作与修复</strong>: 部署 Pre-commit hook，执行全方位缓存与数据安全体检 | <strong>完成状态</strong>: ✅ 完成"
+        },
+        {
+          "id": "b_auto_111",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_112",
+          "type": "heading",
+          "level": 2,
+          "content": "七、项目要点与心得"
+        },
+        {
+          "id": "b_auto_113",
+          "type": "paragraph",
+          "content": "1. <strong>分支策略是代码整洁的重要防线</strong>：在进行大规模重构时，及时做好旧代码的归档和新主干的精简，有助于厘清开发头绪，确保核心业务不受历史遗留代码的影响。"
+        },
+        {
+          "id": "b_auto_114",
+          "type": "paragraph",
+          "content": "2. <strong>多环境测试的重要性</strong>：本地开发环境往往对路径大小写、绝对/相对路径宽容度较高；而静态托管生产环境（GitHub Pages）有更严格的规范。在项目管理中，规范化路径与自动化体检必不可少。"
+        },
+        {
+          "id": "b_auto_115",
           "type": "paragraph",
           "content": "3. <strong>“无数据库”架构的同步挑战</strong>：利用 JSON 和 <code>localStorage</code> 搭建 CMS 能够带来极高的性能与便利，但必须配备完善 of “客户端缓存版本管理”与“自愈判定”，才能实现跨版本平滑过渡。"
         },
         {
-          "id": "b_auto_60",
+          "id": "b_auto_116",
           "type": "divider"
         },
         {
-          "id": "b_auto_61",
+          "id": "b_auto_117",
           "type": "heading",
           "level": 2,
-          "content": "六、与其他作业的衔接"
+          "content": "八、与其他作业的衔接"
         },
         {
-          "id": "b_auto_62",
+          "id": "b_auto_118",
           "type": "paragraph",
-          "content": "本“项目管理与协作开发”作为整组作业博客的基底和内容发布中枢，为后续的其他作业提供了直观的展示空间。后续的 <strong>CAD设计</strong>、<strong>3D打印</strong>、<strong>Arduino应用</strong>、<strong>IOT交互</strong> 等平时作业和最终项目，均已统一导入到本平台中，实现了学习成果的数字化沉淀与高审美呈现。"
+          "content": "本“项目管理与协作开发”作为整组作业博客的基底和内容发布中枢，为后续的其他作业提供了直观的展示空间。后续的 <strong>CAD设计</strong>、<strong>3D打印</strong>、<strong>Arduino应用</strong>、<strong>IOT交互</strong> 等平时作业 and 最终项目，均已统一导入到本平台中，实现了学习成果的数字化沉淀与高审美呈现。"
         },
         {
-          "id": "b_auto_63",
+          "id": "b_auto_119",
           "type": "divider"
         },
         {
-          "id": "b_auto_64",
+          "id": "b_auto_120",
           "type": "quote",
           "content": "<strong>项目名称</strong>：项目管理与协作开发汇报"
         },
         {
-          "id": "b_auto_65",
+          "id": "b_auto_121",
           "type": "quote",
           "content": "<strong>技术栈</strong>：HTML5 / Vanilla CSS / JavaScript (ES Modules) / Git / GitHub Pages"
         },
         {
-          "id": "b_auto_66",
+          "id": "b_auto_122",
           "type": "quote",
           "content": "<strong>更新时间</strong>：2026年6月"
         },
         {
-          "id": "b_auto_67",
+          "id": "b_auto_123",
           "type": "quote",
           "content": "<strong>关键词</strong>：<code>项目管理</code> <code>Git 分支策略</code> <code>块级编辑器</code> <code>路径修复</code> <code>缓存自愈</code> <code>GitHub Pages</code> <code>Pre-commit</code>"
         }
@@ -1003,284 +1291,800 @@
       "parentId": "root-homework",
       "blocks": [
         {
-          "id": "b_auto_191",
+          "id": "b_auto_ard_1",
           "type": "heading",
           "level": 1,
-          "content": "Arduino 传感器编程 — 作业汇报"
+          "content": "Arduino 基础实践教程"
         },
         {
-          "id": "b_auto_192",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_193",
+          "id": "b_auto_ard_2",
           "type": "heading",
           "level": 2,
-          "content": "一、项目简介"
+          "content": "1\\. Arduino IDE 开发环境与编程前置基础"
         },
         {
-          "id": "b_auto_194",
+          "id": "b_auto_ard_3",
           "type": "paragraph",
-          "content": "本作业围绕 <strong>Arduino 开源电子原型平台</strong> 展开，系统学习并实践了 Arduino 硬件编程的基础知识、传感器数据采集、数字/模拟输入输出控制以及串口通信等核心内容。"
+          "content": "在编写 Arduino 代码、开展硬件实验之前，必须熟练掌握 <strong>Arduino IDE</strong> 开发工具的基础界面、操作流程与程序核心逻辑。Arduino IDE 是官方配套的集成开发环境，集成代码编写、语法校验、程序编译、代码上传全功能，是适配所有 Arduino 开发板的专属编程工具，零基础新手可快速上手。"
         },
         {
-          "id": "b_auto_195",
-          "type": "paragraph",
-          "content": "<strong>实验平台</strong>：Arduino Uno / Nano"
-        },
-        {
-          "id": "b_auto_196",
-          "type": "paragraph",
-          "content": "<strong>开发环境</strong>：Arduino IDE"
-        },
-        {
-          "id": "b_auto_197",
-          "type": "paragraph",
-          "content": "<strong>涉及模块</strong>：LED、按键、电位器、光敏电阻、串口监视器"
-        },
-        {
-          "id": "b_auto_198",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_199",
-          "type": "heading",
-          "level": 2,
-          "content": "二、技术介绍"
-        },
-        {
-          "id": "b_auto_200",
-          "type": "paragraph",
-          "content": "Arduino 是一款开源电子原型平台，搭载简易易用的硬件与软件体系，专为创作者、设计师、创客及电子初学者打造，能够快速开发各类交互式电子项目。"
-        },
-        {
-          "id": "b_auto_201",
-          "type": "bullet-list",
-          "content": "<strong>常用主控板</strong>：Uno、Nano、Mega 2560、ESP8266/ESP32（兼容适配）"
-        },
-        {
-          "id": "b_auto_202",
-          "type": "bullet-list",
-          "content": "<strong>核心优势</strong>：丰富的开源函数库、活跃的全球社区、跨平台兼容（Windows/macOS/Linux）"
-        },
-        {
-          "id": "b_auto_203",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_204",
-          "type": "heading",
-          "level": 2,
-          "content": "三、实验内容与过程"
-        },
-        {
-          "id": "b_auto_205",
+          "id": "b_auto_ard_4",
           "type": "heading",
           "level": 3,
-          "content": "3.1 LED 闪烁实验（入门）"
+          "content": "1\\.1 认识 Arduino IDE 主界面"
         },
         {
-          "id": "b_auto_206",
+          "id": "b_auto_ard_5",
           "type": "paragraph",
-          "content": "打开 Arduino IDE，加载内置示例 <strong>文件 → 示例 → 01.Basics → Blink</strong>，上传至开发板，板载 LED 自动闪烁。这是验证开发环境是否正常工作的基础实验。"
+          "content": "打开 Arduino IDE 软件后，主界面划分清晰，核心功能区域如下，覆盖所有基础开发操作："
         },
         {
-          "id": "b_auto_207",
-          "type": "code",
-          "content": "void setup() {\n  pinMode(LED_BUILTIN, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(LED_BUILTIN, HIGH);\n  delay(1000);\n  digitalWrite(LED_BUILTIN, LOW);\n  delay(1000);\n}"
-        },
-        {
-          "id": "b_auto_208",
-          "type": "heading",
-          "level": 3,
-          "content": "3.2 按键控制 LED"
-        },
-        {
-          "id": "b_auto_209",
-          "type": "paragraph",
-          "content": "使用数字输入引脚配合内部上拉电阻，实现按键控制 LED 亮灭。"
-        },
-        {
-          "id": "b_auto_210",
-          "type": "code",
-          "content": "const int buttonPin = 2;\nconst int ledPin = 13;\nint buttonState = 0;\n\nvoid setup() {\n  pinMode(ledPin, OUTPUT);\n  pinMode(buttonPin, INPUT_PULLUP);\n}\n\nvoid loop() {\n  buttonState = digitalRead(buttonPin);\n  if (buttonState == LOW) {\n    digitalWrite(ledPin, HIGH);\n  } else {\n    digitalWrite(ledPin, LOW);\n  }\n}"
-        },
-        {
-          "id": "b_auto_211",
-          "type": "heading",
-          "level": 3,
-          "content": "3.3 电位器调节 LED 亮度（PWM 调光）"
-        },
-        {
-          "id": "b_auto_212",
-          "type": "paragraph",
-          "content": "通过 <code>analogRead()</code> 读取电位器 0-5V 模拟电压（返回 0-1023），利用 <code>map()</code> 函数映射为 PWM 占空比（0-255），实现 LED 无级调光。"
-        },
-        {
-          "id": "b_auto_213",
-          "type": "code",
-          "content": "const int potPin = A0;\nconst int ledPin = 9;\n\nvoid setup() {\n  pinMode(ledPin, OUTPUT);\n}\n\nvoid loop() {\n  int sensorValue = analogRead(potPin);\n  int brightness = map(sensorValue, 0, 1023, 0, 255);\n  analogWrite(ledPin, brightness);\n  delay(10);\n}"
-        },
-        {
-          "id": "b_auto_214",
-          "type": "heading",
-          "level": 3,
-          "content": "3.4 串口打印传感器数值"
-        },
-        {
-          "id": "b_auto_215",
-          "type": "paragraph",
-          "content": "使用串口通信实时输出模拟量读数到电脑监视器，验证传感器数据采集的准确性。"
-        },
-        {
-          "id": "b_auto_216",
-          "type": "code",
-          "content": "void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int val = analogRead(A0);\n  Serial.print(\"模拟量数值：\");\n  Serial.println(val);\n  delay(500);\n}"
-        },
-        {
-          "id": "b_auto_217",
-          "type": "heading",
-          "level": 3,
-          "content": "3.5 综合实验：智能小夜灯"
-        },
-        {
-          "id": "b_auto_218",
-          "type": "paragraph",
-          "content": "结合光敏电阻和 LED，实现环境光线昏暗时 LED 自动点亮，亮度随环境光线自适应调节。"
-        },
-        {
-          "id": "b_auto_219",
-          "type": "paragraph",
-          "content": "<strong>硬件接线</strong>："
-        },
-        {
-          "id": "b_auto_220",
+          "id": "b_auto_ard_6",
           "type": "bullet-list",
-          "content": "光敏电阻（LDR）：接入 A0 模拟引脚（搭配分压电路）"
+          "content": "<strong>顶部菜单栏</strong>：包含文件、编辑、项目、工具、帮助等核心功能，可实现新建脚本、配置开发板、加载库文件、参数设置等全部操作。"
         },
         {
-          "id": "b_auto_221",
+          "id": "b_auto_ard_7",
           "type": "bullet-list",
-          "content": "LED 灯珠：接入 PWM 可调光引脚（9 号引脚）"
+          "content": "<strong>快捷工具栏</strong>：集成高频使用按钮，包括代码验证、程序上传、新建文件、打开文件、保存文件，一键完成基础编译与烧录操作。"
         },
         {
-          "id": "b_auto_222",
-          "type": "code",
-          "content": "const int lightPin = A0;\nconst int ledPin = 9;\n\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(ledPin, OUTPUT);\n}\n\nvoid loop() {\n  int lightLevel = analogRead(lightPin);\n  int brightness = map(lightLevel, 0, 1023, 255, 0);\n  brightness = constrain(brightness, 0, 255);\n  analogWrite(ledPin, brightness);\n\n  Serial.print(\"光线数值：\");\n  Serial.print(lightLevel);\n  Serial.print(\" | LED亮度：\");\n  Serial.println(brightness);\n  delay(200);\n}"
+          "id": "b_auto_ard_8",
+          "type": "bullet-list",
+          "content": "<strong>代码编辑区</strong>：软件中间最大的空白区域，是核心编程区域，用于编写、修改、整理 Arduino 程序代码。"
         },
         {
-          "id": "b_auto_223",
+          "id": "b_auto_ard_9",
+          "type": "bullet-list",
+          "content": "<strong>底部消息输出区</strong>：实时展示代码编译结果、语法报错提示、程序上传状态，同时可配合串口功能输出设备数据，方便调试排错。"
+        },
+        {
+          "id": "b_auto_ard_10",
+          "type": "image",
+          "src": "images/homework/arduino/2f1893d9d9cc0c9991cf51425e46cdf1.png",
+          "caption": "Arduino IDE 2.3.5 主界面"
+        },
+        {
+          "id": "b_auto_ard_11",
+          "type": "heading",
+          "level": 3,
+          "content": "1\\.2 配置开发板与通信端口（必做步骤）"
+        },
+        {
+          "id": "b_auto_ard_12",
+          "type": "paragraph",
+          "content": "所有代码上传前，必须精准匹配开发板型号与通信端口，否则会出现上传失败、设备无法识别等问题，标准配置步骤如下："
+        },
+        {
+          "id": "b_auto_ard_13",
+          "type": "paragraph",
+          "content": "1. 点击顶部菜单栏 <strong>工具（Tools）</strong>；"
+        },
+        {
+          "id": "b_auto_ard_14",
+          "type": "paragraph",
+          "content": "2. 找到 <strong>开发板（Board）</strong> 选项，选择当前使用的设备型号（推荐 Arduino Uno R4 WiFi / Arduino Uno）；"
+        },
+        {
+          "id": "b_auto_ard_15",
+          "type": "paragraph",
+          "content": "3. 点击 <strong>端口（Port）</strong>，选择设备对应的通信端口：Windows 系统选择对应 COM 端口，Mac / Linux 系统选择 \\<code>/dev/ttyUSB*\\</code> 端口。"
+        },
+        {
+          "id": "b_auto_ard_16",
+          "type": "image",
+          "src": "images/homework/arduino/7b7a3163f6aea2b1ec83867432a1ed1e.png",
+          "caption": "开发板与通信端口配置"
+        },
+        {
+          "id": "b_auto_ard_17",
+          "type": "paragraph",
+          "content": "<strong>注意事项</strong>：若列表中无对应端口，优先检查 USB 数据线是否正常连接、设备是否通电；克隆版开发板需提前安装 CH340 串口驱动，否则电脑无法识别设备。"
+        },
+        {
+          "id": "b_auto_ard_18",
+          "type": "heading",
+          "level": 3,
+          "content": "1\\.3 Arduino 程序核心结构（setup 与 loop 函数）"
+        },
+        {
+          "id": "b_auto_ard_19",
+          "type": "paragraph",
+          "content": "所有 Arduino 程序脚本都有固定的标准结构，<strong>必须包含 setup() 和 loop() 两个核心函数</strong>，缺一不可，二者分工明确，构成程序完整运行逻辑。"
+        },
+        {
+          "id": "b_auto_ard_20",
+          "type": "image",
+          "src": "images/homework/arduino/430f968bcd3acd931e428c9441adb057.png",
+          "caption": "Arduino 默认程序核心结构"
+        },
+        {
+          "id": "b_auto_ard_21",
+          "type": "paragraph",
+          "content": "#### 1\\.3\\.1 setup() 初始化函数"
+        },
+        {
+          "id": "b_auto_ard_22",
+          "type": "paragraph",
+          "content": "<strong>运行规则</strong>：设备上电或程序复位后，<strong>仅执行一次</strong>。"
+        },
+        {
+          "id": "b_auto_ard_23",
+          "type": "paragraph",
+          "content": "<strong>核心作用</strong>：完成所有初始化配置，为后续程序循环运行做准备。"
+        },
+        {
+          "id": "b_auto_ard_24",
+          "type": "paragraph",
+          "content": "<strong>常用场景与示例</strong>："
+        },
+        {
+          "id": "b_auto_ard_25",
+          "type": "bullet-list",
+          "content": "配置引脚模式：<code>pinMode(LED_BUILTIN, OUTPUT);</code> // 设置板载LED引脚为输出模式"
+        },
+        {
+          "id": "b_auto_ard_26",
+          "type": "bullet-list",
+          "content": "初始化串口通信：<code>Serial.begin(9600);</code> // 开启串口，波特率9600，用于数据打印"
+        },
+        {
+          "id": "b_auto_ard_27",
+          "type": "bullet-list",
+          "content": "传感器、外设初始化、参数赋值等基础配置"
+        },
+        {
+          "id": "b_auto_ard_28",
+          "type": "paragraph",
+          "content": "#### 1\\.3\\.2 loop() 循环主函数"
+        },
+        {
+          "id": "b_auto_ard_29",
+          "type": "paragraph",
+          "content": "<strong>运行规则</strong>：等待 setup() 函数执行完毕后，<strong>无限循环重复执行</strong>，是程序的核心逻辑载体。"
+        },
+        {
+          "id": "b_auto_ard_30",
+          "type": "paragraph",
+          "content": "<strong>核心作用</strong>：实时执行数据采集、设备控制、逻辑判断、功能响应等核心业务。"
+        },
+        {
+          "id": "b_auto_ard_31",
+          "type": "paragraph",
+          "content": "<strong>常用场景与示例</strong>："
+        },
+        {
+          "id": "b_auto_ard_32",
+          "type": "bullet-list",
+          "content": "控制设备输出：<code>digitalWrite(LED_BUILTIN, HIGH);</code> // 点亮LED灯"
+        },
+        {
+          "id": "b_auto_ard_33",
+          "type": "bullet-list",
+          "content": "延时控制：<code>delay(1000);</code> // 延时1000毫秒（1秒）"
+        },
+        {
+          "id": "b_auto_ard_34",
+          "type": "bullet-list",
+          "content": "读取模拟传感器数据：<code>analogRead(A0);</code> // 读取A0模拟引脚传感器数值"
+        },
+        {
+          "id": "b_auto_ard_35",
+          "type": "bullet-list",
+          "content": "数据判断、设备联动、状态更新等动态逻辑"
+        },
+        {
+          "id": "b_auto_ard_36",
           "type": "divider"
         },
         {
-          "id": "b_auto_224",
+          "id": "b_auto_ard_37",
           "type": "heading",
           "level": 2,
-          "content": "四、实验成果总结"
+          "content": "2\\. 开发环境搭建"
         },
         {
-          "id": "b_auto_225",
-          "type": "bullet-list",
-          "content": "<strong>实验项目</strong>: --------- | <strong>核心知识点</strong>: ----------- | <strong>完成状态</strong>: ---------"
+          "id": "b_auto_ard_38",
+          "type": "heading",
+          "level": 3,
+          "content": "2\\.1 安装 Arduino IDE"
         },
         {
-          "id": "b_auto_226",
-          "type": "bullet-list",
-          "content": "<strong>实验项目</strong>: LED 闪烁 | <strong>核心知识点</strong>: `pinMode()`、`digitalWrite()`、`delay()` | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_ard_39",
+          "type": "paragraph",
+          "content": "1\\. 访问[arduino\\.cc](https://www.arduino.cc/) 下载对应系统版本的 IDE。"
         },
         {
-          "id": "b_auto_227",
-          "type": "bullet-list",
-          "content": "<strong>实验项目</strong>: 按键控制 LED | <strong>核心知识点</strong>: `digitalRead()`、`INPUT_PULLUP` | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_ard_40",
+          "type": "paragraph",
+          "content": "2\\. 安装完成后打开 IDE，完成上述开发板与端口配置即可开始编程。"
         },
         {
-          "id": "b_auto_228",
-          "type": "bullet-list",
-          "content": "<strong>实验项目</strong>: 电位器调光 | <strong>核心知识点</strong>: `analogRead()`、`analogWrite()`、`map()`、PWM | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_ard_41",
+          "type": "heading",
+          "level": 3,
+          "content": "2\\.2 驱动安装（如需）"
         },
         {
-          "id": "b_auto_229",
-          "type": "bullet-list",
-          "content": "<strong>实验项目</strong>: 串口通信 | <strong>核心知识点</strong>: `Serial.begin()`、`Serial.print()` | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_ard_42",
+          "type": "paragraph",
+          "content": "部分兼容板需要安装 CH340 串口驱动，无法识别设备时可自行下载安装。"
         },
         {
-          "id": "b_auto_230",
-          "type": "bullet-list",
-          "content": "<strong>实验项目</strong>: 智能小夜灯 | <strong>核心知识点</strong>: 光敏传感器、`constrain()`、综合应用 | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_ard_43",
+          "type": "heading",
+          "level": 3,
+          "content": "2\\.3 第一个程序：Blink 闪烁"
         },
         {
-          "id": "b_auto_231",
+          "id": "b_auto_ard_44",
+          "type": "paragraph",
+          "content": "打开 IDE，进入 <strong>文件 > 示例 > 01\\.Basics > Blink</strong>，点击上传按钮（→），板载 LED 即可开始闪烁。"
+        },
+        {
+          "id": "b_auto_ard_45",
           "type": "divider"
         },
         {
-          "id": "b_auto_232",
+          "id": "b_auto_ard_46",
           "type": "heading",
           "level": 2,
-          "content": "五、遇到的问题与解决"
+          "content": "3\\. Arduino 编程基础"
         },
         {
-          "id": "b_auto_233",
+          "id": "b_auto_ard_47",
+          "type": "heading",
+          "level": 3,
+          "content": "3\\.1 程序基础结构"
+        },
+        {
+          "id": "b_auto_ard_48",
+          "type": "paragraph",
+          "content": "每个 Arduino 程序都必须包含两个核心函数，构成固定运行逻辑："
+        },
+        {
+          "id": "b_auto_ard_49",
+          "type": "code",
+          "content": "void setup() {\n  // 初始化代码，仅上电/复位后运行一次\n}\n\nvoid loop() {\n  // 主循环代码，程序运行后无限循环执行\n}"
+        },
+        {
+          "id": "b_auto_ard_50",
+          "type": "heading",
+          "level": 3,
+          "content": "3\\.2 代码注释"
+        },
+        {
+          "id": "b_auto_ard_51",
           "type": "bullet-list",
-          "content": "<strong>编译报错</strong>：检查代码语法、分号、大括号是否缺失，确认所需函数库已正确安装"
+          "content": "单行注释：<code>// 这是单行注释</code>"
         },
         {
-          "id": "b_auto_234",
+          "id": "b_auto_ard_52",
           "type": "bullet-list",
-          "content": "<strong>代码上传失败</strong>：核对开发板型号与串口是否选择正确，上传前可按下板子复位键重试"
+          "content": "多行注释：<code>/* 这是多行注释 */</code>"
         },
         {
-          "id": "b_auto_235",
+          "id": "b_auto_ard_53",
+          "type": "heading",
+          "level": 3,
+          "content": "3\\.3 变量与数据类型"
+        },
+        {
+          "id": "b_auto_ard_54",
           "type": "bullet-list",
-          "content": "<strong>传感器信号干扰</strong>：按键检测增加延时消抖，模拟信号端并联电容滤波降噪"
+          "content": "<strong>数据类型</strong>: <code>int</code> | <strong>说明</strong>: 整型整数（范围 -32768 ~ 32767） | <strong>示例代码</strong>: <code>int val = 10;</code>"
         },
         {
-          "id": "b_auto_236",
+          "id": "b_auto_ard_55",
+          "type": "bullet-list",
+          "content": "<strong>数据类型</strong>: <code>float</code> | <strong>说明</strong>: 浮点小数 | <strong>示例代码</strong>: <code>float pi = 3.14;</code>"
+        },
+        {
+          "id": "b_auto_ard_56",
+          "type": "bullet-list",
+          "content": "<strong>数据类型</strong>: <code>char</code> | <strong>说明</strong>: 单个字符 | <strong>示例代码</strong>: <code>char c = 'A';</code>"
+        },
+        {
+          "id": "b_auto_ard_57",
+          "type": "bullet-list",
+          "content": "<strong>数据类型</strong>: <code>bool</code> | <strong>说明</strong>: 布尔值（真/假） | <strong>示例代码</strong>: <code>bool flag = true;</code>"
+        },
+        {
+          "id": "b_auto_ard_58",
+          "type": "bullet-list",
+          "content": "<strong>数据类型</strong>: <code>String</code> | <strong>说明</strong>: 字符串对象 | <strong>示例代码</strong>: <code>String str = \"Hello\";</code>"
+        },
+        {
+          "id": "b_auto_ard_59",
+          "type": "heading",
+          "level": 3,
+          "content": "3\\.4 常用常量"
+        },
+        {
+          "id": "b_auto_ard_60",
+          "type": "bullet-list",
+          "content": "引脚电平：<code>HIGH</code>（高电平） / <code>LOW</code>（低电平）"
+        },
+        {
+          "id": "b_auto_ard_61",
+          "type": "bullet-list",
+          "content": "引脚模式：<code>INPUT</code>（输入） / <code>OUTPUT</code>（输出）"
+        },
+        {
+          "id": "b_auto_ard_62",
+          "type": "bullet-list",
+          "content": "布尔常量：<code>true</code>（真） / <code>false</code>（假）"
+        },
+        {
+          "id": "b_auto_ard_63",
+          "type": "heading",
+          "level": 3,
+          "content": "3\\.5 程序控制结构"
+        },
+        {
+          "id": "b_auto_ard_64",
+          "type": "bullet-list",
+          "content": "条件判断：<code>if...else</code>、<code>switch...case</code>"
+        },
+        {
+          "id": "b_auto_ard_65",
+          "type": "bullet-list",
+          "content": "循环语句：<code>for</code>、<code>while</code>、<code>do...while</code>"
+        },
+        {
+          "id": "b_auto_ard_66",
           "type": "divider"
         },
         {
-          "id": "b_auto_237",
+          "id": "b_auto_ard_67",
           "type": "heading",
           "level": 2,
-          "content": "六、进阶展望"
+          "content": "4\\. 数字输入输出（数字 I/O）"
         },
         {
-          "id": "b_auto_238",
-          "type": "bullet-list",
-          "content": "拓展传感器实验：温湿度、超声波测距、振动传感器等外设开发"
+          "id": "b_auto_ard_68",
+          "type": "heading",
+          "level": 3,
+          "content": "4\\.1 配置引脚模式"
         },
         {
-          "id": "b_auto_239",
-          "type": "bullet-list",
-          "content": "学习外部中断 <code>attachInterrupt</code>，实现实时响应触发功能"
+          "id": "b_auto_ard_69",
+          "type": "code",
+          "content": "pinMode(引脚号, 模式); // 模式可选：INPUT、OUTPUT、INPUT_PULLUP"
         },
         {
-          "id": "b_auto_240",
-          "type": "bullet-list",
-          "content": "搭载无线模块：HC-05 蓝牙、ESP8266 WiFi，实现设备远程控制"
+          "id": "b_auto_ard_70",
+          "type": "heading",
+          "level": 3,
+          "content": "4\\.2 数字输出"
         },
         {
-          "id": "b_auto_241",
-          "type": "bullet-list",
-          "content": "掌握 I2C/SPI 总线，拓展 OLED 显示屏、RTC 时钟模块等外设"
+          "id": "b_auto_ard_71",
+          "type": "code",
+          "content": "digitalWrite(引脚号, 电平); // 电平可选：HIGH 或 LOW"
         },
         {
-          "id": "b_auto_242",
+          "id": "b_auto_ard_72",
+          "type": "heading",
+          "level": 3,
+          "content": "4\\.3 数字读取"
+        },
+        {
+          "id": "b_auto_ard_73",
+          "type": "code",
+          "content": "int state = digitalRead(引脚号); // 返回 HIGH 或 LOW"
+        },
+        {
+          "id": "b_auto_ard_74",
+          "type": "heading",
+          "level": 3,
+          "content": "4\\.4 实战案例：按键控制 LED 亮灭"
+        },
+        {
+          "id": "b_auto_ard_75",
+          "type": "code",
+          "content": "const int buttonPin = 2;\nconst int ledPin = 13;\nint buttonState = 0;\n\nvoid setup() {\n  pinMode(ledPin, OUTPUT);\n  pinMode(buttonPin, INPUT_PULLUP); // 开启内部上拉电阻\n}\n\nvoid loop() {\n  buttonState = digitalRead(buttonPin);\n  if (buttonState == LOW) {        // 按键按下为低电平\n    digitalWrite(ledPin, HIGH);\n  } else {\n    digitalWrite(ledPin, LOW);\n  }\n}"
+        },
+        {
+          "id": "b_auto_ard_76",
           "type": "divider"
         },
         {
-          "id": "b_auto_243",
+          "id": "b_auto_ard_77",
+          "type": "heading",
+          "level": 2,
+          "content": "5\\. 模拟输入输出（PWM与ADC）"
+        },
+        {
+          "id": "b_auto_ard_78",
+          "type": "heading",
+          "level": 3,
+          "content": "5\\.1 模拟输入（ADC模数转换）"
+        },
+        {
+          "id": "b_auto_ard_79",
+          "type": "paragraph",
+          "content": "通过 <code>analogRead(引脚号)</code> 读取 0-5V 模拟电压，返回 <strong>0-1023</strong> 的整数（10位精度），适用于光敏电阻、电位器、温度传感器等模拟器件。"
+        },
+        {
+          "id": "b_auto_ard_80",
+          "type": "heading",
+          "level": 3,
+          "content": "5\\.2 模拟输出（PWM脉宽调制）"
+        },
+        {
+          "id": "b_auto_ard_81",
+          "type": "paragraph",
+          "content": "Arduino Uno 特定引脚（3、5、6、9、10、11）支持 <code>analogWrite(引脚号, 数值)</code>，数值范围 <strong>0-255</strong>，可实现 LED 调光、电机调速等渐变控制效果。"
+        },
+        {
+          "id": "b_auto_ard_82",
+          "type": "heading",
+          "level": 3,
+          "content": "5\\.3 实战案例：电位器调节 LED 亮度"
+        },
+        {
+          "id": "b_auto_ard_83",
+          "type": "code",
+          "content": "const int potPin = A0;\nconst int ledPin = 9;\n\nvoid setup() {\n  pinMode(ledPin, OUTPUT);\n}\n\nvoid loop() {\n  int sensorValue = analogRead(potPin);      // 读取电位器数值 0-1023\n  int brightness = map(sensorValue, 0, 1023, 0, 255); // 映射为 0-255 亮度值\n  analogWrite(ledPin, brightness);\n  delay(10);\n}"
+        },
+        {
+          "id": "b_auto_ard_84",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_ard_85",
+          "type": "heading",
+          "level": 2,
+          "content": "6\\. 串口通信"
+        },
+        {
+          "id": "b_auto_ard_86",
+          "type": "heading",
+          "level": 3,
+          "content": "6\\.1 串口初始化"
+        },
+        {
+          "id": "b_auto_ard_87",
+          "type": "code",
+          "content": "Serial.begin(波特率); // 常用波特率：9600、115200"
+        },
+        {
+          "id": "b_auto_ard_88",
+          "type": "heading",
+          "level": 3,
+          "content": "6\\.2 数据发送"
+        },
+        {
+          "id": "b_auto_ard_89",
+          "type": "bullet-list",
+          "content": "<code>Serial.print()</code>：打印内容不换行"
+        },
+        {
+          "id": "b_auto_ard_90",
+          "type": "bullet-list",
+          "content": "<code>Serial.println()</code>：打印内容并自动换行"
+        },
+        {
+          "id": "b_auto_ard_91",
+          "type": "heading",
+          "level": 3,
+          "content": "6\\.3 数据接收"
+        },
+        {
+          "id": "b_auto_ard_92",
+          "type": "bullet-list",
+          "content": "<code>Serial.available()</code>：检测是否有接收数据"
+        },
+        {
+          "id": "b_auto_ard_93",
+          "type": "bullet-list",
+          "content": "<code>Serial.read()</code>：读取单个字节/字符数据"
+        },
+        {
+          "id": "b_auto_ard_94",
+          "type": "heading",
+          "level": 3,
+          "content": "6\\.4 实战案例：串口打印传感器数值"
+        },
+        {
+          "id": "b_auto_ard_95",
+          "type": "code",
+          "content": "void setup() {\n  Serial.begin(9600);\n}\nvoid loop() {\n  int val = analogRead(A0);\n  Serial.print(\"模拟值：\");\n  Serial.println(val);\n  delay(500);\n}"
+        },
+        {
+          "id": "b_auto_ard_96",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_ard_97",
+          "type": "heading",
+          "level": 2,
+          "content": "7\\. 常用函数与库"
+        },
+        {
+          "id": "b_auto_ard_98",
+          "type": "heading",
+          "level": 3,
+          "content": "7\\.1 时间函数"
+        },
+        {
+          "id": "b_auto_ard_99",
+          "type": "bullet-list",
+          "content": "<code>delay(ms)</code> 毫秒延时"
+        },
+        {
+          "id": "b_auto_ard_100",
+          "type": "bullet-list",
+          "content": "<code>delayMicroseconds(us)</code> 微秒延时"
+        },
+        {
+          "id": "b_auto_ard_101",
+          "type": "bullet-list",
+          "content": "<code>millis()</code> 获取系统运行毫秒数"
+        },
+        {
+          "id": "b_auto_ard_102",
+          "type": "bullet-list",
+          "content": "<code>micros()</code> 获取微秒数"
+        },
+        {
+          "id": "b_auto_ard_103",
+          "type": "heading",
+          "level": 3,
+          "content": "7\\.2 数学函数"
+        },
+        {
+          "id": "b_auto_ard_104",
+          "type": "bullet-list",
+          "content": "<code>min(x,y)</code>、<code>max(x,y)</code>、<code>abs(x)</code>"
+        },
+        {
+          "id": "b_auto_ard_105",
+          "type": "bullet-list",
+          "content": "<code>map(value, fromLow, fromHigh, toLow, toHigh)</code> 数值映射"
+        },
+        {
+          "id": "b_auto_ard_106",
+          "type": "bullet-list",
+          "content": "<code>constrain(x, low, high)</code> 数值限幅"
+        },
+        {
+          "id": "b_auto_ard_107",
+          "type": "heading",
+          "level": 3,
+          "content": "7\\.3 常用库"
+        },
+        {
+          "id": "b_auto_ard_108",
+          "type": "bullet-list",
+          "content": "<strong>Wire</strong> – I2C 通信"
+        },
+        {
+          "id": "b_auto_ard_109",
+          "type": "bullet-list",
+          "content": "<strong>SPI</strong> – SPI 通信"
+        },
+        {
+          "id": "b_auto_ard_110",
+          "type": "bullet-list",
+          "content": "<strong>Servo</strong> – 舵机控制"
+        },
+        {
+          "id": "b_auto_ard_111",
+          "type": "bullet-list",
+          "content": "<strong>LiquidCrystal</strong> – 1602 液晶驱动"
+        },
+        {
+          "id": "b_auto_ard_112",
+          "type": "bullet-list",
+          "content": "<strong>DHT</strong> – 温湿度传感器"
+        },
+        {
+          "id": "b_auto_ard_113",
+          "type": "bullet-list",
+          "content": "<strong>Adafruit\\_NeoPixel</strong> – WS2812 幻彩灯带驱动"
+        },
+        {
+          "id": "b_auto_ard_114",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_ard_115",
+          "type": "heading",
+          "level": 2,
+          "content": "8\\. 综合实训：吹气控制幻彩旋转灯带"
+        },
+        {
+          "id": "b_auto_ard_116",
+          "type": "heading",
+          "level": 3,
+          "content": "8\\.1 库文件安装说明（必须操作）"
+        },
+        {
+          "id": "b_auto_ard_117",
+          "type": "paragraph",
+          "content": "本项目使用 <strong>WS2812 全彩灯带</strong>，需要安装第三方库才能正常驱动，步骤如下："
+        },
+        {
+          "id": "b_auto_ard_118",
+          "type": "paragraph",
+          "content": "1. 打开 Arduino IDE"
+        },
+        {
+          "id": "b_auto_ard_119",
+          "type": "paragraph",
+          "content": "2. 点击菜单栏：<strong>项目 → 加载库 → 管理库</strong>"
+        },
+        {
+          "id": "b_auto_ard_120",
+          "type": "paragraph",
+          "content": "3. 在搜索框中输入：<strong>Adafruit NeoPixel</strong>"
+        },
+        {
+          "id": "b_auto_ard_121",
+          "type": "paragraph",
+          "content": "4. 找到 <strong>Adafruit NeoPixel by Adafruit</strong>，点击 <strong>安装</strong>"
+        },
+        {
+          "id": "b_auto_ard_122",
+          "type": "paragraph",
+          "content": "5. 安装完成后，重启 IDE 即可正常编译代码"
+        },
+        {
+          "id": "b_auto_ard_123",
+          "type": "paragraph",
+          "content": "如无法在线安装，可手动下载库文件并放入 <code>libraries</code> 文件夹。"
+        },
+        {
+          "id": "b_auto_ard_124",
+          "type": "heading",
+          "level": 3,
+          "content": "8\\.2 硬件连接"
+        },
+        {
+          "id": "b_auto_ard_125",
+          "type": "bullet-list",
+          "content": "声音传感器 / 吹气传感器 信号引脚 → A2"
+        },
+        {
+          "id": "b_auto_ard_126",
+          "type": "bullet-list",
+          "content": "WS2812 幻彩灯带 数据引脚 → 9"
+        },
+        {
+          "id": "b_auto_ard_127",
+          "type": "bullet-list",
+          "content": "灯带 5V、GND 与 Arduino 共地供电"
+        },
+        {
+          "id": "b_auto_ard_128",
+          "type": "image",
+          "src": "images/homework/arduino/7965b23c435a7df91d02afee1ed83266.jpg",
+          "caption": "吹气控制旋转灯带硬件连接原理图"
+        },
+        {
+          "id": "b_auto_ard_129",
+          "type": "heading",
+          "level": 3,
+          "content": "8\\.3 功能说明"
+        },
+        {
+          "id": "b_auto_ard_130",
+          "type": "bullet-list",
+          "content": "静止时显示静态彩虹光效"
+        },
+        {
+          "id": "b_auto_ard_131",
+          "type": "bullet-list",
+          "content": "对传感器吹气，灯带开始旋转，<strong>吹气越猛旋转越快</strong>"
+        },
+        {
+          "id": "b_auto_ard_132",
+          "type": "bullet-list",
+          "content": "停止吹气后，灯带自动缓慢减速直至静止"
+        },
+        {
+          "id": "b_auto_ard_133",
+          "type": "bullet-list",
+          "content": "串口实时输出传感器数值与当前转速"
+        },
+        {
+          "id": "b_auto_ard_134",
+          "type": "image",
+          "src": "images/homework/arduino/584d90a739b7b53d796389df32da80c7.jpg",
+          "caption": "吹气控制旋转灯带实物接线图"
+        },
+        {
+          "id": "b_auto_ard_135",
+          "type": "heading",
+          "level": 3,
+          "content": "8\\.4 完整参考代码"
+        },
+        {
+          "id": "b_auto_ard_136",
+          "type": "code",
+          "content": "#include <Adafruit_NeoPixel.h>\n\n#define LED_PIN 9\n#define LED_COUNT 12\n#define SOUND_PIN A2\n\nAdafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);\n\nint baseline = 275; // 基准值\nint currentSpeed = 0;\nint targetSpeed = 0;\nunsigned long lastBlowTime = 0;\nunsigned long lastRotationTime = 0;\nint currentPosition = 0;\nuint16_t hue = 0;\n\nvoid setup() {\n  Serial.begin(9600);\n  \n  // 初始化LED\n  strip.begin();\n  strip.setBrightness(100);\n  strip.clear();\n  strip.show();\n  \n  Serial.println(\"吹气控制彩虹旋转系统已启动\");\n  Serial.println(\"初始状态:彩虹灯静止\");\n  Serial.println(\"吹气:彩虹灯开始旋转，吹气力度越大旋转越快\");\n  Serial.println(\"停止吹气:彩虹灯逐渐减速至停止\");\n}\n\nvoid loop() {\n  int soundValue = analogRead(SOUND_PIN);\n  \n  Serial.print(\"传感器值: \");\n  Serial.print(soundValue);\n  Serial.print(\" | 当前速度: \");\n  Serial.println(currentSpeed);\n  \n  // 检测吹气\n  if (soundValue > baseline + 10) {\n    // 根据吹气力度计算目标速度\n    int blowIntensity = soundValue - baseline;\n    targetSpeed = map(blowIntensity, 10, 500, 1, 20);\n    \n    // 逐渐加速到目标速度\n    if (currentSpeed < targetSpeed) {\n      currentSpeed++;\n    } else if (currentSpeed > targetSpeed) {\n      currentSpeed--;\n    }\n    \n    lastBlowTime = millis();\n  } else {\n    // 没有吹气，逐渐减速\n    if (millis() - lastBlowTime > 500 && currentSpeed > 0) {\n      currentSpeed--;\n    }\n  }\n  \n  // 更新LED显示\n  updateLEDs();\n  \n  delay(50);\n}\n\nvoid updateLEDs() {\n  unsigned long currentTime = millis();\n  \n  // 如果有速度且到了该旋转的时间\n  if (currentSpeed > 0 && currentTime - lastRotationTime >= (1000 / currentSpeed)) {\n    lastRotationTime = currentTime;\n    \n    // 清除所有LED\n    strip.clear();\n    \n    // 创建旋转彩虹效果\n    for (int i = 0; i < LED_COUNT; i++) {\n      int ledIndex = (i + currentPosition) % LED_COUNT;\n      uint16_t pixelHue = (hue + (i * 65535L / LED_COUNT)) % 65535;\n      strip.setPixelColor(ledIndex, strip.gamma32(strip.ColorHSV(pixelHue, 255, 255)));\n    }\n    \n    strip.show();\n    \n    // 更新位置\n    currentPosition = (currentPosition + 1) % LED_COUNT;\n    \n    // 缓慢改变基础色调\n    hue = (hue + 5) % 65535;\n  } else if (currentSpeed == 0) {\n    // 停止状态显示静态彩虹\n    showStaticRainbow();\n  }\n}\n\n// 显示静态彩虹\nvoid showStaticRainbow() {\n  for (int i = 0; i < LED_COUNT; i++) {\n    uint16_t pixelHue = (hue + (i * 65535L / LED_COUNT)) % 65535;\n    strip.setPixelColor(i, strip.gamma32(strip.ColorHSV(pixelHue, 255, 255)));\n  }\n  strip.show();\n}"
+        },
+        {
+          "id": "b_auto_ard_137",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_ard_138",
+          "type": "heading",
+          "level": 2,
+          "content": "9\\. 常见问题与调试技巧"
+        },
+        {
+          "id": "b_auto_ard_139",
+          "type": "bullet-list",
+          "content": "<strong>编译报错</strong>：检查语法、分号、大括号配对，确认库已安装。"
+        },
+        {
+          "id": "b_auto_ard_140",
+          "type": "bullet-list",
+          "content": "<strong>上传失败</strong>：检查板型与端口是否正确，可按复位键重试。"
+        },
+        {
+          "id": "b_auto_ard_141",
+          "type": "bullet-list",
+          "content": "<strong>灯带不亮</strong>：检查供电、引脚定义、灯带顺序（GRB/RGB）。"
+        },
+        {
+          "id": "b_auto_ard_142",
+          "type": "bullet-list",
+          "content": "<strong>传感器误触发</strong>：调整 <code>baseline</code> 基准值，增加阈值判断。"
+        },
+        {
+          "id": "b_auto_ard_143",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_ard_144",
+          "type": "heading",
+          "level": 2,
+          "content": "10\\. 进阶学习建议"
+        },
+        {
+          "id": "b_auto_ard_145",
+          "type": "bullet-list",
+          "content": "尝试接入蓝牙或 WiFi 模块，实现手机控制灯带。"
+        },
+        {
+          "id": "b_auto_ard_146",
+          "type": "bullet-list",
+          "content": "加入音乐律动算法，实现音乐可视化效果。"
+        },
+        {
+          "id": "b_auto_ard_147",
+          "type": "bullet-list",
+          "content": "结合人体感应、光敏模块实现智能氛围灯。"
+        },
+        {
+          "id": "b_auto_ard_148",
+          "type": "bullet-list",
+          "content": "学习使用 <code>millis()</code> 非阻塞编程，实现多效果切换。"
+        },
+        {
+          "id": "b_auto_ard_149",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_ard_150",
+          "type": "heading",
+          "level": 2,
+          "content": "总结"
+        },
+        {
+          "id": "b_auto_ard_151",
+          "type": "paragraph",
+          "content": "Arduino 的魅力在于<strong>在实践中学习</strong>。熟练掌握 IDE 操作、程序基础结构、引脚控制与外设库使用，是开发智能交互项目的核心基础。从基础灯光实验到创意传感交互项目，循序渐进即可快速掌握硬件编程能力，打造专属创客作品。"
+        },
+        {
+          "id": "b_auto_ard_152",
           "type": "quote",
-          "content": "<strong>项目名称</strong>：Arduino 传感器编程"
-        },
-        {
-          "id": "b_auto_244",
-          "type": "quote",
-          "content": "<strong>更新时间</strong>：2026年6月"
-        },
-        {
-          "id": "b_auto_245",
-          "type": "quote",
-          "content": "<strong>关键词</strong>：<code>Arduino</code> <code>传感器</code> <code>PWM</code> <code>串口通信</code> <code>智能小夜灯</code> <code>嵌入式开发</code>"
+          "content": "（注：部分内容可能由 AI 生成）"
         }
       ]
     },
