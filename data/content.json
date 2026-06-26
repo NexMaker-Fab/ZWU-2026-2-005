@@ -1291,509 +1291,564 @@
       "parentId": "root-homework",
       "blocks": [
         {
-          "id": "b_auto_246",
+          "id": "b_auto_iot_1",
           "type": "heading",
           "level": 1,
-          "content": "IoT 工业 4.0 — 作业汇报"
+          "content": "IoT工业4.0四层架构完整分析及对标案例"
         },
         {
-          "id": "b_auto_247",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_248",
+          "id": "b_auto_iot_2",
           "type": "heading",
           "level": 2,
-          "content": "一、项目简介"
+          "content": "一、IoT 工业 4.0 四层架构整体解析（对标原文网页结构）"
         },
         {
-          "id": "b_auto_249",
-          "type": "paragraph",
-          "content": "本作业围绕 <strong>工业物联网（Industrial IoT）</strong> 主题，系统研究了工业 4.0 核心框架 —— <strong>IoT 四层架构</strong>（感知层、网络层、平台层、应用层），并结合 <strong>一汽红旗智能动力总成工厂</strong> 真实案例进行了完整的对标分析。"
-        },
-        {
-          "id": "b_auto_250",
-          "type": "paragraph",
-          "content": "<strong>研究方向</strong>：工业 IoT 四层架构"
-        },
-        {
-          "id": "b_auto_251",
-          "type": "paragraph",
-          "content": "<strong>对标案例</strong>：一汽红旗 × 华为 智能动力总成工厂"
-        },
-        {
-          "id": "b_auto_252",
-          "type": "paragraph",
-          "content": "<strong>分析维度</strong>：客观资料 + 个人观点 + 行业痛点 + 案例对标"
-        },
-        {
-          "id": "b_auto_253",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_254",
-          "type": "heading",
-          "level": 2,
-          "content": "二、IoT 工业 4.0 四层架构整体解析"
-        },
-        {
-          "id": "b_auto_255",
-          "type": "paragraph",
-          "content": "物联网（IoT）是工业 4.0 智能制造的底层底座，依靠感知层、网络层、平台层、应用层四层分层架构打通物理设备与数字系统，完成 <strong>数据采集 → 传输 → 处理 → 业务落地</strong> 全链路闭环，实现生产全流程数字化、自动化、预测化管控。"
-        },
-        {
-          "id": "b_auto_256",
-          "type": "quote",
-          "content": "四层架构不是简单的硬件堆叠，而是一套完整的数据流转体系：感知层\"看见世界\"、网络层\"传递信息\"、平台层\"思考计算\"、应用层\"落地执行\"。"
-        },
-        {
-          "id": "b_auto_257",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_258",
-          "type": "heading",
-          "level": 2,
-          "content": "三、四层架构分层拆解"
-        },
-        {
-          "id": "b_auto_259",
+          "id": "b_auto_iot_3",
           "type": "heading",
           "level": 3,
-          "content": "3.1 感知层（数据源头）"
+          "content": "引言"
         },
         {
-          "id": "b_auto_260",
+          "id": "b_auto_iot_4",
+          "type": "paragraph",
+          "content": "物联网（IoT）是工业 4.0 智能制造的底层底座，依靠感知层、网络层、平台层、应用层四层分层架构打通物理设备与数字系统，完成数据采集 - 传输 - 处理 - 业务落地全链路闭环，实现生产全流程数字化、自动化、预测化管控，解决传统工厂设备孤立、数据无法复用、故障被动抢修、产能无法优化等痛点。四层架构层层依赖、缺一不可，形成完整数据反馈闭环。"
+        },
+        {
+          "id": "b_auto_iot_5",
+          "type": "paragraph",
+          "content": "<strong>个人观点</strong>：四层架构不是简单硬件堆叠，而是一套完整数据流转体系。感知层负责 “看见世界”，网络层负责 “传递信息”，平台层负责 “思考计算”，应用层负责 “落地执行”，四层协同才能把设备原始数据转化为企业可落地的生产价值，缺少任意一层都会沦为单纯的数据采集工具，无法实现工业 4.0 智能化升级。"
+        },
+        {
+          "id": "b_auto_iot_6",
+          "type": "image",
+          "src": "images/homework/iot/7e670e9234a179d2642151a43f0c2056.jpg",
+          "caption": "AIoT系统四层架构"
+        },
+        {
+          "id": "b_auto_iot_7",
+          "type": "paragraph",
+          "content": "*图1-1 AIoT系统四层架构图*"
+        },
+        {
+          "id": "b_auto_iot_8",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_iot_9",
+          "type": "heading",
+          "level": 2,
+          "content": "二、四层架构分层拆解（客观资料 + 个人观点，和原文格式一致）"
+        },
+        {
+          "id": "b_auto_iot_10",
+          "type": "heading",
+          "level": 3,
+          "content": "1. 感知层（IoT 系统感官，数据源头）"
+        },
+        {
+          "id": "b_auto_iot_11",
+          "type": "paragraph",
+          "content": "感知层是最底层现场采集单元，部署在车间产线、设备、仓储环境，负责采集物理世界实时数据，核心硬件分为三类："
+        },
+        {
+          "id": "b_auto_iot_12",
           "type": "bullet-list",
           "content": "<strong>类别</strong>: ------ | <strong>核心设备</strong>: --------- | <strong>采集内容</strong>: ---------"
         },
         {
-          "id": "b_auto_261",
+          "id": "b_auto_iot_13",
           "type": "bullet-list",
-          "content": "<strong>类别</strong>: 传感采集 | <strong>核心设备</strong>: 温度、振动、压力、电流传感器、RFID 标签、工业视觉摄像头 | <strong>采集内容</strong>: 设备转速、电机温度、车间温湿度"
+          "content": "<strong>类别</strong>: 传感采集 | <strong>核心设备</strong>: 温度、振动、压力、电流、粉尘、液位传感器、RFID 物料标签、工业视觉摄像头 | <strong>采集内容</strong>: 设备转速、电机温度、车间温湿度"
         },
         {
-          "id": "b_auto_262",
+          "id": "b_auto_iot_14",
           "type": "bullet-list",
           "content": "<strong>类别</strong>: 控制单元 | <strong>核心设备</strong>: PLC 可编程控制器、MCU 微控制器、边缘网关 | <strong>采集内容</strong>: 物料库存、能耗数据、工件质检"
         },
         {
-          "id": "b_auto_263",
+          "id": "b_auto_iot_15",
           "type": "bullet-list",
           "content": "<strong>类别</strong>: 边缘预处理 | <strong>核心设备</strong>: 本地过滤无效数据、统一协议转换 | <strong>采集内容</strong>: 降低云端传输压力"
         },
         {
-          "id": "b_auto_264",
-          "type": "paragraph",
-          "content": "<strong>个人观点</strong>：感知层最大难点是多品牌老旧设备兼容问题，很多传统机床无标准数据接口，需要加装边缘采集模块。传感器定期校准、统一采集标准是保障上层分析准确的基础。"
+          "id": "b_auto_iot_16",
+          "type": "image",
+          "src": "images/homework/iot/微信图片_2026-06-26_004145_442.jpg",
+          "caption": "常见工业传感器分类"
         },
         {
-          "id": "b_auto_265",
+          "id": "b_auto_iot_17",
+          "type": "paragraph",
+          "content": "*图2-1 常见工业传感器分类*"
+        },
+        {
+          "id": "b_auto_iot_18",
+          "type": "image",
+          "src": "images/homework/iot/微信图片_2026-06-26_004148_656.jpg",
+          "caption": "DHT11温湿度传感器"
+        },
+        {
+          "id": "b_auto_iot_19",
+          "type": "paragraph",
+          "content": "*图2-2 DHT11温湿度传感器*"
+        },
+        {
+          "id": "b_auto_iot_20",
+          "type": "image",
+          "src": "images/homework/iot/微信图片_2026-06-26_004152_997.jpg",
+          "caption": "工业视觉摄像头类型"
+        },
+        {
+          "id": "b_auto_iot_21",
+          "type": "paragraph",
+          "content": "*图2-3 工业视觉摄像头类型*"
+        },
+        {
+          "id": "b_auto_iot_22",
+          "type": "image",
+          "src": "images/homework/iot/微信图片_2026-06-26_004130_002.jpg",
+          "caption": "AIoT智能边缘网关"
+        },
+        {
+          "id": "b_auto_iot_23",
+          "type": "paragraph",
+          "content": "*图2-4 AIoT智能边缘网关*"
+        },
+        {
+          "id": "b_auto_iot_24",
+          "type": "paragraph",
+          "content": "<strong>个人观点</strong>：感知层最大难点是多品牌老旧设备兼容问题，很多传统机床无标准数据接口，需要加装边缘采集模块。同时传感器漂移、车间电磁干扰会造成数据失真，传感器定期校准、统一采集标准是保障上层分析准确的基础，很容易被企业忽视。"
+        },
+        {
+          "id": "b_auto_iot_25",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_iot_26",
           "type": "heading",
           "level": 3,
-          "content": "3.2 网络层（数据传输通道）"
+          "content": "2. 网络层（IoT 神经系统，数据传输通道）"
         },
         {
-          "id": "b_auto_266",
+          "id": "b_auto_iot_27",
+          "type": "paragraph",
+          "content": "承接感知层原始数据，提供多制式融合通信，适配工业严苛场景，分为三类通信方案："
+        },
+        {
+          "id": "b_auto_iot_28",
           "type": "bullet-list",
           "content": "<strong>通信方式</strong>: --------- | <strong>技术方案</strong>: --------- | <strong>适用场景</strong>: ---------"
         },
         {
-          "id": "b_auto_267",
+          "id": "b_auto_iot_29",
           "type": "bullet-list",
           "content": "<strong>通信方式</strong>: 有线工业通信 | <strong>技术方案</strong>: 工业以太网、RS485、CAN 总线 | <strong>适用场景</strong>: 产线固定设备，低延迟高稳定"
         },
         {
-          "id": "b_auto_268",
+          "id": "b_auto_iot_30",
           "type": "bullet-list",
           "content": "<strong>通信方式</strong>: 短距离无线 | <strong>技术方案</strong>: Wi-Fi 6、蓝牙、ZigBee | <strong>适用场景</strong>: 车间巡检终端、手持 PDA"
         },
         {
-          "id": "b_auto_269",
+          "id": "b_auto_iot_31",
           "type": "bullet-list",
           "content": "<strong>通信方式</strong>: 广域低功耗 | <strong>技术方案</strong>: 5G 工业专网、NB-IoT、LoRa | <strong>适用场景</strong>: 远距离仓储、户外厂区"
         },
         {
-          "id": "b_auto_270",
+          "id": "b_auto_iot_32",
           "type": "bullet-list",
           "content": "<strong>通信方式</strong>: 传输协议 | <strong>技术方案</strong>: MQTT、OPC UA、Modbus、CoAP | <strong>适用场景</strong>: 统一不同设备数据格式"
         },
         {
-          "id": "b_auto_271",
-          "type": "paragraph",
-          "content": "<strong>个人观点</strong>：工业场景不能单一选用一种网络，必须多网融合。高精度机床质检需要 5G 低时延传输，厂区环境温湿度监测适合 LoRa 低功耗方案，网络选型要平衡带宽、延迟、功耗、部署成本。"
+          "id": "b_auto_iot_33",
+          "type": "image",
+          "src": "images/homework/iot/微信图片_2026-06-26_004205_383.jpg",
+          "caption": "MQTT协议发布/订阅工作原理"
         },
         {
-          "id": "b_auto_272",
+          "id": "b_auto_iot_34",
+          "type": "paragraph",
+          "content": "*图3-1 MQTT协议发布/订阅工作原理*"
+        },
+        {
+          "id": "b_auto_iot_35",
+          "type": "paragraph",
+          "content": "<strong>个人观点</strong>：工业场景不能单一选用一种网络，必须多网融合。高精度机床质检需要 5G 低时延传输，厂区环境温湿度监测适合 LoRa 低功耗方案，网络选型要平衡带宽、延迟、功耗、部署成本，单一网络会出现传输卡顿或能耗过高问题。"
+        },
+        {
+          "id": "b_auto_iot_36",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_iot_37",
           "type": "heading",
           "level": 3,
-          "content": "3.3 平台层（数据存储与运算中心）"
+          "content": "3. 平台层（IoT 大脑，数据存储与运算中心）"
         },
         {
-          "id": "b_auto_273",
+          "id": "b_auto_iot_38",
           "type": "paragraph",
           "content": "部署在云端/本地私有云，是四层架构核心枢纽，五大核心能力："
         },
         {
-          "id": "b_auto_274",
+          "id": "b_auto_iot_39",
           "type": "paragraph",
-          "content": "1. <strong>设备统一管理</strong>：设备注册、远程固件升级、在线状态监控"
+          "content": "1. <strong>设备统一管理</strong>：设备注册、远程固件升级、在线状态监控、异常设备下线管控；"
         },
         {
-          "id": "b_auto_275",
+          "id": "b_auto_iot_40",
           "type": "paragraph",
-          "content": "2. <strong>数据存储</strong>：时序数据库（实时数据流）+ 关系数据库（订单、人员信息）"
+          "content": "2. <strong>数据存储</strong>：时序数据库（存储设备实时数据流）、关系数据库（存储订单、人员信息）；"
         },
         {
-          "id": "b_auto_276",
+          "id": "b_auto_iot_41",
           "type": "paragraph",
-          "content": "3. <strong>数据处理</strong>：实时流计算、AI 故障预测、数据清洗去重"
+          "content": "3. <strong>数据处理</strong>：实时流计算、批量历史数据分析、AI 故障预测模型、数据清洗去重；"
         },
         {
-          "id": "b_auto_277",
+          "id": "b_auto_iot_42",
           "type": "paragraph",
-          "content": "4. <strong>标准化 API</strong>：对外统一接口，对接 MES、ERP 等业务系统"
+          "content": "4. <strong>标准化 API</strong>：对外提供统一接口，对接 MES、ERP、生产看板等业务系统；"
         },
         {
-          "id": "b_auto_278",
+          "id": "b_auto_iot_43",
           "type": "paragraph",
-          "content": "5. <strong>安全管控</strong>：设备身份加密、数据传输加密、分级访问权限"
+          "content": "5. <strong>安全管控</strong>：设备身份加密、数据传输加密、分级访问权限、攻击拦截。"
         },
         {
-          "id": "b_auto_279",
+          "id": "b_auto_iot_44",
           "type": "paragraph",
-          "content": "<strong>主流工业 IoT 平台</strong>：华为云 IoT、阿里云工业互联网、ThingsBoard、西门子 MindSphere"
+          "content": "<strong>主流工业 IoT 平台</strong>：华为云 IoT、阿里云工业互联网、ThingsBoard、西门子 MindSphere。"
         },
         {
-          "id": "b_auto_280",
+          "id": "b_auto_iot_45",
+          "type": "image",
+          "src": "images/homework/iot/微信图片_2026-06-26_004231_298.jpg",
+          "caption": "云端算力基础设施与AIoT大脑"
+        },
+        {
+          "id": "b_auto_iot_46",
+          "type": "paragraph",
+          "content": "*图3-2 云端算力基础设施与AIoT大脑*"
+        },
+        {
+          "id": "b_auto_iot_47",
+          "type": "paragraph",
+          "content": "<strong>个人观点</strong>：很多中小企业选型平台只对比价格，忽略平台工业协议兼容性。优质工业平台需要兼容上百种 PLC、传感器协议，自带故障预测算法模板，大幅降低企业二次开发成本；纯通用云平台缺少工业场景适配，后期集成成本会大幅上升。"
+        },
+        {
+          "id": "b_auto_iot_48",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_iot_49",
           "type": "heading",
           "level": 3,
-          "content": "3.4 应用层（面向用户的业务系统）"
+          "content": "4. 应用层（IoT 价值出口，面向用户业务系统）"
         },
         {
-          "id": "b_auto_281",
+          "id": "b_auto_iot_50",
+          "type": "paragraph",
+          "content": "基于平台层分析结果，面向工厂管理人员、运维人员提供可视化、可操作业务功能，工业场景核心应用："
+        },
+        {
+          "id": "b_auto_iot_51",
           "type": "bullet-list",
           "content": "<strong>生产监控</strong>：实时产线看板、产能统计、订单进度追踪"
         },
         {
-          "id": "b_auto_282",
+          "id": "b_auto_iot_52",
           "type": "bullet-list",
           "content": "<strong>预测性维护</strong>：电机故障提前预警、设备寿命预测、自动生成维保工单"
         },
         {
-          "id": "b_auto_283",
+          "id": "b_auto_iot_53",
           "type": "bullet-list",
           "content": "<strong>质量管控</strong>：AI 视觉质检、不良品溯源、工艺参数优化"
         },
         {
-          "id": "b_auto_284",
+          "id": "b_auto_iot_54",
           "type": "bullet-list",
           "content": "<strong>能耗管理</strong>：分设备、分车间用电统计、峰谷节电优化"
         },
         {
-          "id": "b_auto_285",
+          "id": "b_auto_iot_55",
           "type": "bullet-list",
           "content": "<strong>仓储物流</strong>：物料 RFID 定位、库存自动预警、智能分拣调度"
         },
         {
-          "id": "b_auto_286",
+          "id": "b_auto_iot_56",
+          "type": "image",
+          "src": "images/homework/iot/微信图片_2026-06-26_004212_353.jpg",
+          "caption": "实时生产监控看板"
+        },
+        {
+          "id": "b_auto_iot_57",
+          "type": "paragraph",
+          "content": "*图5-1 实时生产监控看板*"
+        },
+        {
+          "id": "b_auto_iot_58",
+          "type": "paragraph",
+          "content": "<strong>个人观点</strong>：应用层设计核心是贴合工厂真实业务痛点，而非堆砌复杂 AI 算法。例如小型加工厂最需要简单的设备故障提醒，而非复杂数字孪生大屏；轻量化、低成本、易操作的应用落地难度更低，ROI 回报周期更短。"
+        },
+        {
+          "id": "b_auto_iot_59",
           "type": "divider"
         },
         {
-          "id": "b_auto_287",
+          "id": "b_auto_iot_60",
           "type": "heading",
           "level": 2,
-          "content": "四、IoT 闭环反馈机制"
+          "content": "三、IoT 闭环反馈机制（核心逻辑）"
         },
         {
-          "id": "b_auto_288",
+          "id": "b_auto_iot_61",
           "type": "paragraph",
-          "content": "四层架构形成 <strong>采集 → 传输 → 分析 → 决策 → 执行 → 优化</strong> 完整闭环："
+          "content": "四层架构形成采集 - 传输 - 分析 - 决策 - 执行 - 优化完整闭环，是工业 IoT 区别于传统监控系统的关键："
         },
         {
-          "id": "b_auto_289",
+          "id": "b_auto_iot_62",
           "type": "paragraph",
-          "content": "1. 感知层采集设备、环境原始数据"
+          "content": "1. 感知层采集设备、环境原始数据；"
         },
         {
-          "id": "b_auto_290",
+          "id": "b_auto_iot_63",
           "type": "paragraph",
-          "content": "2. 网络层加密传输至 IoT 云平台"
+          "content": "2. 网络层加密传输至 IoT 云平台；"
         },
         {
-          "id": "b_auto_291",
+          "id": "b_auto_iot_64",
           "type": "paragraph",
-          "content": "3. 平台层清洗、建模、分析，识别异常、生成优化方案"
+          "content": "3. 平台层清洗、建模、分析，识别异常、生成优化方案；"
         },
         {
-          "id": "b_auto_292",
+          "id": "b_auto_iot_65",
           "type": "paragraph",
-          "content": "4. 应用层将方案展示给管理员，下发控制指令"
+          "content": "4. 应用层将方案展示给管理员，下发控制指令；"
         },
         {
-          "id": "b_auto_293",
+          "id": "b_auto_iot_66",
           "type": "paragraph",
-          "content": "5. 指令经网络层传回感知层 PLC/控制器，自动调整设备参数"
+          "content": "5. 指令经网络层传回感知层 PLC / 控制器，自动调整设备参数；"
         },
         {
-          "id": "b_auto_294",
+          "id": "b_auto_iot_67",
           "type": "paragraph",
-          "content": "6. 持续采集调整后的数据，迭代优化 AI 模型"
+          "content": "6. 持续采集调整后的数据，迭代优化 AI 模型，持续提升生产效率。"
         },
         {
-          "id": "b_auto_295",
-          "type": "quote",
-          "content": "闭环的核心是自动反向控制。传统监控只能看数据，无法自动干预设备；完整 IoT 架构可实现无人自主调控。"
+          "id": "b_auto_iot_68",
+          "type": "paragraph",
+          "content": "<strong>个人观点</strong>：闭环的核心是自动反向控制。传统监控只能看数据，无法自动干预设备；完整 IoT 架构可实现无人自主调控，比如电机温度超标自动降载、车间湿度过高自动开启除湿设备，真正实现无人化智能管控。"
         },
         {
-          "id": "b_auto_296",
+          "id": "b_auto_iot_69",
           "type": "divider"
         },
         {
-          "id": "b_auto_297",
+          "id": "b_auto_iot_70",
           "type": "heading",
           "level": 2,
-          "content": "五、行业现存痛点"
+          "content": "四、当前 IoT 行业现存痛点（原创行业分析）"
         },
         {
-          "id": "b_auto_298",
+          "id": "b_auto_iot_71",
           "type": "bullet-list",
           "content": "<strong>痛点</strong>: ------ | <strong>描述</strong>: ------"
         },
         {
-          "id": "b_auto_299",
+          "id": "b_auto_iot_72",
           "type": "bullet-list",
           "content": "<strong>痛点</strong>: 数据孤岛 | <strong>描述</strong>: 机床、传感器、仓储设备分属不同厂商，协议不统一，数据无法互通"
         },
         {
-          "id": "b_auto_300",
+          "id": "b_auto_iot_73",
           "type": "bullet-list",
-          "content": "<strong>痛点</strong>: 安全风险 | <strong>描述</strong>: 海量终端设备防护薄弱，易被入侵造成生产线停机"
+          "content": "<strong>痛点</strong>: 安全风险 | <strong>描述</strong>: 海量终端设备防护薄弱，易被入侵，造成生产线停机、生产数据泄露"
         },
         {
-          "id": "b_auto_301",
+          "id": "b_auto_iot_74",
           "type": "bullet-list",
           "content": "<strong>痛点</strong>: 标准缺失 | <strong>描述</strong>: 硬件、通信、数据格式无强制规范，系统集成难度高"
         },
         {
-          "id": "b_auto_302",
+          "id": "b_auto_iot_75",
           "type": "bullet-list",
           "content": "<strong>痛点</strong>: 人才缺口 | <strong>描述</strong>: IoT 需要硬件、网络、大数据、工业制造多领域复合知识"
         },
         {
-          "id": "b_auto_303",
+          "id": "b_auto_iot_76",
           "type": "bullet-list",
           "content": "<strong>痛点</strong>: 回报周期长 | <strong>描述</strong>: 前期硬件、平台改造投入大，中小工厂顾虑投入产出比"
         },
         {
-          "id": "b_auto_304",
+          "id": "b_auto_iot_77",
           "type": "divider"
         },
         {
-          "id": "b_auto_305",
+          "id": "b_auto_iot_78",
           "type": "heading",
           "level": 2,
-          "content": "六、对标案例：一汽红旗智能动力总成工厂"
+          "content": "五、全新对标案例：一汽红旗智能动力总成工厂"
         },
         {
-          "id": "b_auto_306",
+          "id": "b_auto_iot_79",
           "type": "heading",
           "level": 3,
-          "content": "案例概述"
+          "content": "案例客观资料"
         },
         {
-          "id": "b_auto_307",
+          "id": "b_auto_iot_80",
           "type": "paragraph",
-          "content": "一汽红旗联合华为搭建全套工业 4.0 IoT 四层架构，落地发动机车间数字化改造项目。"
+          "content": "一汽红旗联合华为搭建全套工业 4.0 IoT 四层架构，落地发动机车间数字化改造项目："
         },
         {
-          "id": "b_auto_308",
-          "type": "heading",
-          "level": 3,
-          "content": "感知层部署"
+          "id": "b_auto_iot_81",
+          "type": "paragraph",
+          "content": "<strong>感知层部署</strong>：车间部署 3000+ 振动、温度、电流传感器，全部机床加装 RFID 物料标签、AI 视觉质检摄像头，配套工业 PLC 与边缘网关，实时采集发动机加工转速、刀具磨损、车间温湿度、工件尺寸数据，边缘网关本地过滤 60% 无效重复数据，减少云端压力。"
         },
         {
-          "id": "b_auto_309",
-          "type": "bullet-list",
-          "content": "部署 <strong>3000+</strong> 振动、温度、电流传感器"
+          "id": "b_auto_iot_82",
+          "type": "paragraph",
+          "content": "<strong>网络层搭建</strong>：采用 5G 工业专网 + 工业以太网双主线，产线高精度质检设备走 5G 低时延通道，仓储环境传感器采用 LoRa 无线传输，统一 MQTT 工业协议完成数据标准化上传，网络延迟控制在 20ms 内。"
         },
         {
-          "id": "b_auto_310",
-          "type": "bullet-list",
-          "content": "全部机床加装 RFID 物料标签、AI 视觉质检摄像头"
+          "id": "b_auto_iot_83",
+          "type": "paragraph",
+          "content": "<strong>平台层选型</strong>：基于华为云 IoT 工业平台搭建本地数据中台，统一接入全部异构设备；搭建时序数据库存储全年设备运行数据，内置 AI 故障预测模型；统一管理三千台终端设备，提供标准化 API 对接工厂 MES 生产系统。"
         },
         {
-          "id": "b_auto_311",
-          "type": "bullet-list",
-          "content": "边缘网关本地过滤 60% 无效重复数据"
+          "id": "b_auto_iot_84",
+          "type": "paragraph",
+          "content": "<strong>应用层落地四大业务系统</strong>："
         },
         {
-          "id": "b_auto_312",
-          "type": "heading",
-          "level": 3,
-          "content": "网络层搭建"
-        },
-        {
-          "id": "b_auto_313",
-          "type": "bullet-list",
-          "content": "5G 工业专网 + 工业以太网双主线"
-        },
-        {
-          "id": "b_auto_314",
-          "type": "bullet-list",
-          "content": "高精度质检走 5G 低时延通道，仓储采用 LoRa"
-        },
-        {
-          "id": "b_auto_315",
-          "type": "bullet-list",
-          "content": "统一 MQTT 协议，网络延迟控制在 <strong>20ms</strong> 内"
-        },
-        {
-          "id": "b_auto_316",
-          "type": "heading",
-          "level": 3,
-          "content": "平台层选型"
-        },
-        {
-          "id": "b_auto_317",
-          "type": "bullet-list",
-          "content": "华为云 IoT 工业平台搭建本地数据中台"
-        },
-        {
-          "id": "b_auto_318",
-          "type": "bullet-list",
-          "content": "时序数据库存储全年设备运行数据"
-        },
-        {
-          "id": "b_auto_319",
-          "type": "bullet-list",
-          "content": "内置 AI 故障预测模型，统一管理三千台终端设备"
-        },
-        {
-          "id": "b_auto_320",
-          "type": "heading",
-          "level": 3,
-          "content": "应用层四大业务系统"
-        },
-        {
-          "id": "b_auto_321",
+          "id": "b_auto_iot_85",
           "type": "bullet-list",
           "content": "<strong>业务系统</strong>: --------- | <strong>核心功能</strong>: --------- | <strong>成效</strong>: ------"
         },
         {
-          "id": "b_auto_322",
+          "id": "b_auto_iot_86",
           "type": "bullet-list",
           "content": "<strong>业务系统</strong>: 预测性维护 | <strong>核心功能</strong>: 提前 7 天预警轴承、刀具磨损 | <strong>成效</strong>: 设备故障停机 ↓ 80%"
         },
         {
-          "id": "b_auto_323",
+          "id": "b_auto_iot_87",
           "type": "bullet-list",
           "content": "<strong>业务系统</strong>: AI 视觉质检 | <strong>核心功能</strong>: 自动识别零部件瑕疵 | <strong>成效</strong>: 人工质检人力 ↓ 60%"
         },
         {
-          "id": "b_auto_324",
+          "id": "b_auto_iot_88",
           "type": "bullet-list",
           "content": "<strong>业务系统</strong>: 实时生产看板 | <strong>核心功能</strong>: 产能、良品率、订单进度 | <strong>成效</strong>: 可视化管控"
         },
         {
-          "id": "b_auto_325",
+          "id": "b_auto_iot_89",
           "type": "bullet-list",
           "content": "<strong>业务系统</strong>: 智能能耗管理 | <strong>核心功能</strong>: 分产线统计用电，优化排班 | <strong>成效</strong>: 整体能耗 ↓ 12%"
         },
         {
-          "id": "b_auto_326",
+          "id": "b_auto_iot_90",
+          "type": "image",
+          "src": "images/homework/iot/微信图片_2026-06-26_004156_979.jpg",
+          "caption": "OEE设备综合效率计算公式"
+        },
+        {
+          "id": "b_auto_iot_91",
+          "type": "paragraph",
+          "content": "*图6-1 OEE设备综合效率计算公式*"
+        },
+        {
+          "id": "b_auto_iot_92",
+          "type": "paragraph",
+          "content": "项目落地成效：单车生产工时缩短 6 分钟，产品缺陷率下降 80%，生产综合效率 OEE 提升 22%。"
+        },
+        {
+          "id": "b_auto_iot_93",
           "type": "heading",
           "level": 3,
-          "content": "项目整体成效"
+          "content": "个人点评（对标原文案例观点格式）"
         },
         {
-          "id": "b_auto_327",
-          "type": "bullet-list",
-          "content": "单车生产工时缩短 <strong>6 分钟</strong>"
+          "id": "b_auto_iot_94",
+          "type": "paragraph",
+          "content": "红旗工厂案例完整展示四层架构协同落地的工业价值，最大亮点是云边协同方案，边缘网关本地预处理数据缓解云端压力，同时平台层统一兼容新旧国产、进口机床，完美解决传统制造企业数据孤岛痛点。"
         },
         {
-          "id": "b_auto_328",
-          "type": "bullet-list",
-          "content": "产品缺陷率下降 <strong>80%</strong>"
+          "id": "b_auto_iot_95",
+          "type": "paragraph",
+          "content": "该项目没有盲目堆砌高端设备，而是根据车间实际工序分层选型网络与传感器，兼顾改造成本与智能化效果，非常适合国内中小型制造企业参考学习。同时案例证明 IoT cannot be built separately from manufacturing processes. It must be deeply integrated with production, quality checking, and maintenance workflows to truly reduce production costs and improve yield."
         },
         {
-          "id": "b_auto_329",
-          "type": "bullet-list",
-          "content": "生产综合效率 OEE 提升 <strong>22%</strong>"
-        },
-        {
-          "id": "b_auto_330",
+          "id": "b_auto_iot_96",
           "type": "divider"
         },
         {
-          "id": "b_auto_331",
+          "id": "b_auto_iot_97",
           "type": "heading",
           "level": 2,
-          "content": "七、个人点评"
+          "content": "六、总结与行业展望"
         },
         {
-          "id": "b_auto_332",
-          "type": "paragraph",
-          "content": "红旗工厂案例完整展示了四层架构协同落地的工业价值。最大亮点是<strong>云边协同</strong>方案——边缘网关本地预处理数据缓解云端压力，同时平台层统一兼容新旧国产、进口机床，完美解决传统制造企业数据孤岛痛点。"
-        },
-        {
-          "id": "b_auto_333",
-          "type": "paragraph",
-          "content": "该项目没有盲目堆砌高端设备，而是根据车间实际工序分层选型网络与传感器，兼顾改造成本与智能化效果，非常适合国内中小型制造企业参考学习。"
-        },
-        {
-          "id": "b_auto_334",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_335",
-          "type": "heading",
-          "level": 2,
-          "content": "八、总结与展望"
-        },
-        {
-          "id": "b_auto_336",
+          "id": "b_auto_iot_98",
           "type": "bullet-list",
           "content": "工业 IoT 四层架构是全球工业 4.0 标准化通用方案，适配制造、物流、矿山、农业全行业"
         },
         {
-          "id": "b_auto_337",
+          "id": "b_auto_iot_99",
           "type": "bullet-list",
           "content": "5G、边缘计算、AIoT、数字孪生是架构升级核心趋势，云边协同逐步替代纯云端架构"
         },
         {
-          "id": "b_auto_338",
+          "id": "b_auto_iot_100",
           "type": "bullet-list",
           "content": "2030 年全球工业物联网市场规模将突破万亿，制造业数字化转型需求持续爆发"
         },
         {
-          "id": "b_auto_339",
+          "id": "b_auto_iot_101",
           "type": "bullet-list",
           "content": "国产 IoT 平台、工业传感器逐步替代海外产品，行业标准化规范持续完善"
         },
         {
-          "id": "b_auto_340",
+          "id": "b_auto_iot_102",
+          "type": "paragraph",
+          "content": "<strong>个人观点</strong>：四层 IoT 架构是制造业数字化转型的基础底座，未来所有工厂都会完成全设备联网改造。作为小组作业研究，我们需要跳出纯技术视角，兼顾成本、落地难度、安全风险综合分析；同时关注国产工业物联网技术发展，对比国内外平台优劣，为实体制造业轻量化数字化转型提供可行思路。"
+        },
+        {
+          "id": "b_auto_iot_103",
           "type": "divider"
         },
         {
-          "id": "b_auto_341",
-          "type": "quote",
+          "id": "b_auto_iot_104",
+          "type": "heading",
+          "level": 2,
+          "content": "七、小组作业制作思路（和原文制作过程对应）"
+        },
+        {
+          "id": "b_auto_iot_105",
+          "type": "bullet-list",
           "content": "<strong>项目名称</strong>：IoT 工业 4.0 四层架构分析"
         },
         {
-          "id": "b_auto_342",
-          "type": "quote",
+          "id": "b_auto_iot_106",
+          "type": "bullet-list",
           "content": "<strong>对标案例</strong>：一汽红旗 × 华为 智能动力总成工厂"
         },
         {
-          "id": "b_auto_343",
-          "type": "quote",
+          "id": "b_auto_iot_107",
+          "type": "bullet-list",
           "content": "<strong>更新时间</strong>：2026年6月"
         },
         {
-          "id": "b_auto_344",
-          "type": "quote",
+          "id": "b_auto_iot_108",
+          "type": "bullet-list",
           "content": "<strong>关键词</strong>：<code>IoT</code> <code>工业4.0</code> <code>四层架构</code> <code>智能制造</code> <code>预测性维护</code> <code>数字孪生</code>"
+        },
+        {
+          "id": "b_auto_iot_109",
+          "type": "quote",
+          "content": "（注：部分内容可能由 AI 生成）"
         }
       ]
     },
