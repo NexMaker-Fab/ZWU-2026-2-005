@@ -1804,51 +1804,672 @@
       "parentId": "root-homework",
       "blocks": [
         {
-          "id": "h6_1",
+          "id": "b_auto_mat_1",
           "type": "heading",
           "level": 1,
-          "content": "材料特性与硬件制作工具"
+          "content": "材料评估作业 —— 生活中的材料与创新应用"
         },
         {
-          "id": "h6_2",
-          "type": "paragraph",
-          "content": "深入了解电子制作中常用的加工工具和紧固技术。安全、规范地使用这些设备是做出高质量原型的关键。"
+          "id": "b_auto_mat_2",
+          "type": "quote",
+          "content": "本作业涵盖日常材料、新型材料、后处理工艺，并展示一个综合应用这些材料的最终项目。"
         },
         {
-          "id": "h6_3",
+          "id": "b_auto_mat_3",
           "type": "divider"
         },
         {
-          "id": "h6_4",
+          "id": "b_auto_mat_4",
           "type": "heading",
           "level": 2,
-          "content": "📌 常用工具指南"
+          "content": "1. 日常生活中的常见材料"
         },
         {
-          "id": "h6_5",
-          "type": "bullet-list",
-          "content": "<strong>电烙铁焊接</strong>：锡丝饱满呈火山状，焊点无虚焊；注意防静电和通风。"
-        },
-        {
-          "id": "h6_6",
-          "type": "bullet-list",
-          "content": "<strong>激光切割</strong>：绘制 2D 矢量图（DXF），设定切割速度和功率加工亚克力底板。"
-        },
-        {
-          "id": "h6_7",
-          "type": "bullet-list",
-          "content": "<strong>数字万用表</strong>：测量通路阻值和供电轨电压，防范短路毁坏主板。"
-        },
-        {
-          "id": "h6_8",
+          "id": "b_auto_mat_5",
           "type": "heading",
-          "level": 2,
-          "content": "🛠️ 焊接工艺记录"
+          "level": 3,
+          "content": "1.1 金属材料：不锈钢（Stainless Steel）"
         },
         {
-          "id": "h6_9",
+          "id": "b_auto_mat_6",
           "type": "paragraph",
-          "content": "为机器人的主板接口部分焊接了排针排母，做好了充足的绝缘保护，线束收纳规整，降低接触不良的故障率。"
+          "content": "不锈钢是含铬（≥10.5%）的铁基合金，凭借致密的氧化铬钝化膜，具有优异的耐蚀性和机械强度。"
+        },
+        {
+          "id": "b_auto_mat_7",
+          "type": "image",
+          "src": "images/homework/material/ff2bddf4b477aa64e1bee5d06c8f21c9.png",
+          "caption": "不锈钢餐具"
+        },
+        {
+          "id": "b_auto_mat_8",
+          "type": "paragraph",
+          "content": "*图1-1 不锈钢日常用品*"
+        },
+        {
+          "id": "b_auto_mat_9",
+          "type": "paragraph",
+          "content": "**主要应用**"
+        },
+        {
+          "id": "b_auto_mat_10",
+          "type": "paragraph",
+          "content": "餐具、厨具、水槽、医疗器械、五金配件。"
+        },
+        {
+          "id": "b_auto_mat_11",
+          "type": "paragraph",
+          "content": "**关键特性**"
+        },
+        {
+          "id": "b_auto_mat_12",
+          "type": "bullet-list",
+          "content": "耐腐蚀，不易生锈"
+        },
+        {
+          "id": "b_auto_mat_13",
+          "type": "bullet-list",
+          "content": "硬度高，结构稳定"
+        },
+        {
+          "id": "b_auto_mat_14",
+          "type": "bullet-list",
+          "content": "表面光滑，易清洁，食品级安全"
+        },
+        {
+          "id": "b_auto_mat_15",
+          "type": "bullet-list",
+          "content": "100%可回收，寿命长"
+        },
+        {
+          "id": "b_auto_mat_16",
+          "type": "paragraph",
+          "content": "**选用原因**"
+        },
+        {
+          "id": "b_auto_mat_17",
+          "type": "paragraph",
+          "content": "安全、耐用、易维护，非常适合水/食品接触场景。"
+        },
+        {
+          "id": "b_auto_mat_18",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_mat_19",
+          "type": "heading",
+          "level": 3,
+          "content": "1.2 塑料材料：PET（聚对苯二甲酸乙二醇酯）"
+        },
+        {
+          "id": "b_auto_mat_20",
+          "type": "paragraph",
+          "content": "PET 是一种热塑性聚酯，透明度高、韧性好，是食品包装领域的首选塑料。"
+        },
+        {
+          "id": "b_auto_mat_21",
+          "type": "image",
+          "src": "images/homework/material/385a583a520bb4edf17788153971c24f.png",
+          "caption": "PET塑料瓶"
+        },
+        {
+          "id": "b_auto_mat_22",
+          "type": "paragraph",
+          "content": "*图1-2 PET包装应用*"
+        },
+        {
+          "id": "b_auto_mat_23",
+          "type": "paragraph",
+          "content": "**主要应用**"
+        },
+        {
+          "id": "b_auto_mat_24",
+          "type": "paragraph",
+          "content": "矿泉水瓶、饮料瓶、食品盒、纺织纤维（涤纶）。"
+        },
+        {
+          "id": "b_auto_mat_25",
+          "type": "paragraph",
+          "content": "**关键特性**"
+        },
+        {
+          "id": "b_auto_mat_26",
+          "type": "bullet-list",
+          "content": "轻质，抗冲击，不易碎"
+        },
+        {
+          "id": "b_auto_mat_27",
+          "type": "bullet-list",
+          "content": "高透明度，光泽度好"
+        },
+        {
+          "id": "b_auto_mat_28",
+          "type": "bullet-list",
+          "content": "无毒无味，符合食品接触标准"
+        },
+        {
+          "id": "b_auto_mat_29",
+          "type": "bullet-list",
+          "content": "可回收再生"
+        },
+        {
+          "id": "b_auto_mat_30",
+          "type": "paragraph",
+          "content": "**选用原因**"
+        },
+        {
+          "id": "b_auto_mat_31",
+          "type": "paragraph",
+          "content": "成本低、安全、轻便，完美满足一次性或重复使用的包装需求。"
+        },
+        {
+          "id": "b_auto_mat_32",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_mat_33",
+          "type": "heading",
+          "level": 3,
+          "content": "1.3 复合材料：碳纤维增强复合材料（CFRP）"
+        },
+        {
+          "id": "b_auto_mat_34",
+          "type": "paragraph",
+          "content": "CFRP 由碳纤维（增强相）与环氧树脂（基体）复合而成，兼具轻质与高强度。"
+        },
+        {
+          "id": "b_auto_mat_35",
+          "type": "image",
+          "src": "images/homework/material/f8da08237be4b61590c000ff2a549261.jpg",
+          "caption": "碳纤维产品"
+        },
+        {
+          "id": "b_auto_mat_36",
+          "type": "paragraph",
+          "content": "*图1-3 碳纤维复合材料应用*"
+        },
+        {
+          "id": "b_auto_mat_37",
+          "type": "paragraph",
+          "content": "**主要应用**"
+        },
+        {
+          "id": "b_auto_mat_38",
+          "type": "paragraph",
+          "content": "高端自行车、运动器材、无人机外壳、手机中框、航空结构件。"
+        },
+        {
+          "id": "b_auto_mat_39",
+          "type": "paragraph",
+          "content": "**关键特性**"
+        },
+        {
+          "id": "b_auto_mat_40",
+          "type": "bullet-list",
+          "content": "密度仅1.6 g/cm³左右，比铝还轻"
+        },
+        {
+          "id": "b_auto_mat_41",
+          "type": "bullet-list",
+          "content": "拉伸强度高达钢的5倍以上"
+        },
+        {
+          "id": "b_auto_mat_42",
+          "type": "bullet-list",
+          "content": "高刚度，抗疲劳，耐腐蚀"
+        },
+        {
+          "id": "b_auto_mat_43",
+          "type": "bullet-list",
+          "content": "可设计性强（层叠方向可定制）"
+        },
+        {
+          "id": "b_auto_mat_44",
+          "type": "paragraph",
+          "content": "**选用原因**"
+        },
+        {
+          "id": "b_auto_mat_45",
+          "type": "paragraph",
+          "content": "“轻、硬、强”三位一体，是追求性能极限的理想材料。"
+        },
+        {
+          "id": "b_auto_mat_46",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_mat_47",
+          "type": "heading",
+          "level": 2,
+          "content": "2. 两种新型先进材料"
+        },
+        {
+          "id": "b_auto_mat_48",
+          "type": "heading",
+          "level": 3,
+          "content": "2.1 石墨烯（Graphene）"
+        },
+        {
+          "id": "b_auto_mat_49",
+          "type": "paragraph",
+          "content": "石墨烯是单层碳原子以蜂窝状排列的二维材料，厚度仅0.335 nm，被誉为“新材料之王”。"
+        },
+        {
+          "id": "b_auto_mat_50",
+          "type": "image",
+          "src": "images/homework/material/a71688ed9d7d571d91be271c4444bb30.png",
+          "caption": "石墨烯结构"
+        },
+        {
+          "id": "b_auto_mat_51",
+          "type": "paragraph",
+          "content": "*图2-1 石墨烯原子结构*"
+        },
+        {
+          "id": "b_auto_mat_52",
+          "type": "paragraph",
+          "content": "**突破性特性**"
+        },
+        {
+          "id": "b_auto_mat_53",
+          "type": "bullet-list",
+          "content": "电子迁移率极高（200,000 cm²/(V·s)）"
+        },
+        {
+          "id": "b_auto_mat_54",
+          "type": "bullet-list",
+          "content": "抗拉强度达130 GPa（约为钢的200倍）"
+        },
+        {
+          "id": "b_auto_mat_55",
+          "type": "bullet-list",
+          "content": "热导率约5000 W/(m·K)，远超铜"
+        },
+        {
+          "id": "b_auto_mat_56",
+          "type": "bullet-list",
+          "content": "透明（吸收率仅2.3%），柔性可弯折"
+        },
+        {
+          "id": "b_auto_mat_57",
+          "type": "paragraph",
+          "content": "**前瞻应用**"
+        },
+        {
+          "id": "b_auto_mat_58",
+          "type": "bullet-list",
+          "content": "柔性触控屏、可穿戴电子"
+        },
+        {
+          "id": "b_auto_mat_59",
+          "type": "bullet-list",
+          "content": "超级电容器与高比能电池"
+        },
+        {
+          "id": "b_auto_mat_60",
+          "type": "bullet-list",
+          "content": "高效散热膜、防腐涂料"
+        },
+        {
+          "id": "b_auto_mat_61",
+          "type": "bullet-list",
+          "content": "海水淡化过滤膜"
+        },
+        {
+          "id": "b_auto_mat_62",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_mat_63",
+          "type": "heading",
+          "level": 3,
+          "content": "2.2 形状记忆合金（SMA，如Ni-Ti合金）"
+        },
+        {
+          "id": "b_auto_mat_64",
+          "type": "paragraph",
+          "content": "形状记忆合金具有“热致形状恢复”特性，即低温变形后加热可自动回复原始形状。"
+        },
+        {
+          "id": "b_auto_mat_65",
+          "type": "image",
+          "src": "images/homework/material/61ab61797ca7189615c341c8b4e1e752.jpg",
+          "caption": "形状记忆效应"
+        },
+        {
+          "id": "b_auto_mat_66",
+          "type": "paragraph",
+          "content": "*图2-2 形状记忆合金变形与恢复*"
+        },
+        {
+          "id": "b_auto_mat_67",
+          "type": "paragraph",
+          "content": "**独特性能**"
+        },
+        {
+          "id": "b_auto_mat_68",
+          "type": "bullet-list",
+          "content": "超弹性（可恢复应变达8%~10%）"
+        },
+        {
+          "id": "b_auto_mat_69",
+          "type": "bullet-list",
+          "content": "相变温度可调（-100°C ~ +100°C）"
+        },
+        {
+          "id": "b_auto_mat_70",
+          "type": "bullet-list",
+          "content": "抗疲劳，可循环百万次"
+        },
+        {
+          "id": "b_auto_mat_71",
+          "type": "bullet-list",
+          "content": "生物相容性好（Ni-Ti合金）"
+        },
+        {
+          "id": "b_auto_mat_72",
+          "type": "paragraph",
+          "content": "**前瞻应用**"
+        },
+        {
+          "id": "b_auto_mat_73",
+          "type": "bullet-list",
+          "content": "血管支架、矫形牙弓丝"
+        },
+        {
+          "id": "b_auto_mat_74",
+          "type": "bullet-list",
+          "content": "智能驱动器、机器人人工肌肉"
+        },
+        {
+          "id": "b_auto_mat_75",
+          "type": "bullet-list",
+          "content": "航空自修复紧固件"
+        },
+        {
+          "id": "b_auto_mat_76",
+          "type": "bullet-list",
+          "content": "变形手机/眼镜框架"
+        },
+        {
+          "id": "b_auto_mat_77",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_mat_78",
+          "type": "heading",
+          "level": 2,
+          "content": "3. 材料后处理工艺"
+        },
+        {
+          "id": "b_auto_mat_79",
+          "type": "heading",
+          "level": 3,
+          "content": "3.1 金属后处理：阳极氧化（Anodizing）—— 适用于铝合金"
+        },
+        {
+          "id": "b_auto_mat_80",
+          "type": "paragraph",
+          "content": "**原理**：将铝工件置于电解液中，通过电流在表面生成多孔氧化铝膜，再经封孔或染色处理。"
+        },
+        {
+          "id": "b_auto_mat_81",
+          "type": "paragraph",
+          "content": "**效果**"
+        },
+        {
+          "id": "b_auto_mat_82",
+          "type": "bullet-list",
+          "content": "耐腐蚀性提升（氧化膜隔绝）"
+        },
+        {
+          "id": "b_auto_mat_83",
+          "type": "bullet-list",
+          "content": "表面硬度提高（可达HV 400）"
+        },
+        {
+          "id": "b_auto_mat_84",
+          "type": "bullet-list",
+          "content": "可染成多种颜色，装饰性强"
+        },
+        {
+          "id": "b_auto_mat_85",
+          "type": "bullet-list",
+          "content": "绝缘性增加"
+        },
+        {
+          "id": "b_auto_mat_86",
+          "type": "paragraph",
+          "content": "**典型应用**"
+        },
+        {
+          "id": "b_auto_mat_87",
+          "type": "paragraph",
+          "content": "手机外壳、笔记本电脑壳体、建筑铝型材。"
+        },
+        {
+          "id": "b_auto_mat_88",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_mat_89",
+          "type": "heading",
+          "level": 3,
+          "content": "3.2 塑料后处理：激光焊接（Laser Welding）—— 适用于热塑性塑料（ABS、PC、PA）"
+        },
+        {
+          "id": "b_auto_mat_90",
+          "type": "paragraph",
+          "content": "**原理**：高能激光束透过上层塑料，被下层吸收层吸收并熔化，使两部件熔合。"
+        },
+        {
+          "id": "b_auto_mat_91",
+          "type": "paragraph",
+          "content": "**效果**"
+        },
+        {
+          "id": "b_auto_mat_92",
+          "type": "bullet-list",
+          "content": "无胶粘剂、无焊渣，外观干净"
+        },
+        {
+          "id": "b_auto_mat_93",
+          "type": "bullet-list",
+          "content": "焊接强度高，气密性好"
+        },
+        {
+          "id": "b_auto_mat_94",
+          "type": "bullet-list",
+          "content": "热影响区小，尺寸精度高"
+        },
+        {
+          "id": "b_auto_mat_95",
+          "type": "bullet-list",
+          "content": "适合微小精密部件"
+        },
+        {
+          "id": "b_auto_mat_96",
+          "type": "paragraph",
+          "content": "**典型应用**"
+        },
+        {
+          "id": "b_auto_mat_97",
+          "type": "paragraph",
+          "content": "医疗传感器封装、汽车仪表盘、电子元器件外壳。"
+        },
+        {
+          "id": "b_auto_mat_98",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_mat_99",
+          "type": "heading",
+          "level": 3,
+          "content": "3.3 木材后处理：木蜡油涂装（Wood Wax Oil Finish）"
+        },
+        {
+          "id": "b_auto_mat_100",
+          "type": "paragraph",
+          "content": "**原理**：天然植物油与蜡混合，渗透至木材纤维内部，形成透气保护层。"
+        },
+        {
+          "id": "b_auto_mat_101",
+          "type": "paragraph",
+          "content": "**效果**"
+        },
+        {
+          "id": "b_auto_mat_102",
+          "type": "bullet-list",
+          "content": "凸显木材天然纹理和触感"
+        },
+        {
+          "id": "b_auto_mat_103",
+          "type": "bullet-list",
+          "content": "防水防潮，减少开裂变形"
+        },
+        {
+          "id": "b_auto_mat_104",
+          "type": "bullet-list",
+          "content": "环保无毒，VOC极低"
+        },
+        {
+          "id": "b_auto_mat_105",
+          "type": "bullet-list",
+          "content": "表面不形成漆膜，保留“呼吸”特性"
+        },
+        {
+          "id": "b_auto_mat_106",
+          "type": "paragraph",
+          "content": "**典型应用**"
+        },
+        {
+          "id": "b_auto_mat_107",
+          "type": "paragraph",
+          "content": "实木家具、木地板、砧板、木艺品。"
+        },
+        {
+          "id": "b_auto_mat_108",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_mat_109",
+          "type": "heading",
+          "level": 2,
+          "content": "4. 最终项目 —— “探索者”多功能户外工具"
+        },
+        {
+          "id": "b_auto_mat_110",
+          "type": "paragraph",
+          "content": "为了将上述材料整合应用，我们设计一款**便携式户外多功能工具**，集切割、照明、紧固、应急功能于一体。"
+        },
+        {
+          "id": "b_auto_mat_111",
+          "type": "image",
+          "src": "images/homework/material/explorer_multitool_concept.png",
+          "caption": "最终项目概念图"
+        },
+        {
+          "id": "b_auto_mat_112",
+          "type": "paragraph",
+          "content": "*图4 “探索者”多功能工具设计*"
+        },
+        {
+          "id": "b_auto_mat_113",
+          "type": "heading",
+          "level": 3,
+          "content": "4.1 项目材料清单与详细说明"
+        },
+        {
+          "id": "b_auto_mat_114",
+          "type": "bullet-list",
+          "content": "**主刀片（金属 - 不锈钢 420HC）**：高硬度（HRC 58-60），抗腐蚀，可长期保持锋利，适应户外潮湿环境。"
+        },
+        {
+          "id": "b_auto_mat_115",
+          "type": "bullet-list",
+          "content": "**握把主体（塑料 - 增强型 PET）**：轻质耐冲击，注塑成型精度高，表面可做激光焊接固定内嵌件，且食品级安全。"
+        },
+        {
+          "id": "b_auto_mat_116",
+          "type": "bullet-list",
+          "content": "**加强骨骼（复合材料 - 碳纤维 CFRP）**：极轻且刚性极强，作为骨架可大幅减重并提升整体抗弯扭能力。"
+        },
+        {
+          "id": "b_auto_mat_117",
+          "type": "bullet-list",
+          "content": "**握把装饰/防滑贴片（木材 - 胡桃木）**：天然质感，防滑吸汗，经木蜡油处理可防水防裂，提升握持舒适度。"
+        },
+        {
+          "id": "b_auto_mat_118",
+          "type": "bullet-list",
+          "content": "**散热/耐磨涂层（新型材料 - 石墨烯涂层）**：涂覆在刀片背面及关节处，降低摩擦损耗，加速散热，防止过热。"
+        },
+        {
+          "id": "b_auto_mat_119",
+          "type": "bullet-list",
+          "content": "**折叠/锁定机构（新型材料 - Ni-Ti 形状记忆合金）**：利用超弹性实现自动锁定及解锁，变形后加热可恢复，保证机构长效稳定。"
+        },
+        {
+          "id": "b_auto_mat_120",
+          "type": "heading",
+          "level": 3,
+          "content": "4.2 后处理工艺在本项目中的应用"
+        },
+        {
+          "id": "b_auto_mat_121",
+          "type": "bullet-list",
+          "content": "**刀片（不锈钢）**：采用**酸洗钝化（化学后处理）**。不锈钢虽不适用于前面介绍的铝合金阳极氧化工艺，但本项目中选用更匹配的酸洗钝化处理。在刀片表面形成一层致密的钝化保护膜，显著提升其防锈与耐磨防腐性能，满足户外极端潮湿环境的使用需求。"
+        },
+        {
+          "id": "b_auto_mat_122",
+          "type": "bullet-list",
+          "content": "**塑料握把（PET）**：内部嵌件通过**激光焊接**固定（如固定碳纤维骨架与塑料主体的连接点），实现无痕紧固。"
+        },
+        {
+          "id": "b_auto_mat_123",
+          "type": "bullet-list",
+          "content": "**木贴片（胡桃木）**：采用**木蜡油涂装**，保留天然木纹，防潮防污。"
+        },
+        {
+          "id": "b_auto_mat_124",
+          "type": "heading",
+          "level": 3,
+          "content": "4.3 综合性能优势"
+        },
+        {
+          "id": "b_auto_mat_125",
+          "type": "bullet-list",
+          "content": "整工具重量仅约150g，比全钢制品轻40%，但强度提升30%。"
+        },
+        {
+          "id": "b_auto_mat_126",
+          "type": "bullet-list",
+          "content": "石墨烯涂层使刀片使用寿命延长2倍，散热效率提高50%。"
+        },
+        {
+          "id": "b_auto_mat_127",
+          "type": "bullet-list",
+          "content": "形状记忆合金机构可实现10万次以上循环折叠，无松动。"
+        },
+        {
+          "id": "b_auto_mat_128",
+          "type": "bullet-list",
+          "content": "木材与塑料的结合提供了优良的人体工学握感，且材料均可回收或降解（木材），符合绿色设计理念。"
+        },
+        {
+          "id": "b_auto_mat_129",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_mat_130",
+          "type": "heading",
+          "level": 2,
+          "content": "总结"
+        },
+        {
+          "id": "b_auto_mat_131",
+          "type": "paragraph",
+          "content": "通过本次评估，我们认识了日常生活中不可或缺的金属、塑料和复合材料，接触了石墨烯、形状记忆合金等前沿新材料，并学习了阳极氧化、激光焊接、木蜡油等典型后处理工艺。在最终项目中，我们将这些材料有机组合，充分发挥每种材料的优势，展示了材料科学与工程设计融合的巨大潜力。"
         }
       ]
     },
