@@ -232,9 +232,9 @@ export const translations = {
     'project.sim.desc': 'Real-time rendering of robot\'s OLED screen and emotional feedback:',
     'project.specs.title': '🛠️ Spec Sheets',
     'project.sensors.title': '📊 Telemetry',
-    'project.sensor.hr': 'Heart Rate',
-    'project.sensor.temp': 'Temperature',
-    'project.sensor.stability': 'Stability',
+    'project.sensor.hr': 'Sound Level',
+    'project.sensor.temp': 'Distance',
+    'project.sensor.stability': 'Mood State',
     'project.console.title': '🖥️ Arduino Console'
   },
   zh: {
@@ -466,9 +466,9 @@ export const translations = {
     'project.sim.desc': '实时渲染机器人头部 OLED 屏幕表情与情感状态响应：',
     'project.specs.title': '🛠️ 硬件架构与物料 / Spec Sheets',
     'project.sensors.title': '📊 传感器实时数据 / Telemetry',
-    'project.sensor.hr': '心率 / Heart Rate',
-    'project.sensor.temp': '温度 / Temperature',
-    'project.sensor.stability': '稳定性 / Stability',
+    'project.sensor.hr': '声音强度 / Sound Level',
+    'project.sensor.temp': '感应距离 / Distance',
+    'project.sensor.stability': '情绪状态 / Mood State',
     'project.console.title': '🖥️ 串口调试终端 / Arduino Console'
   }
 };
