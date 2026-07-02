@@ -154,634 +154,654 @@
       "parentId": "root-homework",
       "blocks": [
         {
-          "id": "b_auto_1",
+          "id": "b_auto_proj_1",
           "type": "heading",
           "level": 1,
           "content": "项目管理与协作开发 — 作业汇报"
         },
         {
-          "id": "b_auto_2",
+          "id": "b_auto_proj_2",
           "type": "divider"
         },
         {
-          "id": "b_auto_3",
+          "id": "b_auto_proj_3",
           "type": "heading",
           "level": 2,
           "content": "一、项目简介"
         },
         {
-          "id": "b_auto_4",
+          "id": "b_auto_proj_4",
           "type": "paragraph",
           "content": "本作业记录并总结了 <strong>ZWU-2026-2-005</strong> 团队展示门户与协作博客网站的完整重构与开发规划过程。涵盖了从旧项目分支归档、主分支轻量化重构，到块级编辑器（Block Editor）开发、多成员作品集整合，以及 GitHub Pages 部署路径兼容与客户端缓存自愈算法的设计与实践。"
         },
         {
-          "id": "b_auto_5",
+          "id": "b_auto_proj_5",
           "type": "bullet-list",
           "content": "<strong>项目名称</strong>：团队作业的展示门户与协作博客系统"
         },
         {
-          "id": "b_auto_6",
+          "id": "b_auto_proj_6",
           "type": "bullet-list",
           "content": "<strong>设计角色</strong>：项目管理与全栈开发"
         },
         {
-          "id": "b_auto_7",
+          "id": "b_auto_proj_7",
           "type": "bullet-list",
           "content": "<strong>涉及技术</strong>：Git 分支管理、ES Modules 静态无头 CMS、localStorage 缓存控制、GitHub Actions/Pages 持续部署、Pre-commit 安全检查"
         },
         {
-          "id": "b_auto_8",
+          "id": "b_auto_proj_8",
           "type": "divider"
         },
         {
-          "id": "b_auto_9",
+          "id": "b_auto_proj_9",
           "type": "heading",
           "level": 2,
           "content": "二、技术介绍与架构设计"
         },
         {
-          "id": "b_auto_10",
+          "id": "b_auto_proj_10",
           "type": "paragraph",
           "content": "本项目基于前沿的“无头协作知识库（Headless CMS）”概念设计，将复杂的后台管理简化为静态数据源驱动，具有零服务器成本、高安全性和极速响应的特点："
         },
         {
-          "id": "b_auto_11",
+          "id": "b_auto_proj_11",
           "type": "bullet-list",
           "content": "<strong>Git 分支管理策略</strong>：使用分支进行版本隔离，将旧项目封存归档，主分支聚焦重构，保持代码库健康。"
         },
         {
-          "id": "b_auto_12",
+          "id": "b_auto_proj_12",
           "type": "bullet-list",
           "content": "<strong>静态数据驱动与组件化编辑器</strong>：在前端自主实现 Notion 风格的块级编辑器，内容以 JSON 块数组保存，支持动态渲染与扩展。"
         },
         {
-          "id": "b_auto_13",
+          "id": "b_auto_proj_13",
           "type": "bullet-list",
           "content": "<strong>本地缓存自愈算法</strong>：通过判定特定页面特征 and 正则表达式检查，自动失效和重构客户端 <code>localStorage</code> 缓存，消除版本冲突导致的脏数据。"
         },
         {
-          "id": "b_auto_14",
+          "id": "b_auto_proj_14",
           "type": "bullet-list",
           "content": "<strong>路径兼容性与 Pre-commit 体检</strong>：对所有的静态资源图片使用相对路径适配 GitHub Pages 部署，并利用 Git 钩子在代码提交前执行自动校验体检。"
         },
         {
-          "id": "b_auto_15",
+          "id": "b_auto_proj_15",
           "type": "divider"
         },
         {
-          "id": "b_auto_16",
+          "id": "b_auto_proj_16",
           "type": "heading",
           "level": 2,
           "content": "三、开发与管理阶段回溯"
         },
         {
-          "id": "b_auto_17",
+          "id": "b_auto_proj_17",
           "type": "paragraph",
           "content": "为了帮您清晰地回溯整个网站的演进与制作过程，我们选取了以下 5 个具有里程碑意义的历史版本，展示了网站从最初的雏形到最终成品的完整进化路径："
         },
         {
-          "id": "b_auto_18",
+          "id": "b_auto_proj_18",
           "type": "heading",
           "level": 3,
           "content": "3.1 【第 1 阶段：主页改版为卡片式动态门户】"
         },
         {
-          "id": "b_auto_19",
+          "id": "b_auto_proj_19",
           "type": "paragraph",
           "content": "👉 本地访问地址：http://localhost:8001/ (对应 Commit: 2ef12e0)"
         },
         {
-          "id": "b_auto_20",
+          "id": "b_auto_proj_20",
           "type": "paragraph",
           "content": "<strong>节点背景</strong>：将原先简单的静态页面全面重构成玻璃态的高颜值动态卡片门户，打下了整个项目的视觉基调。在此阶段，最简版的主页卡片和最简版的后台块级编辑器开始初步成型。"
         },
         {
-          "id": "b_auto_21",
+          "id": "b_auto_proj_21",
           "type": "image",
-          "src": "images/homework/project/ddd723cac568618b118f7f067bdcd923.png",
+          "src": "netdrive://ddd723cac568618b118f7f067bdcd923",
           "caption": "TeamFlow Wiki 1.2 玻璃态卡片动态门户"
         },
         {
-          "id": "b_auto_22",
+          "id": "b_auto_proj_22",
           "type": "image",
-          "src": "images/homework/project/85acca04d6736cd2e5a109dd01625d10.png",
+          "src": "netdrive://85acca04d6736cd2e5a109dd01625d10",
           "caption": "后台编辑器最简版原型"
         },
         {
-          "id": "b_auto_23",
+          "id": "b_auto_proj_23",
           "type": "divider"
         },
         {
-          "id": "b_auto_24",
+          "id": "b_auto_proj_24",
           "type": "heading",
           "level": 3,
           "content": "3.2 【第 2 阶段：后台块编辑器 + 机器人表情模拟器上线】"
         },
         {
-          "id": "b_auto_25",
+          "id": "b_auto_proj_25",
           "type": "paragraph",
           "content": "👉 本地访问地址：http://localhost:8002/ (对应 Commit: a2d8b6b)"
         },
         {
-          "id": "b_auto_26",
+          "id": "b_auto_proj_26",
           "type": "paragraph",
           "content": "<strong>节点背景</strong>：正式确立了“介绍页 - 成员页 - 平时作业 - 最终项目”的导航栏；开发了最初分栏的块级（类 Notion）文本编辑器原型，并加入了最终项目里可交互的机器人面部 Canvas 模拟器。"
         },
         {
-          "id": "b_auto_27",
+          "id": "b_auto_proj_27",
           "type": "image",
-          "src": "images/homework/project/0454cabf459d9cc7ba3edc461170a2df.png",
+          "src": "netdrive://0454cabf459d9cc7ba3edc461170a2df",
           "caption": "重构后带有顶部导航栏的展示门户主页"
         },
         {
-          "id": "b_auto_28",
+          "id": "b_auto_proj_28",
           "type": "image",
-          "src": "images/homework/project/7d71b736b798551b768448c30c7008b2.png",
+          "src": "netdrive://7d71b736b798551b768448c30c7008b2",
           "caption": "平时作业分栏块级文本编辑器最初原型"
         },
         {
-          "id": "b_auto_29",
+          "id": "b_auto_proj_29",
           "type": "divider"
         },
         {
-          "id": "b_auto_30",
+          "id": "b_auto_proj_30",
           "type": "heading",
           "level": 3,
           "content": "3.3 【第 3 阶段：平时作业并入 CMS 管理 + 自动编号目录】"
         },
         {
-          "id": "b_auto_31",
+          "id": "b_auto_proj_31",
           "type": "paragraph",
           "content": "👉 本地访问地址：http://localhost:8003/ (对应 Commit: f64f4e7)"
         },
         {
-          "id": "b_auto_32",
+          "id": "b_auto_proj_32",
           "type": "paragraph",
           "content": "<strong>节点背景</strong>：把零散的作业文稿整合进入 CMS 数据源统一管理，平时作业阅读页侧边新增了支持多级自动阿拉伯数字编号的大纲（TOC）目录。"
         },
         {
-          "id": "b_auto_33",
+          "id": "b_auto_proj_33",
           "type": "image",
-          "src": "images/homework/project/b32722b37e132dedc6f2ccbaaf92dab7.png",
+          "src": "netdrive://b32722b37e132dedc6f2ccbaaf92dab7",
           "caption": "平时作业右下角侧边自动多级编号大纲目录"
         },
         {
-          "id": "b_auto_34",
+          "id": "b_auto_proj_34",
           "type": "divider"
         },
         {
-          "id": "b_auto_35",
+          "id": "b_auto_proj_35",
           "type": "heading",
           "level": 3,
           "content": "3.4 【第 4 阶段：成员板块重构 + 主创 Hkz 调整置首】"
         },
         {
-          "id": "b_auto_36",
+          "id": "b_auto_proj_36",
           "type": "paragraph",
           "content": "👉 本地访问地址：http://localhost:8004/ (对应 Commit: fa73a88)"
         },
         {
-          "id": "b_auto_37",
+          "id": "b_auto_proj_37",
           "type": "paragraph",
           "content": "<strong>节点背景</strong>：重新规划了团队名片，加入照片渲染支持；将名字周波更正为周紫晗（Purple），并将主创 Hkz 的头像名片移到了团队列表的首位，设计了全新的精美毛玻璃个人详细主页。"
         },
         {
-          "id": "b_auto_38",
+          "id": "b_auto_proj_38",
           "type": "image",
-          "src": "images/homework/project/8730c8edf91e91620c25f297f0af8a88.png",
+          "src": "netdrive://8730c8edf91e91620c25f297f0af8a88",
           "caption": "主创 Hkz 的精美毛玻璃风格个人主页"
         },
         {
-          "id": "b_auto_39",
+          "id": "b_auto_proj_39",
           "type": "image",
-          "src": "images/homework/project/df36b6d5a8235739a8ca9e405e826562.png",
+          "src": "netdrive://df36b6d5a8235739a8ca9e405e826562",
           "caption": "更新后的团队名片列表及主创 Hkz 置首展示"
         },
         {
-          "id": "b_auto_40",
+          "id": "b_auto_proj_40",
           "type": "divider"
         },
         {
-          "id": "b_auto_41",
+          "id": "b_auto_proj_41",
           "type": "heading",
           "level": 3,
           "content": "3.5 【第 5 阶段：最终完成版（收藏即展示 + 顶部大纲 + 拦截验证）】"
         },
         {
-          "id": "b_auto_42",
+          "id": "b_auto_proj_42",
           "type": "paragraph",
           "content": "👉 本地访问地址：http://localhost:8005/ (对应 Commit: main)"
         },
         {
-          "id": "b_auto_43",
+          "id": "b_auto_proj_43",
           "type": "paragraph",
           "content": "<strong>节点背景</strong>：包含我们最新的所有优化：大纲目录重制为清爽手写体并移至文章上方（取消重复的多级数字前缀）；项目展示逻辑改为只要在后台点亮“星标收藏”即可上线；并加入了 Git Pre-commit 自动拦截的缓存自愈安全体检，防止带病提交。"
         },
         {
-          "id": "b_auto_44",
+          "id": "b_auto_proj_44",
           "type": "image",
-          "src": "images/homework/project/5298fafd37ff380c33f37aba9f14838b.png",
+          "src": "netdrive://5298fafd37ff380c33f37aba9f14838b",
           "caption": "移至顶部的清爽手写体大纲目录与虚线框玻璃态呈现"
         },
         {
-          "id": "b_auto_45",
+          "id": "b_auto_proj_45",
           "type": "divider"
         },
         {
-          "id": "b_auto_46",
+          "id": "b_auto_proj_46",
           "type": "heading",
           "level": 2,
           "content": "四、同步至 GitHub Pages 的功能实现原理"
         },
         {
-          "id": "b_auto_47",
+          "id": "b_auto_proj_47",
           "type": "paragraph",
           "content": "为了在“无数据库”的静态网页中实现后台实时编辑、保存并自动部署，本项目设计了一条“前端配置 -> API落库 -> 自动构建部署 -> 客户端缓存自愈”的闭环数据流链路："
         },
         {
-          "id": "b_auto_48",
+          "id": "b_auto_proj_48",
           "type": "code",
           "content": "graph TD\n    A[后台块编辑器] -->|1. 保存| B(本地浏览器 localStorage)\n    A -->|2. 点击 Save to GitHub| C{检查 GitHub 配置}\n    C -->|未配置| D[弹出配置窗口]\n    C -->|已配置| E[\"1. GET 获取 content.json SHA<br>2. Base64 编码 JSON<br>3. PUT 发送更新\"]\n    E -->|写入| F[GitHub API 接口]\n    F -->|触发| G[GitHub Actions 自动构建]\n    G -->|部署静态包| H[GitHub Pages 托管服务]\n    H -->|读取新数据| I[访客浏览器加载]\n    I -->|自愈算法检测脏缓存| J{是否触发失效特征}\n    J -->|是| K[清理 localStorage 缓存] --> L[强制重新 fetch 数据]\n    J -->|否| M[直接渲染页面]"
         },
         {
-          "id": "b_auto_49",
+          "id": "b_auto_proj_49",
           "type": "heading",
           "level": 3,
           "content": "4.1 核心同步与部署机制"
         },
         {
-          "id": "b_auto_50",
+          "id": "b_auto_proj_50",
           "type": "paragraph",
           "content": "1. <strong>轻量化客户端鉴权</strong>："
         },
         {
-          "id": "b_auto_51",
+          "id": "b_auto_proj_51",
           "type": "paragraph",
           "content": "在后台设置面板中，用户可配置 Repository Owner（仓库所有者）、Repository Name（仓库名）、Branch（默认 <code>main</code>）及 GitHub Personal Access Token（个人访问令牌）。出于隐私和安全性考量，该 Token 纯本地化存储于访客浏览器的 <code>localStorage</code> 中，绝不上传到任何中转服务器。"
         },
         {
-          "id": "b_auto_52",
+          "id": "b_auto_proj_52",
           "type": "paragraph",
           "content": "2. <strong>GitHub Contents API 实现数据落库</strong>："
         },
         {
-          "id": "b_auto_53",
+          "id": "b_auto_proj_53",
           "type": "paragraph",
           "content": "当用户在后台编辑完成并点击 <code>Save to GitHub</code> 时，前端 JavaScript 模块（[github.js](file:///C:/Users/jxgm/.gemini/antigravity/worktrees/ZWU-2026-2-005/update-3d-print-docs/js/github.js)）执行以下操作："
         },
         {
-          "id": "b_auto_54",
+          "id": "b_auto_proj_54",
           "type": "bullet-list",
           "content": "发送 <code>GET</code> 请求获取远端 <code>data/content.json</code> 的最新 <code>sha</code> 校验值（GitHub Contents API 规定修改文件必须携带最新 SHA）。"
         },
         {
-          "id": "b_auto_55",
+          "id": "b_auto_proj_55",
           "type": "bullet-list",
           "content": "将当前页面 JSON 数据序列化，使用 <code>btoa(unescape(encodeURIComponent(content)))</code> 将中文字符安全地转换为 Base64 编码，避免 API 传输过程乱码。"
         },
         {
-          "id": "b_auto_56",
+          "id": "b_auto_proj_56",
           "type": "bullet-list",
           "content": "向 <code>https://api.github.com/repos/{owner}/{repo}/contents/data/content.json</code> 发送 <code>PUT</code> 请求，将更新写入仓库。"
         },
         {
-          "id": "b_auto_57",
+          "id": "b_auto_proj_57",
           "type": "paragraph",
           "content": "3. <strong>GitHub Actions 持续集成与分钟级构建</strong>："
         },
         {
-          "id": "b_auto_58",
+          "id": "b_auto_proj_58",
           "type": "paragraph",
           "content": "项目配置了自动化流水线（[.github/workflows/static.yml](file:///C:/Users/jxgm/.gemini/antigravity/worktrees/ZWU-2026-2-005/update-3d-print-docs/.github/workflows/static.yml)），监听 <code>main</code> 分支上 <code>data/content.json</code> 等文件的推送事件。工作流在 Ubuntu 虚拟环境中自动执行代码检出（<code>actions/checkout@v4</code>）、配置 Pages 静态部署（<code>actions/configure-pages@v5</code>）、打包并上传制品（<code>actions/upload-pages-artifact@v3</code>）以及最终部署至 GitHub Pages（<code>actions/deploy-pages@v5</code>）。"
         },
         {
-          "id": "b_auto_59",
+          "id": "b_auto_proj_59",
           "type": "heading",
           "level": 3,
           "content": "4.2 客户端缓存自愈算法（Cache Self-Healing）"
         },
         {
-          "id": "b_auto_60",
+          "id": "b_auto_proj_60",
           "type": "paragraph",
           "content": "由于静态托管服务器在部署后存在一定的缓存延迟，且各团队成员可能在不同终端、不同版本间频繁操作，本地 <code>localStorage</code> 的旧数据极易与远端 <code>content.json</code> 产生脏数据冲突（如导致图片绝对路径失效、列表显示错误等）。"
         },
         {
-          "id": "b_auto_61",
+          "id": "b_auto_proj_61",
           "type": "paragraph",
           "content": "为此，项目在 [storage.js](file:///C:/Users/jxgm/.gemini/antigravity/worktrees/ZWU-2026-2-005/update-3d-print-docs/js/storage.js) 中设计了<strong>缓存失效自愈验证算法</strong>。在加载数据（<code>loadContent()</code>）时，会实时检测缓存对象是否存在以下冲突特征："
         },
         {
-          "id": "b_auto_62",
+          "id": "b_auto_proj_62",
           "type": "bullet-list",
           "content": "缓存中是否存在已废弃的测试项目（如 <code>project-blue-prince</code>）；"
         },
         {
-          "id": "b_auto_63",
+          "id": "b_auto_proj_63",
           "type": "bullet-list",
           "content": "缓存中是否缺失新版必需页面（如 <code>project-arduino</code>、<code>root-homework</code>）；"
         },
         {
-          "id": "b_auto_64",
+          "id": "b_auto_proj_64",
           "type": "bullet-list",
           "content": "缓存中是否包含已废弃的绝对路径图片（以 <code>/images/</code> 开头）；"
         },
         {
-          "id": "b_auto_65",
+          "id": "b_auto_proj_65",
           "type": "bullet-list",
           "content": "团队主创 Hkz 的名片是否未被置首；"
         },
         {
-          "id": "b_auto_66",
+          "id": "b_auto_proj_66",
           "type": "bullet-list",
           "content": "团队成员 Purple 的姓名是否为已废弃的曾用名“周波”；"
         },
         {
-          "id": "b_auto_67",
+          "id": "b_auto_proj_67",
           "type": "bullet-list",
           "content": "缓存中三个核心作业（项目管理、Arduino、IoT交互）的排版块数（<code>blocks</code>）是否少于 20 个（判断为占位符）。"
         },
         {
-          "id": "b_auto_68",
+          "id": "b_auto_proj_68",
           "type": "paragraph",
           "content": "一旦满足上述任一特征，系统在控制台抛出 <code>Stale cache detected, forcing reload from content.json</code>，自动执行 <code>localStorage.removeItem('teamflow_content')</code> 强行清空本地缓存，并重新向远端拉取最新数据，完美实现了“零用户感知”的客户端版本自愈。"
         },
         {
-          "id": "b_auto_69",
+          "id": "b_auto_proj_69",
           "type": "divider"
         },
         {
-          "id": "b_auto_70",
+          "id": "b_auto_proj_70",
           "type": "heading",
           "level": 2,
           "content": "五、AI 工具辅助搭建网站的过程与协同开发记录"
         },
         {
-          "id": "b_auto_71",
+          "id": "b_auto_proj_71",
           "type": "paragraph",
           "content": "本项目的整体重构与开发是在与 Google DeepMind 的 AI 协同编码助手 <strong>Antigravity</strong> 密切配对编程下完成的。AI 不仅扮演了代码生成器的角色，还作为项目架构师和自动化验证门禁的设计者，协助团队高效推进开发进程。"
         },
         {
-          "id": "b_auto_72",
+          "id": "b_auto_proj_72",
           "type": "heading",
           "level": 3,
           "content": "5.1 AI 协同里程碑与 Progress 进展"
         },
         {
-          "id": "b_auto_73",
+          "id": "b_auto_proj_73",
           "type": "paragraph",
           "content": "整个 AI 协同开发过程可以梳理为以下几个关键的迭代周期："
         },
         {
-          "id": "b_auto_74",
-          "type": "bullet-list",
-          "content": "<strong>迭代阶段</strong>: <strong>阶段 1</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>分支规整与瘦身</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “清理冗余分支，做网站的经历做成项目管理的 md 文件。” | <strong>解决的技术痛点</strong>: 旧项目残留了大量杂乱代码与过时原型。AI 指导建立了 <code>archive</code> 分支做备份，精简了主分支。"
+          "id": "b_auto_proj_74",
+          "type": "paragraph",
+          "content": "| 迭代阶段 | AI 协同任务与项目进展 | AI 接收的 Prompt 指令意图 | 解决的技术痛点 |"
         },
         {
-          "id": "b_auto_75",
-          "type": "bullet-list",
-          "content": "<strong>迭代阶段</strong>: <strong>阶段 2</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>编辑器优化与 Landing 匹配</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “优化 teamflow wiki editor 编辑器，支持修改 homework 页面的目录大纲目录，并且 landing 页自动匹配成员，实现点击跳转。” | <strong>解决的技术痛点</strong>: 完善 Notion 风格编辑器的行内 Markdown 语法渲染，并实现主页名片与个人子页面的自动关联绑定。"
+          "id": "b_auto_proj_75",
+          "type": "paragraph",
+          "content": "| :--- | :--- | :--- | :--- |"
         },
         {
-          "id": "b_auto_76",
-          "type": "bullet-list",
-          "content": "<strong>迭代阶段</strong>: <strong>阶段 3</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>资源路径相对化与 GitHub 部署</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “所有团队成员页面的照片都没有上传成功，landing 页是成功的。”<br>“上传对应的作业，自己下载图片对应，本地测试。” | <strong>解决的技术痛点</strong>: 发现部署到 GitHub Pages 后图片资源由于绝对路径 <code>/</code> 无法加载，AI 协助将其全部修正为相对路径，并引入了 Pre-commit 校验脚本。"
+          "id": "b_auto_proj_76",
+          "type": "paragraph",
+          "content": "| <strong>阶段 1</strong> | <strong>分支规整与瘦身</strong> | “清理冗余分支，做网站的经历做成项目管理的 md 文件。” | 旧项目残留了大量杂乱代码与过时原型。AI 指导建立了 <code>archive</code> 分支做备份，精简了主分支。 |"
         },
         {
-          "id": "b_auto_77",
-          "type": "bullet-list",
-          "content": "<strong>迭代阶段</strong>: <strong>阶段 4</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>目录大纲排版重制</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “将 outline 移到笔记开头”<br>“outline 匹配每一级大标题，不要全都是 1.x 版本” | <strong>解决的技术痛点</strong>: 改进作业阅读体验，移除原右侧悬浮且层级混乱的目录，改为文章开头毛玻璃线框包裹的清爽手写体 TOC 大纲。"
+          "id": "b_auto_proj_77",
+          "type": "paragraph",
+          "content": "| <strong>阶段 2</strong> | <strong>编辑器优化与 Landing 匹配</strong> | “优化 teamflow wiki editor 编辑器，支持修改 homework 页面的目录大纲目录，并且 landing 页自动匹配成员，实现点击跳转。” | 完善 Notion 风格编辑器的行内 Markdown 语法渲染，并实现主页名片与个人子页面的自动关联绑定。 |"
         },
         {
-          "id": "b_auto_78",
-          "type": "bullet-list",
-          "content": "<strong>迭代阶段</strong>: <strong>阶段 5</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>团队名片重构与星标展示</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “将我（Hkz主创）排在首位，有精美毛玻璃个人详细主页；Purple 拼音更正为周紫晗”<br>“把项目展示的逻辑改为添加到 favorites 中就展示” | <strong>解决的技术痛点</strong>: 动态卡片置顶展示逻辑设计；修正由于历史遗留拼写导致的数据报错；简化后台发布操作为“点亮星标一键上线”。"
+          "id": "b_auto_proj_78",
+          "type": "paragraph",
+          "content": "| <strong>阶段 3</strong> | <strong>资源路径相对化与 GitHub 部署</strong> | “所有团队成员页面的照片都没有上传成功，landing 页是成功的。”<br>“上传对应的作业，自己下载图片对应，本地测试。” | 发现部署到 GitHub Pages 后图片资源由于绝对路径 <code>/</code> 无法加载，AI 协助将其全部修正为相对路径，并引入了 Pre-commit 校验脚本。 |"
         },
         {
-          "id": "b_auto_79",
-          "type": "bullet-list",
-          "content": "<strong>迭代阶段</strong>: <strong>阶段 6</strong> | <strong>AI 协同任务与项目进展</strong>: <strong>防带病提交的自动化门禁 (Git Hook)</strong> | <strong>AI 接收的 Prompt 指令意图</strong>: “缓存自愈机制进行全方面的增强判定，每次代码提交前都要过这个测试进行缓存刷新，配个 hook，每次上传自动触发。” | <strong>解决的技术痛点</strong>: 团队开发提交前缺乏统一校验，容易把占位符、老缓存或绝对路径图片上传到 GitHub。AI 编写了 <code>pre_commit_test.py</code> 并封装在 Git Pre-commit 钩子中，实现本地强制体检。"
+          "id": "b_auto_proj_79",
+          "type": "paragraph",
+          "content": "| <strong>阶段 4</strong> | <strong>目录大纲排版重制</strong> | “将 outline 移到笔记开头”<br>“outline 匹配每一级大标题，不要全都是 1.x 版本” | 改进作业阅读体验，移除原右侧悬浮且层级混乱的目录，改为文章开头毛玻璃线框包裹的清爽手写体 TOC 大纲。 |"
         },
         {
-          "id": "b_auto_80",
+          "id": "b_auto_proj_80",
+          "type": "paragraph",
+          "content": "| <strong>阶段 5</strong> | <strong>团队名片重构与星标展示</strong> | “将我（Hkz主创）排在首位，有精美毛玻璃个人详细主页；Purple 拼音更正为周紫晗”<br>“把项目展示的逻辑改为添加到 favorites 中就展示” | 动态卡片置顶展示逻辑设计；修正由于历史遗留拼写导致的数据报错；简化后台发布操作为“点亮星标一键上线”。 |"
+        },
+        {
+          "id": "b_auto_proj_81",
+          "type": "paragraph",
+          "content": "| <strong>阶段 6</strong> | <strong>防带病提交的自动化门禁 (Git Hook)</strong> | “缓存自愈机制进行全方面的增强判定，每次代码提交前都要过这个测试进行缓存刷新，配个 hook，每次上传自动触发。” | 团队开发提交前缺乏统一校验，容易把占位符、老缓存或绝对路径图片上传到 GitHub。AI 编写了 <code>pre_commit_test.py</code> 并封装在 Git Pre-commit 钩子中，实现本地强制体检。 |"
+        },
+        {
+          "id": "b_auto_proj_82",
           "type": "heading",
           "level": 3,
           "content": "5.2 关键 AI Prompt 指令实录"
         },
         {
-          "id": "b_auto_81",
+          "id": "b_auto_proj_83",
           "type": "paragraph",
           "content": "为了实现对网站的高质量控制，我们向 AI 发送了多条具有精确架构引导的 Prompt 指令："
         },
         {
-          "id": "b_auto_82",
+          "id": "b_auto_proj_84",
           "type": "paragraph",
           "content": "1. <strong>关于缓存自愈与 Pre-commit 构建指令</strong>："
         },
         {
-          "id": "b_auto_83",
+          "id": "b_auto_proj_85",
           "type": "quote",
-          "content": "<em>“这样，给这个项目配个缓存自愈测试 of hook，每次上传代码自动触发。”</em>"
+          "content": "*“这样，给这个项目配个缓存自愈测试 of hook，每次上传代码自动触发。”*"
         },
         {
-          "id": "b_auto_84",
+          "id": "b_auto_proj_86",
           "type": "quote",
           "content": "<strong>AI 的响应实现</strong>：在 [.githooks/pre-commit](file:///C:/Users/jxgm/.gemini/antigravity/worktrees/ZWU-2026-2-005/update-3d-print-docs/.githooks/pre-commit) 中注入 Python 脚本执行命令，在本地 <code>git commit</code> 时自动执行 [pre_commit_test.py](file:///C:/Users/jxgm/.gemini/antigravity/worktrees/ZWU-2026-2-005/update-3d-print-docs/pre_commit_test.py)，对 <code>content.json</code> 的合法性和 <code>storage.js</code> 的自愈关键字进行全方位静态体检。"
         },
         {
-          "id": "b_auto_85",
+          "id": "b_auto_proj_87",
           "type": "paragraph",
           "content": "2. <strong>关于目录大纲层级与体验重构指令</strong>："
         },
         {
-          "id": "b_auto_86",
+          "id": "b_auto_proj_88",
           "type": "quote",
-          "content": "<em>“outline匹配每一级大标题，不要全都是1.x版本，重新修改，将outline移到笔记开头”</em>"
+          "content": "*“outline匹配每一级大标题，不要全都是1.x版本，重新修改，将outline移到笔记开头”*"
         },
         {
-          "id": "b_auto_87",
+          "id": "b_auto_proj_89",
           "type": "quote",
           "content": "<strong>AI 的响应实现</strong>：优化了 <code>homework.js</code> 中的目录解析正则与 HTML 构建逻辑，将大纲容器从侧边栏移到文章头部，运用手写艺术字体结合毛玻璃虚线框进行高审美排版。"
         },
         {
-          "id": "b_auto_88",
+          "id": "b_auto_proj_90",
           "type": "paragraph",
           "content": "3. <strong>关于多端口本地服务器快照验证指令</strong>："
         },
         {
-          "id": "b_auto_89",
+          "id": "b_auto_proj_91",
           "type": "quote",
-          "content": "<em>“我需要网站的快照（制作过程），给每一个我所说重大改动的地方的 github 历史分支拉到本地，然后按照顺序开不同端口的本地服务器。”</em>"
+          "content": "*“我需要网站的快照（制作过程），给每一个我所说重大改动的地方的 github 历史分支拉到本地，然后按照顺序开不同端口的本地服务器。”*"
         },
         {
-          "id": "b_auto_90",
+          "id": "b_auto_proj_92",
           "type": "quote",
           "content": "<strong>AI 的响应实现</strong>：通过 Git 命令拉取 5 个里程碑 Commit 并保存到独立的本地文件夹，利用 Python 的 <code>http.server</code> 依次在 <code>8001</code>-<code>8005</code> 端口并发拉起本地服务，帮助项目进行可视化多版本回溯展示。"
         },
         {
-          "id": "b_auto_91",
+          "id": "b_auto_proj_93",
           "type": "heading",
           "level": 3,
           "content": "5.3 AI 协同开发界面与对话实录"
         },
         {
-          "id": "b_auto_92",
+          "id": "b_auto_proj_94",
           "type": "paragraph",
           "content": "为直观展示人机协同的开发状态与迭代记录，以下是协同界面、对话流树以及项目从开始到完成的 prompt 与回答过程截图："
         },
         {
-          "id": "b_auto_93",
+          "id": "b_auto_proj_95",
           "type": "paragraph",
           "content": "1. <strong>AI 协同开发与代码实时对比 Review 界面</strong>："
         },
         {
-          "id": "b_auto_94",
+          "id": "b_auto_proj_96",
           "type": "paragraph",
           "content": "展示了 AI (Antigravity) 执行任务时的实时 Diff 比对与代码评审过程，右侧以红绿行清晰呈现在本地执行的修改方案。"
         },
         {
-          "id": "b_auto_95",
+          "id": "b_auto_proj_97",
           "type": "image",
-          "src": "images/homework/project/a1175733a97f9fef87b5859f3a786968.png",
+          "src": "netdrive://a1175733a97f9fef87b5859f3a786968",
           "caption": "Antigravity 协同开发与代码对比界面"
         },
         {
-          "id": "b_auto_96",
+          "id": "b_auto_proj_98",
           "type": "paragraph",
           "content": "2. <strong>Antigravity 历史对话树 (Conversation History) 管理</strong>："
         },
         {
-          "id": "b_auto_97",
+          "id": "b_auto_proj_99",
           "type": "paragraph",
           "content": "记录了团队针对主分支博客维护、编辑器优化、资源相对路径重构等一系列历史任务的迭代会话。"
         },
         {
-          "id": "b_auto_98",
+          "id": "b_auto_proj_100",
           "type": "image",
-          "src": "images/homework/project/616e118e0daab259460866764dc91815.png",
+          "src": "netdrive://616e118e0daab259460866764dc91815",
           "caption": "Antigravity 历史对话树"
         },
         {
-          "id": "b_auto_99",
+          "id": "b_auto_proj_101",
           "type": "paragraph",
           "content": "3. <strong>从项目启动到最终交付的 Prompt 意图与解答过程快照</strong>："
         },
         {
-          "id": "b_auto_100",
+          "id": "b_auto_proj_102",
           "type": "paragraph",
           "content": "完整展现了利用 AI 从最初的“冗余文件规整”到最终“编写本地 Git Pre-commit 钩子、自愈缓存校验算法”的架构设计与实现对话脉络。"
         },
         {
-          "id": "b_auto_101",
+          "id": "b_auto_proj_103",
           "type": "image",
-          "src": "images/homework/project/152870a4dd025167f049d852e39bd1bb.png",
+          "src": "netdrive://152870a4dd025167f049d852e39bd1bb",
           "caption": "人机协同 Prompt 与回答全生命周期过程"
         },
         {
-          "id": "b_auto_102",
+          "id": "b_auto_proj_104",
           "type": "divider"
         },
         {
-          "id": "b_auto_103",
+          "id": "b_auto_proj_105",
           "type": "heading",
           "level": 2,
           "content": "六、项目成果总结"
         },
         {
-          "id": "b_auto_104",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 分支管理 | <strong>关键操作与修复</strong>: 归档旧项目到 <code>archive</code> 分支，清理主干无用原型 | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_proj_106",
+          "type": "paragraph",
+          "content": "| 开发阶段 | 关键操作与修复 | 完成状态 |"
         },
         {
-          "id": "b_auto_105",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 编辑器核心 | <strong>关键操作与修复</strong>: 实现 BlockEditor，支持行内 Markdown 兼容 | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_proj_107",
+          "type": "paragraph",
+          "content": "|---------|---------|---------|"
         },
         {
-          "id": "b_auto_106",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 成员卡片 | <strong>关键操作与修复</strong>: Hkz 主创置首，动态提取头像和职责 | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_proj_108",
+          "type": "paragraph",
+          "content": "| 分支管理 | 归档旧项目到 <code>archive</code> 分支，清理主干无用原型 | ✅ 完成 |"
         },
         {
-          "id": "b_auto_107",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 目录大纲 | <strong>关键操作与修复</strong>: 增加 auto-numbering 大纲并移至笔记开头，支持虚线玻璃态 | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_proj_109",
+          "type": "paragraph",
+          "content": "| 编辑器核心 | 实现 BlockEditor，支持行内 Markdown 兼容 | ✅ 完成 |"
         },
         {
-          "id": "b_auto_108",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 路径兼容性 | <strong>关键操作与修复</strong>: 批量修正图片为相对路径，部署至 GitHub Pages 畅通无阻 | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_proj_110",
+          "type": "paragraph",
+          "content": "| 成员卡片 | Hkz 主创置首，动态提取头像和职责 | ✅ 完成 |"
         },
         {
-          "id": "b_auto_109",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 缓存失效控制 | <strong>关键操作与修复</strong>: 增加自愈逻辑，避免浏览器本地缓存过期导致图片报错 | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_proj_111",
+          "type": "paragraph",
+          "content": "| 目录大纲 | 增加 auto-numbering 大纲并移至笔记开头，支持虚线玻璃态 | ✅ 完成 |"
         },
         {
-          "id": "b_auto_110",
-          "type": "bullet-list",
-          "content": "<strong>开发阶段</strong>: 自动化验证 | <strong>关键操作与修复</strong>: 部署 Pre-commit hook，执行全方位缓存与数据安全体检 | <strong>完成状态</strong>: ✅ 完成"
+          "id": "b_auto_proj_112",
+          "type": "paragraph",
+          "content": "| 路径兼容性 | 批量修正图片为相对路径，部署至 GitHub Pages 畅通无阻 | ✅ 完成 |"
         },
         {
-          "id": "b_auto_111",
+          "id": "b_auto_proj_113",
+          "type": "paragraph",
+          "content": "| 缓存失效控制 | 增加自愈逻辑，避免浏览器本地缓存过期导致图片报错 | ✅ 完成 |"
+        },
+        {
+          "id": "b_auto_proj_114",
+          "type": "paragraph",
+          "content": "| 自动化验证 | 部署 Pre-commit hook，执行全方位缓存与数据安全体检 | ✅ 完成 |"
+        },
+        {
+          "id": "b_auto_proj_115",
           "type": "divider"
         },
         {
-          "id": "b_auto_112",
+          "id": "b_auto_proj_116",
           "type": "heading",
           "level": 2,
           "content": "七、项目要点与心得"
         },
         {
-          "id": "b_auto_113",
+          "id": "b_auto_proj_117",
           "type": "paragraph",
           "content": "1. <strong>分支策略是代码整洁的重要防线</strong>：在进行大规模重构时，及时做好旧代码的归档和新主干的精简，有助于厘清开发头绪，确保核心业务不受历史遗留代码的影响。"
         },
         {
-          "id": "b_auto_114",
+          "id": "b_auto_proj_118",
           "type": "paragraph",
           "content": "2. <strong>多环境测试的重要性</strong>：本地开发环境往往对路径大小写、绝对/相对路径宽容度较高；而静态托管生产环境（GitHub Pages）有更严格的规范。在项目管理中，规范化路径与自动化体检必不可少。"
         },
         {
-          "id": "b_auto_115",
+          "id": "b_auto_proj_119",
           "type": "paragraph",
           "content": "3. <strong>“无数据库”架构的同步挑战</strong>：利用 JSON 和 <code>localStorage</code> 搭建 CMS 能够带来极高的性能与便利，但必须配备完善 of “客户端缓存版本管理”与“自愈判定”，才能实现跨版本平滑过渡。"
         },
         {
-          "id": "b_auto_116",
+          "id": "b_auto_proj_120",
           "type": "divider"
         },
         {
-          "id": "b_auto_117",
+          "id": "b_auto_proj_121",
           "type": "heading",
           "level": 2,
           "content": "八、与其他作业的衔接"
         },
         {
-          "id": "b_auto_118",
+          "id": "b_auto_proj_122",
           "type": "paragraph",
           "content": "本“项目管理与协作开发”作为整组作业博客的基底和内容发布中枢，为后续的其他作业提供了直观的展示空间。后续的 <strong>CAD设计</strong>、<strong>3D打印</strong>、<strong>Arduino应用</strong>、<strong>IOT交互</strong> 等平时作业 and 最终项目，均已统一导入到本平台中，实现了学习成果的数字化沉淀与高审美呈现。"
         },
         {
-          "id": "b_auto_119",
+          "id": "b_auto_proj_123",
           "type": "divider"
         },
         {
-          "id": "b_auto_120",
+          "id": "b_auto_proj_124",
           "type": "quote",
           "content": "<strong>项目名称</strong>：项目管理与协作开发汇报"
         },
         {
-          "id": "b_auto_121",
+          "id": "b_auto_proj_125",
           "type": "quote",
           "content": "<strong>技术栈</strong>：HTML5 / Vanilla CSS / JavaScript (ES Modules) / Git / GitHub Pages"
         },
         {
-          "id": "b_auto_122",
+          "id": "b_auto_proj_126",
           "type": "quote",
           "content": "<strong>更新时间</strong>：2026年6月"
         },
         {
-          "id": "b_auto_123",
+          "id": "b_auto_proj_127",
           "type": "quote",
           "content": "<strong>关键词</strong>：<code>项目管理</code> <code>Git 分支策略</code> <code>块级编辑器</code> <code>路径修复</code> <code>缓存自愈</code> <code>GitHub Pages</code> <code>Pre-commit</code>"
         }
@@ -794,309 +814,65 @@
       "parentId": "root-homework",
       "blocks": [
         {
-          "id": "b_auto_68",
+          "id": "b_auto_cad_1",
+          "type": "paragraph",
+          "content": "#"
+        },
+        {
+          "id": "b_auto_cad_2",
           "type": "heading",
           "level": 1,
-          "content": "CAD 设计 — 作业汇报"
+          "content": "CAD Modeling Process"
         },
         {
-          "id": "b_auto_69",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_70",
+          "id": "b_auto_cad_3",
           "type": "heading",
           "level": 2,
-          "content": "一、项目简介"
+          "content": "Introduction"
         },
         {
-          "id": "b_auto_71",
+          "id": "b_auto_cad_4",
           "type": "paragraph",
-          "content": "本作业使用 <strong>Fusion 360</strong>（Autodesk 旗下三维 CAD/CAM/CAE 一体化设计平台）完成了一个 <strong>蘑菇灯（Mushroom Lamp）</strong> 的三维建模设计项目，涵盖从草图绘制、实体建模、曲面造型到渲染输出的完整设计流程。"
+          "content": "CAD refers to computer-aided design software. It is used for drawing and building 3D solid models on computers. We can design the appearance and internal structure of products independently, and export the completed model files for 3D printing processing."
         },
         {
-          "id": "b_auto_72",
+          "id": "b_auto_cad_5",
           "type": "paragraph",
-          "content": "<strong>设计软件</strong>：Fusion 360"
+          "content": "In this experiment, we designed two models: an off-road vehicle and a mushroom lamp shell."
         },
         {
-          "id": "b_auto_73",
-          "type": "paragraph",
-          "content": "<strong>设计对象</strong>：蘑菇灯外壳三维模型"
-        },
-        {
-          "id": "b_auto_74",
-          "type": "paragraph",
-          "content": "<strong>涉及技术</strong>：参数化草图、旋转实体、曲面放样、抽壳、外观渲染"
-        },
-        {
-          "id": "b_auto_75",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_76",
+          "id": "b_auto_cad_6",
           "type": "heading",
           "level": 2,
-          "content": "二、技术介绍"
+          "content": "1. Off-road Vehicle Model Design"
         },
         {
-          "id": "b_auto_77",
+          "id": "b_auto_cad_7",
           "type": "paragraph",
-          "content": "Fusion 360 是一款基于云的三维设计平台，集成了参数化建模、自由造型、网格编辑、渲染和 CAM 加工等功能。相比传统 CAD 软件，其优势在于："
+          "content": "We draw basic sketches, generate solid parts and complete the whole assembly structure in the modeling software."
         },
         {
-          "id": "b_auto_78",
-          "type": "bullet-list",
-          "content": "<strong>云协作</strong>：设计数据云端存储，支持多人协作"
+          "id": "b_auto_cad_8",
+          "type": "image",
+          "src": "images/homework/cad/bc9c26b793c5ac9facf1d1a5fdd5a876.png",
+          "caption": "Fusion360越野车建模界面"
         },
         {
-          "id": "b_auto_79",
-          "type": "bullet-list",
-          "content": "<strong>一体化</strong>：设计-仿真-制造全流程覆盖"
-        },
-        {
-          "id": "b_auto_80",
-          "type": "bullet-list",
-          "content": "<strong>参数化</strong>：支持历史时间轴，可回溯修改任意步骤"
-        },
-        {
-          "id": "b_auto_81",
-          "type": "bullet-list",
-          "content": "<strong>多平台</strong>：支持 Windows 和 macOS"
-        },
-        {
-          "id": "b_auto_82",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_83",
+          "id": "b_auto_cad_9",
           "type": "heading",
           "level": 2,
-          "content": "三、设计过程"
+          "content": "2. Mushroom Lamp Model Design"
         },
         {
-          "id": "b_auto_84",
-          "type": "heading",
-          "level": 3,
-          "content": "3.1 草图绘制"
-        },
-        {
-          "id": "b_auto_85",
+          "id": "b_auto_cad_10",
           "type": "paragraph",
-          "content": "在 Fusion 360 中新建草图，使用<strong>直线、圆弧、样条曲线</strong>等工具绘制蘑菇灯主体轮廓的二维截面。"
+          "content": "We use curved surface tools to make the special shape of the mushroom lamp, adjust the overall size, and export the finished model file."
         },
         {
-          "id": "b_auto_86",
+          "id": "b_auto_cad_11",
           "type": "image",
-          "src": "images/homework/cad/lQDPJwAx3s9YpLfNArrNBQCwg2e-8I_lMZAKETHdSls_AA_1280_698.jpg",
-          "caption": "蘑菇灯草图绘制"
-        },
-        {
-          "id": "b_auto_87",
-          "type": "image",
-          "src": "images/homework/cad/lQDPJwKUJCAR0rfNAtTNBQCwwQFv8baSzx4KETHcuvOUAA_1280_724.jpg",
-          "caption": "蘑菇灯截面草图"
-        },
-        {
-          "id": "b_auto_88",
-          "type": "heading",
-          "level": 3,
-          "content": "3.2 实体建模"
-        },
-        {
-          "id": "b_auto_89",
-          "type": "paragraph",
-          "content": "使用 <strong>Revolve（旋转）</strong> 命令将草图截面绕中心轴旋转 360°，生成蘑菇灯主体的三维实体模型。"
-        },
-        {
-          "id": "b_auto_90",
-          "type": "image",
-          "src": "images/homework/cad/lQDPJwC7NFSMmLfNAf7NAeGwD-NwleOuXnwKETHigzvfAA_481_510.jpg",
-          "caption": "旋转生成实体"
-        },
-        {
-          "id": "b_auto_91",
-          "type": "image",
-          "src": "images/homework/cad/lQDPKHCvkeLjZjfNBBjNAfiwT-9m_E-QO10KETHjDXLoAA_504_1048.jpg",
-          "caption": "实体模型视图"
-        },
-        {
-          "id": "b_auto_92",
-          "type": "heading",
-          "level": 3,
-          "content": "3.3 抽壳与细化"
-        },
-        {
-          "id": "b_auto_93",
-          "type": "paragraph",
-          "content": "使用 <strong>Shell（抽壳）</strong> 命令对实体进行壁厚处理，使蘑菇灯外壳变为中空结构，适用于后续 3D 打印。"
-        },
-        {
-          "id": "b_auto_94",
-          "type": "image",
-          "src": "images/homework/cad/lQDPKILXFn-mpzfNA_zNAf-wdXP7cWBl9OMKETHkA0OXAA_511_1020.jpg",
-          "caption": "抽壳操作"
-        },
-        {
-          "id": "b_auto_95",
-          "type": "image",
-          "src": "images/homework/cad/lQDPJwvF6eahNbfNA97NBQCwxQwe834vPP8KETHemtjvAA_1280_990.jpg",
-          "caption": "模型细化"
-        },
-        {
-          "id": "b_auto_96",
-          "type": "heading",
-          "level": 3,
-          "content": "3.4 外观与渲染"
-        },
-        {
-          "id": "b_auto_97",
-          "type": "paragraph",
-          "content": "为模型赋予材质和颜色，设置场景光照，生成高质量渲染效果图。"
-        },
-        {
-          "id": "b_auto_98",
-          "type": "image",
-          "src": "images/homework/cad/lQDPJxB_iroP-LfNBCDNBMOweegIrJPEXkQKETHgkRleAA_1219_1056.jpg",
-          "caption": "渲染效果图"
-        },
-        {
-          "id": "b_auto_99",
-          "type": "image",
-          "src": "images/homework/cad/lQDPKekWtxSttrfNBE7NBPawlmO5TityvUwKETHffGVXAA_1270_1102.jpg",
-          "caption": "模型多角度展示"
-        },
-        {
-          "id": "b_auto_100",
-          "type": "heading",
-          "level": 3,
-          "content": "3.5 设计最终成果"
-        },
-        {
-          "id": "b_auto_101",
-          "type": "paragraph",
-          "content": "蘑菇灯外壳模型设计完成，具备光滑的曲面过渡和均匀的壁厚，适合进行 3D 打印制造。"
-        },
-        {
-          "id": "b_auto_102",
-          "type": "image",
-          "src": "images/homework/cad/lQDPJwmS76o6eTfNAt7NBQCwZ8Sah0hPZqkKETHlXE7VAA_1280_734.jpg",
-          "caption": "最终设计效果"
-        },
-        {
-          "id": "b_auto_103",
-          "type": "image",
-          "src": "images/homework/cad/291.png.JPG",
-          "caption": "设计完成界面"
-        },
-        {
-          "id": "b_auto_104",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_105",
-          "type": "heading",
-          "level": 2,
-          "content": "四、设计成果总结"
-        },
-        {
-          "id": "b_auto_106",
-          "type": "bullet-list",
-          "content": "<strong>设计阶段</strong>: --------- | <strong>关键操作</strong>: --------- | <strong>完成状态</strong>: ---------"
-        },
-        {
-          "id": "b_auto_107",
-          "type": "bullet-list",
-          "content": "<strong>设计阶段</strong>: 草图绘制 | <strong>关键操作</strong>: 直线、圆弧、样条曲线 | <strong>完成状态</strong>: ✅ 完成"
-        },
-        {
-          "id": "b_auto_108",
-          "type": "bullet-list",
-          "content": "<strong>设计阶段</strong>: 实体旋转 | <strong>关键操作</strong>: Revolve 命令 | <strong>完成状态</strong>: ✅ 完成"
-        },
-        {
-          "id": "b_auto_109",
-          "type": "bullet-list",
-          "content": "<strong>设计阶段</strong>: 抽壳处理 | <strong>关键操作</strong>: Shell 命令 | <strong>完成状态</strong>: ✅ 完成"
-        },
-        {
-          "id": "b_auto_110",
-          "type": "bullet-list",
-          "content": "<strong>设计阶段</strong>: 外观渲染 | <strong>关键操作</strong>: 材质、光照设置 | <strong>完成状态</strong>: ✅ 完成"
-        },
-        {
-          "id": "b_auto_111",
-          "type": "bullet-list",
-          "content": "<strong>设计阶段</strong>: 导出模型 | <strong>关键操作</strong>: STL 格式导出 | <strong>完成状态</strong>: ✅ 完成"
-        },
-        {
-          "id": "b_auto_112",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_113",
-          "type": "heading",
-          "level": 2,
-          "content": "五、设计要点与心得"
-        },
-        {
-          "id": "b_auto_114",
-          "type": "paragraph",
-          "content": "1. <strong>草图约束的重要性</strong>：在绘制二维草图时，充分的几何约束和尺寸标注能保证后续三维建模的精度和可修改性"
-        },
-        {
-          "id": "b_auto_115",
-          "type": "paragraph",
-          "content": "2. <strong>旋转建模适用场景</strong>：蘑菇灯这种旋转对称的造型非常适合使用 Revolve 命令，一条截面曲线即可生成完整形体"
-        },
-        {
-          "id": "b_auto_116",
-          "type": "paragraph",
-          "content": "3. <strong>抽壳壁厚选择</strong>：壁厚需要综合考虑 3D 打印精度和结构强度，太薄易碎、太厚浪费材料"
-        },
-        {
-          "id": "b_auto_117",
-          "type": "paragraph",
-          "content": "4. <strong>渲染让设计更直观</strong>：通过材质和渲染，可以在制造前直观预览产品效果，方便沟通和迭代"
-        },
-        {
-          "id": "b_auto_118",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_119",
-          "type": "heading",
-          "level": 2,
-          "content": "六、与 3D 打印的衔接"
-        },
-        {
-          "id": "b_auto_120",
-          "type": "paragraph",
-          "content": "本 CAD 设计模型将导出为 <strong>STL 格式</strong>，导入 Bambu Studio 切片软件进行打印参数设置，最终通过 Bambu Lab X2D 3D 打印机完成实物制造，形成\"设计 → 制造\"的完整闭环。"
-        },
-        {
-          "id": "b_auto_121",
-          "type": "divider"
-        },
-        {
-          "id": "b_auto_122",
-          "type": "quote",
-          "content": "<strong>项目名称</strong>：CAD 设计（蘑菇灯三维建模）"
-        },
-        {
-          "id": "b_auto_123",
-          "type": "quote",
-          "content": "<strong>设计软件</strong>：Fusion 360"
-        },
-        {
-          "id": "b_auto_124",
-          "type": "quote",
-          "content": "<strong>更新时间</strong>：2026年6月"
-        },
-        {
-          "id": "b_auto_125",
-          "type": "quote",
-          "content": "<strong>关键词</strong>：<code>Fusion 360</code> <code>CAD</code> <code>三维建模</code> <code>蘑菇灯</code> <code>参数化设计</code> <code>渲染</code>"
+          "src": "images/homework/cad/49539cd1083902c36546e59ca4def11f.png",
+          "caption": "Fusion360蘑菇灯建模界面"
         }
       ]
     },
@@ -1107,177 +883,177 @@
       "parentId": "root-homework",
       "blocks": [
         {
-          "id": "b_auto_3d_2",
+          "id": "b_auto_3d_1",
           "type": "heading",
           "level": 1,
           "content": "实验 5：3D 打印"
         },
         {
-          "id": "b_auto_3d_3",
+          "id": "b_auto_3d_2",
           "type": "heading",
           "level": 2,
           "content": "技术介绍"
         },
         {
-          "id": "b_auto_3d_4",
+          "id": "b_auto_3d_3",
           "type": "paragraph",
           "content": "3D 打印是一种增材制造技术，通过逐层堆叠打印材料来制造实体物理对象。相比传统的切削加工方法，它具有更高的设计自由度和更少的材料浪费，能够实现各种复杂结构模型的生产。"
         },
         {
-          "id": "b_auto_3d_5",
+          "id": "b_auto_3d_4",
           "type": "paragraph",
           "content": "本次实践使用 Bambu Lab X2D 桌面级 3D 打印机，配备 AMS 2 Pro 多材料供料系统。该打印机具备多项智能自动功能，打印速度稳定，且对不同打印材料具有良好的兼容性。我们在 Bambu Studio 软件中完成了两组模型的打印：测试方块和蘑菇灯外壳。"
         },
         {
-          "id": "b_auto_3d_6",
+          "id": "b_auto_3d_5",
           "type": "heading",
           "level": 2,
           "content": "操作过程"
         },
         {
-          "id": "b_auto_3d_7",
+          "id": "b_auto_3d_6",
           "type": "heading",
           "level": 3,
           "content": "1. 在 Bambu Studio 中创建测试模型"
         },
         {
-          "id": "b_auto_3d_8",
+          "id": "b_auto_3d_7",
           "type": "paragraph",
           "content": "在软件中直接创建基础的立方体模型，调整其尺寸参数，作为打印练习的测试件。"
         },
         {
-          "id": "b_auto_3d_9",
+          "id": "b_auto_3d_8",
           "type": "image",
           "src": "images/homework/3dprint/7e0fbc17ef1296416a6b36e035717d19.jpg",
           "caption": "Bambu Studio 软件方块建模界面"
         },
         {
-          "id": "b_auto_3d_10",
+          "id": "b_auto_3d_9",
           "type": "heading",
           "level": 3,
           "content": "2. 导入并排版蘑菇灯模型"
         },
         {
-          "id": "b_auto_3d_11",
+          "id": "b_auto_3d_10",
           "type": "paragraph",
           "content": "将预先设计的蘑菇灯外壳模型导入软件中，合理调整其在打印平台上的尺寸、位置和摆放角度，以确保稳定打印。"
         },
         {
-          "id": "b_auto_3d_12",
+          "id": "b_auto_3d_11",
           "type": "image",
           "src": "images/homework/3dprint/9fafa4cd98d147779772a1b433fb3821.png",
           "caption": "蘑菇灯模型排版界面"
         },
         {
-          "id": "b_auto_3d_13",
+          "id": "b_auto_3d_12",
           "type": "heading",
           "level": 3,
           "content": "3. 设置切片参数"
         },
         {
-          "id": "b_auto_3d_14",
+          "id": "b_auto_3d_13",
           "type": "paragraph",
           "content": "完成模型排版后，在软件中设置专业的切片和打印参数，并生成设备的标准打印文件。"
         },
         {
-          "id": "b_auto_3d_15",
+          "id": "b_auto_3d_14",
           "type": "image",
           "src": "images/homework/3dprint/lQDPJw_4Bt_0fBfNELzNFlCw_Q5TqnGSkmUKET1p_etSAA_5712_4284.jpg",
           "caption": "软件切片参数设置"
         },
         {
-          "id": "b_auto_3d_16",
+          "id": "b_auto_3d_15",
           "type": "heading",
           "level": 3,
           "content": "4. 下发打印任务"
         },
         {
-          "id": "b_auto_3d_17",
+          "id": "b_auto_3d_16",
           "type": "paragraph",
           "content": "通过无线网络连接设备，利用手机 App 将切片后的打印文件上传至 Bambu Lab X2D 打印机。"
         },
         {
-          "id": "b_auto_3d_18",
+          "id": "b_auto_3d_17",
           "type": "image",
           "src": "images/homework/3dprint/9fafa4cd98d147779772a1b433fb3821.png",
           "caption": "3D打印机整机"
         },
         {
-          "id": "b_auto_3d_19",
+          "id": "b_auto_3d_18",
           "type": "heading",
           "level": 3,
           "content": "5. 正式打印与观察"
         },
         {
-          "id": "b_auto_3d_20",
+          "id": "b_auto_3d_19",
           "type": "paragraph",
           "content": "打印机自动执行分层打印。我们全程观察喷头运行状态、打印速度以及设备的实时进度。"
         },
         {
-          "id": "b_auto_3d_21",
+          "id": "b_auto_3d_20",
           "type": "image",
           "src": "images/homework/3dprint/lQDPKHUMbhUCd5fND8DNC9CwHZdRwELqwP0KET1iheypAA_3024_4032.jpg",
           "caption": "打印机屏幕进度实拍"
         },
         {
-          "id": "b_auto_3d_22",
+          "id": "b_auto_3d_21",
           "type": "image",
           "src": "images/homework/3dprint/lQDPJwdnPBHLD7fNAtHNBQCwA31ZG6cvRbkKETHYKU5FAA_1280_721.jpg",
           "caption": "打印喷头工作近景实拍"
         },
         {
-          "id": "b_auto_3d_23",
+          "id": "b_auto_3d_22",
           "type": "paragraph",
           "content": "以下是打印过程与填充测试的更多细节："
         },
         {
-          "id": "b_auto_3d_24",
+          "id": "b_auto_3d_23",
           "type": "image",
           "src": "images/homework/3dprint/lQDPKHi2HlTM4LfNAtHNBQCwaiF8DymAF4YKETHZjQIMAA_1280_721.jpg",
           "caption": "不同填充模式近景"
         },
         {
-          "id": "b_auto_3d_25",
+          "id": "b_auto_3d_24",
           "type": "image",
           "src": "images/homework/3dprint/lQDPKGaOmbnX9xfNEXTNDwCw4dFtPt-dotkKET1l1TsEAA_3840_4468.jpg",
           "caption": "方块矩阵打印过程"
         },
         {
-          "id": "b_auto_3d_26",
+          "id": "b_auto_3d_25",
           "type": "heading",
           "level": 2,
           "content": "成品展示"
         },
         {
-          "id": "b_auto_3d_27",
+          "id": "b_auto_3d_26",
           "type": "heading",
           "level": 3,
           "content": "1. 测试方块成品"
         },
         {
-          "id": "b_auto_3d_28",
+          "id": "b_auto_3d_27",
           "type": "paragraph",
           "content": "打印出的测试方块结构完整，形状规整，表面光滑，验证了打印机的正常运行。"
         },
         {
-          "id": "b_auto_3d_29",
+          "id": "b_auto_3d_28",
           "type": "image",
           "src": "images/homework/3dprint/c8b0b6bf7baf908568e0867cde1706e1.jpg",
           "caption": "方块成品实拍"
         },
         {
-          "id": "b_auto_3d_30",
+          "id": "b_auto_3d_29",
           "type": "heading",
           "level": 3,
           "content": "2. 蘑菇灯成品"
         },
         {
-          "id": "b_auto_3d_31",
+          "id": "b_auto_3d_30",
           "type": "paragraph",
           "content": "打印出的蘑菇灯外壳弧度流畅，轮廓完整，无明显打印缺陷，符合设计与制作要求。"
         },
         {
-          "id": "b_auto_3d_32",
+          "id": "b_auto_3d_31",
           "type": "image",
           "src": "images/homework/3dprint/62df13f12aaa4a1d858b04abfae702d0.png",
           "caption": "蘑菇灯成品实拍"
@@ -1300,7 +1076,7 @@
           "id": "b_auto_ard_2",
           "type": "heading",
           "level": 2,
-          "content": "1\\. Arduino IDE 开发环境与编程前置基础"
+          "content": "1. Arduino IDE 开发环境与编程前置基础"
         },
         {
           "id": "b_auto_ard_3",
@@ -1311,7 +1087,7 @@
           "id": "b_auto_ard_4",
           "type": "heading",
           "level": 3,
-          "content": "1\\.1 认识 Arduino IDE 主界面"
+          "content": "1.1 认识 Arduino IDE 主界面"
         },
         {
           "id": "b_auto_ard_5",
@@ -1348,7 +1124,7 @@
           "id": "b_auto_ard_11",
           "type": "heading",
           "level": 3,
-          "content": "1\\.2 配置开发板与通信端口（必做步骤）"
+          "content": "1.2 配置开发板与通信端口（必做步骤）"
         },
         {
           "id": "b_auto_ard_12",
@@ -1385,7 +1161,7 @@
           "id": "b_auto_ard_18",
           "type": "heading",
           "level": 3,
-          "content": "1\\.3 Arduino 程序核心结构（setup 与 loop 函数）"
+          "content": "1.3 Arduino 程序核心结构（setup 与 loop 函数）"
         },
         {
           "id": "b_auto_ard_19",
@@ -1401,7 +1177,7 @@
         {
           "id": "b_auto_ard_21",
           "type": "paragraph",
-          "content": "#### 1\\.3\\.1 setup() 初始化函数"
+          "content": "<strong>1.3.1 setup() 初始化函数</strong>"
         },
         {
           "id": "b_auto_ard_22",
@@ -1436,7 +1212,7 @@
         {
           "id": "b_auto_ard_28",
           "type": "paragraph",
-          "content": "#### 1\\.3\\.2 loop() 循环主函数"
+          "content": "<strong>1.3.2 loop() 循环主函数</strong>"
         },
         {
           "id": "b_auto_ard_29",
@@ -1481,29 +1257,29 @@
           "id": "b_auto_ard_37",
           "type": "heading",
           "level": 2,
-          "content": "2\\. 开发环境搭建"
+          "content": "2. 开发环境搭建"
         },
         {
           "id": "b_auto_ard_38",
           "type": "heading",
           "level": 3,
-          "content": "2\\.1 安装 Arduino IDE"
+          "content": "2.1 安装 Arduino IDE"
         },
         {
           "id": "b_auto_ard_39",
           "type": "paragraph",
-          "content": "1\\. 访问[arduino\\.cc](https://www.arduino.cc/) 下载对应系统版本的 IDE。"
+          "content": "1. 访问[arduino.cc](https://www.arduino.cc/) 下载对应系统版本的 IDE。"
         },
         {
           "id": "b_auto_ard_40",
           "type": "paragraph",
-          "content": "2\\. 安装完成后打开 IDE，完成上述开发板与端口配置即可开始编程。"
+          "content": "2. 安装完成后打开 IDE，完成上述开发板与端口配置即可开始编程。"
         },
         {
           "id": "b_auto_ard_41",
           "type": "heading",
           "level": 3,
-          "content": "2\\.2 驱动安装（如需）"
+          "content": "2.2 驱动安装（如需）"
         },
         {
           "id": "b_auto_ard_42",
@@ -1514,12 +1290,12 @@
           "id": "b_auto_ard_43",
           "type": "heading",
           "level": 3,
-          "content": "2\\.3 第一个程序：Blink 闪烁"
+          "content": "2.3 第一个程序：Blink 闪烁"
         },
         {
           "id": "b_auto_ard_44",
           "type": "paragraph",
-          "content": "打开 IDE，进入 <strong>文件 > 示例 > 01\\.Basics > Blink</strong>，点击上传按钮（→），板载 LED 即可开始闪烁。"
+          "content": "打开 IDE，进入 <strong>文件 \\> 示例 \\> 01.Basics \\> Blink</strong>，点击上传按钮（→），板载 LED 即可开始闪烁。"
         },
         {
           "id": "b_auto_ard_45",
@@ -1529,13 +1305,13 @@
           "id": "b_auto_ard_46",
           "type": "heading",
           "level": 2,
-          "content": "3\\. Arduino 编程基础"
+          "content": "3. Arduino 编程基础"
         },
         {
           "id": "b_auto_ard_47",
           "type": "heading",
           "level": 3,
-          "content": "3\\.1 程序基础结构"
+          "content": "3.1 程序基础结构"
         },
         {
           "id": "b_auto_ard_48",
@@ -1551,7 +1327,7 @@
           "id": "b_auto_ard_50",
           "type": "heading",
           "level": 3,
-          "content": "3\\.2 代码注释"
+          "content": "3.2 代码注释"
         },
         {
           "id": "b_auto_ard_51",
@@ -1567,7 +1343,7 @@
           "id": "b_auto_ard_53",
           "type": "heading",
           "level": 3,
-          "content": "3\\.3 变量与数据类型"
+          "content": "3.3 变量与数据类型"
         },
         {
           "id": "b_auto_ard_54",
@@ -1598,7 +1374,7 @@
           "id": "b_auto_ard_59",
           "type": "heading",
           "level": 3,
-          "content": "3\\.4 常用常量"
+          "content": "3.4 常用常量"
         },
         {
           "id": "b_auto_ard_60",
@@ -1619,7 +1395,7 @@
           "id": "b_auto_ard_63",
           "type": "heading",
           "level": 3,
-          "content": "3\\.5 程序控制结构"
+          "content": "3.5 程序控制结构"
         },
         {
           "id": "b_auto_ard_64",
@@ -1639,13 +1415,13 @@
           "id": "b_auto_ard_67",
           "type": "heading",
           "level": 2,
-          "content": "4\\. 数字输入输出（数字 I/O）"
+          "content": "4. 数字输入输出（数字 I/O）"
         },
         {
           "id": "b_auto_ard_68",
           "type": "heading",
           "level": 3,
-          "content": "4\\.1 配置引脚模式"
+          "content": "4.1 配置引脚模式"
         },
         {
           "id": "b_auto_ard_69",
@@ -1656,7 +1432,7 @@
           "id": "b_auto_ard_70",
           "type": "heading",
           "level": 3,
-          "content": "4\\.2 数字输出"
+          "content": "4.2 数字输出"
         },
         {
           "id": "b_auto_ard_71",
@@ -1667,7 +1443,7 @@
           "id": "b_auto_ard_72",
           "type": "heading",
           "level": 3,
-          "content": "4\\.3 数字读取"
+          "content": "4.3 数字读取"
         },
         {
           "id": "b_auto_ard_73",
@@ -1678,7 +1454,7 @@
           "id": "b_auto_ard_74",
           "type": "heading",
           "level": 3,
-          "content": "4\\.4 实战案例：按键控制 LED 亮灭"
+          "content": "4.4 实战案例：按键控制 LED 亮灭"
         },
         {
           "id": "b_auto_ard_75",
@@ -1693,13 +1469,13 @@
           "id": "b_auto_ard_77",
           "type": "heading",
           "level": 2,
-          "content": "5\\. 模拟输入输出（PWM与ADC）"
+          "content": "5. 模拟输入输出（PWM与ADC）"
         },
         {
           "id": "b_auto_ard_78",
           "type": "heading",
           "level": 3,
-          "content": "5\\.1 模拟输入（ADC模数转换）"
+          "content": "5.1 模拟输入（ADC模数转换）"
         },
         {
           "id": "b_auto_ard_79",
@@ -1710,7 +1486,7 @@
           "id": "b_auto_ard_80",
           "type": "heading",
           "level": 3,
-          "content": "5\\.2 模拟输出（PWM脉宽调制）"
+          "content": "5.2 模拟输出（PWM脉宽调制）"
         },
         {
           "id": "b_auto_ard_81",
@@ -1721,7 +1497,7 @@
           "id": "b_auto_ard_82",
           "type": "heading",
           "level": 3,
-          "content": "5\\.3 实战案例：电位器调节 LED 亮度"
+          "content": "5.3 实战案例：电位器调节 LED 亮度"
         },
         {
           "id": "b_auto_ard_83",
@@ -1736,13 +1512,13 @@
           "id": "b_auto_ard_85",
           "type": "heading",
           "level": 2,
-          "content": "6\\. 串口通信"
+          "content": "6. 串口通信"
         },
         {
           "id": "b_auto_ard_86",
           "type": "heading",
           "level": 3,
-          "content": "6\\.1 串口初始化"
+          "content": "6.1 串口初始化"
         },
         {
           "id": "b_auto_ard_87",
@@ -1753,7 +1529,7 @@
           "id": "b_auto_ard_88",
           "type": "heading",
           "level": 3,
-          "content": "6\\.2 数据发送"
+          "content": "6.2 数据发送"
         },
         {
           "id": "b_auto_ard_89",
@@ -1769,7 +1545,7 @@
           "id": "b_auto_ard_91",
           "type": "heading",
           "level": 3,
-          "content": "6\\.3 数据接收"
+          "content": "6.3 数据接收"
         },
         {
           "id": "b_auto_ard_92",
@@ -1785,7 +1561,7 @@
           "id": "b_auto_ard_94",
           "type": "heading",
           "level": 3,
-          "content": "6\\.4 实战案例：串口打印传感器数值"
+          "content": "6.4 实战案例：串口打印传感器数值"
         },
         {
           "id": "b_auto_ard_95",
@@ -1800,13 +1576,13 @@
           "id": "b_auto_ard_97",
           "type": "heading",
           "level": 2,
-          "content": "7\\. 常用函数与库"
+          "content": "7. 常用函数与库"
         },
         {
           "id": "b_auto_ard_98",
           "type": "heading",
           "level": 3,
-          "content": "7\\.1 时间函数"
+          "content": "7.1 时间函数"
         },
         {
           "id": "b_auto_ard_99",
@@ -1832,7 +1608,7 @@
           "id": "b_auto_ard_103",
           "type": "heading",
           "level": 3,
-          "content": "7\\.2 数学函数"
+          "content": "7.2 数学函数"
         },
         {
           "id": "b_auto_ard_104",
@@ -1853,7 +1629,7 @@
           "id": "b_auto_ard_107",
           "type": "heading",
           "level": 3,
-          "content": "7\\.3 常用库"
+          "content": "7.3 常用库"
         },
         {
           "id": "b_auto_ard_108",
@@ -1883,7 +1659,7 @@
         {
           "id": "b_auto_ard_113",
           "type": "bullet-list",
-          "content": "<strong>Adafruit\\_NeoPixel</strong> – WS2812 幻彩灯带驱动"
+          "content": "<strong>Adafruit_NeoPixel</strong> – WS2812 幻彩灯带驱动"
         },
         {
           "id": "b_auto_ard_114",
@@ -1893,13 +1669,13 @@
           "id": "b_auto_ard_115",
           "type": "heading",
           "level": 2,
-          "content": "8\\. 综合实训：吹气控制幻彩旋转灯带"
+          "content": "8. 综合实训：吹气控制幻彩旋转灯带"
         },
         {
           "id": "b_auto_ard_116",
           "type": "heading",
           "level": 3,
-          "content": "8\\.1 库文件安装说明（必须操作）"
+          "content": "8.1 库文件安装说明（必须操作）"
         },
         {
           "id": "b_auto_ard_117",
@@ -1940,7 +1716,7 @@
           "id": "b_auto_ard_124",
           "type": "heading",
           "level": 3,
-          "content": "8\\.2 硬件连接"
+          "content": "8.2 硬件连接"
         },
         {
           "id": "b_auto_ard_125",
@@ -1967,7 +1743,7 @@
           "id": "b_auto_ard_129",
           "type": "heading",
           "level": 3,
-          "content": "8\\.3 功能说明"
+          "content": "8.3 功能说明"
         },
         {
           "id": "b_auto_ard_130",
@@ -1999,7 +1775,7 @@
           "id": "b_auto_ard_135",
           "type": "heading",
           "level": 3,
-          "content": "8\\.4 完整参考代码"
+          "content": "8.4 完整参考代码"
         },
         {
           "id": "b_auto_ard_136",
@@ -2014,7 +1790,7 @@
           "id": "b_auto_ard_138",
           "type": "heading",
           "level": 2,
-          "content": "9\\. 常见问题与调试技巧"
+          "content": "9. 常见问题与调试技巧"
         },
         {
           "id": "b_auto_ard_139",
@@ -2044,7 +1820,7 @@
           "id": "b_auto_ard_144",
           "type": "heading",
           "level": 2,
-          "content": "10\\. 进阶学习建议"
+          "content": "10. 进阶学习建议"
         },
         {
           "id": "b_auto_ard_145",
@@ -2821,7 +2597,7 @@
         {
           "id": "b_auto_mat_9",
           "type": "paragraph",
-          "content": "**主要应用**"
+          "content": "<strong>主要应用</strong>"
         },
         {
           "id": "b_auto_mat_10",
@@ -2831,7 +2607,7 @@
         {
           "id": "b_auto_mat_11",
           "type": "paragraph",
-          "content": "**关键特性**"
+          "content": "<strong>关键特性</strong>"
         },
         {
           "id": "b_auto_mat_12",
@@ -2856,7 +2632,7 @@
         {
           "id": "b_auto_mat_16",
           "type": "paragraph",
-          "content": "**选用原因**"
+          "content": "<strong>选用原因</strong>"
         },
         {
           "id": "b_auto_mat_17",
@@ -2892,7 +2668,7 @@
         {
           "id": "b_auto_mat_23",
           "type": "paragraph",
-          "content": "**主要应用**"
+          "content": "<strong>主要应用</strong>"
         },
         {
           "id": "b_auto_mat_24",
@@ -2902,7 +2678,7 @@
         {
           "id": "b_auto_mat_25",
           "type": "paragraph",
-          "content": "**关键特性**"
+          "content": "<strong>关键特性</strong>"
         },
         {
           "id": "b_auto_mat_26",
@@ -2927,7 +2703,7 @@
         {
           "id": "b_auto_mat_30",
           "type": "paragraph",
-          "content": "**选用原因**"
+          "content": "<strong>选用原因</strong>"
         },
         {
           "id": "b_auto_mat_31",
@@ -2963,7 +2739,7 @@
         {
           "id": "b_auto_mat_37",
           "type": "paragraph",
-          "content": "**主要应用**"
+          "content": "<strong>主要应用</strong>"
         },
         {
           "id": "b_auto_mat_38",
@@ -2973,7 +2749,7 @@
         {
           "id": "b_auto_mat_39",
           "type": "paragraph",
-          "content": "**关键特性**"
+          "content": "<strong>关键特性</strong>"
         },
         {
           "id": "b_auto_mat_40",
@@ -2998,7 +2774,7 @@
         {
           "id": "b_auto_mat_44",
           "type": "paragraph",
-          "content": "**选用原因**"
+          "content": "<strong>选用原因</strong>"
         },
         {
           "id": "b_auto_mat_45",
@@ -3040,7 +2816,7 @@
         {
           "id": "b_auto_mat_52",
           "type": "paragraph",
-          "content": "**突破性特性**"
+          "content": "<strong>突破性特性</strong>"
         },
         {
           "id": "b_auto_mat_53",
@@ -3065,7 +2841,7 @@
         {
           "id": "b_auto_mat_57",
           "type": "paragraph",
-          "content": "**前瞻应用**"
+          "content": "<strong>前瞻应用</strong>"
         },
         {
           "id": "b_auto_mat_58",
@@ -3116,7 +2892,7 @@
         {
           "id": "b_auto_mat_67",
           "type": "paragraph",
-          "content": "**独特性能**"
+          "content": "<strong>独特性能</strong>"
         },
         {
           "id": "b_auto_mat_68",
@@ -3141,7 +2917,7 @@
         {
           "id": "b_auto_mat_72",
           "type": "paragraph",
-          "content": "**前瞻应用**"
+          "content": "<strong>前瞻应用</strong>"
         },
         {
           "id": "b_auto_mat_73",
@@ -3182,12 +2958,12 @@
         {
           "id": "b_auto_mat_80",
           "type": "paragraph",
-          "content": "**原理**：将铝工件置于电解液中，通过电流在表面生成多孔氧化铝膜，再经封孔或染色处理。"
+          "content": "<strong>原理</strong>：将铝工件置于电解液中，通过电流在表面生成多孔氧化铝膜，再经封孔或染色处理。"
         },
         {
           "id": "b_auto_mat_81",
           "type": "paragraph",
-          "content": "**效果**"
+          "content": "<strong>效果</strong>"
         },
         {
           "id": "b_auto_mat_82",
@@ -3212,7 +2988,7 @@
         {
           "id": "b_auto_mat_86",
           "type": "paragraph",
-          "content": "**典型应用**"
+          "content": "<strong>典型应用</strong>"
         },
         {
           "id": "b_auto_mat_87",
@@ -3232,12 +3008,12 @@
         {
           "id": "b_auto_mat_90",
           "type": "paragraph",
-          "content": "**原理**：高能激光束透过上层塑料，被下层吸收层吸收并熔化，使两部件熔合。"
+          "content": "<strong>原理</strong>：高能激光束透过上层塑料，被下层吸收层吸收并熔化，使两部件熔合。"
         },
         {
           "id": "b_auto_mat_91",
           "type": "paragraph",
-          "content": "**效果**"
+          "content": "<strong>效果</strong>"
         },
         {
           "id": "b_auto_mat_92",
@@ -3262,7 +3038,7 @@
         {
           "id": "b_auto_mat_96",
           "type": "paragraph",
-          "content": "**典型应用**"
+          "content": "<strong>典型应用</strong>"
         },
         {
           "id": "b_auto_mat_97",
@@ -3282,12 +3058,12 @@
         {
           "id": "b_auto_mat_100",
           "type": "paragraph",
-          "content": "**原理**：天然植物油与蜡混合，渗透至木材纤维内部，形成透气保护层。"
+          "content": "<strong>原理</strong>：天然植物油与蜡混合，渗透至木材纤维内部，形成透气保护层。"
         },
         {
           "id": "b_auto_mat_101",
           "type": "paragraph",
-          "content": "**效果**"
+          "content": "<strong>效果</strong>"
         },
         {
           "id": "b_auto_mat_102",
@@ -3312,7 +3088,7 @@
         {
           "id": "b_auto_mat_106",
           "type": "paragraph",
-          "content": "**典型应用**"
+          "content": "<strong>典型应用</strong>"
         },
         {
           "id": "b_auto_mat_107",
@@ -3332,7 +3108,7 @@
         {
           "id": "b_auto_mat_110",
           "type": "paragraph",
-          "content": "为了将上述材料整合应用，我们设计一款**便携式户外多功能工具**，集切割、照明、紧固、应急功能于一体。"
+          "content": "为了将上述材料整合应用，我们设计一款<strong>便携式户外多功能工具</strong>，集切割、照明、紧固、应急功能于一体。"
         },
         {
           "id": "b_auto_mat_111",
@@ -3354,32 +3130,32 @@
         {
           "id": "b_auto_mat_114",
           "type": "bullet-list",
-          "content": "**主刀片（金属 - 不锈钢 420HC）**：高硬度（HRC 58-60），抗腐蚀，可长期保持锋利，适应户外潮湿环境。"
+          "content": "<strong>主刀片（金属 - 不锈钢 420HC）</strong>：高硬度（HRC 58-60），抗腐蚀，可长期保持锋利，适应户外潮湿环境。"
         },
         {
           "id": "b_auto_mat_115",
           "type": "bullet-list",
-          "content": "**握把主体（塑料 - 增强型 PET）**：轻质耐冲击，注塑成型精度高，表面可做激光焊接固定内嵌件，且食品级安全。"
+          "content": "<strong>握把主体（塑料 - 增强型 PET）</strong>：轻质耐冲击，注塑成型精度高，表面可做激光焊接固定内嵌件，且食品级安全。"
         },
         {
           "id": "b_auto_mat_116",
           "type": "bullet-list",
-          "content": "**加强骨骼（复合材料 - 碳纤维 CFRP）**：极轻且刚性极强，作为骨架可大幅减重并提升整体抗弯扭能力。"
+          "content": "<strong>加强骨骼（复合材料 - 碳纤维 CFRP）</strong>：极轻且刚性极强，作为骨架可大幅减重并提升整体抗弯扭能力。"
         },
         {
           "id": "b_auto_mat_117",
           "type": "bullet-list",
-          "content": "**握把装饰/防滑贴片（木材 - 胡桃木）**：天然质感，防滑吸汗，经木蜡油处理可防水防裂，提升握持舒适度。"
+          "content": "<strong>握把装饰/防滑贴片（木材 - 胡桃木）</strong>：天然质感，防滑吸汗，经木蜡油处理可防水防裂，提升握持舒适度。"
         },
         {
           "id": "b_auto_mat_118",
           "type": "bullet-list",
-          "content": "**散热/耐磨涂层（新型材料 - 石墨烯涂层）**：涂覆在刀片背面及关节处，降低摩擦损耗，加速散热，防止过热。"
+          "content": "<strong>散热/耐磨涂层（新型材料 - 石墨烯涂层）</strong>：涂覆在刀片背面及关节处，降低摩擦损耗，加速散热，防止过热。"
         },
         {
           "id": "b_auto_mat_119",
           "type": "bullet-list",
-          "content": "**折叠/锁定机构（新型材料 - Ni-Ti 形状记忆合金）**：利用超弹性实现自动锁定及解锁，变形后加热可恢复，保证机构长效稳定。"
+          "content": "<strong>折叠/锁定机构（新型材料 - Ni-Ti 形状记忆合金）</strong>：利用超弹性实现自动锁定及解锁，变形后加热可恢复，保证机构长效稳定。"
         },
         {
           "id": "b_auto_mat_120",
@@ -3390,17 +3166,17 @@
         {
           "id": "b_auto_mat_121",
           "type": "bullet-list",
-          "content": "**刀片（不锈钢）**：采用**酸洗钝化（化学后处理）**。不锈钢虽不适用于前面介绍的铝合金阳极氧化工艺，但本项目中选用更匹配的酸洗钝化处理。在刀片表面形成一层致密的钝化保护膜，显著提升其防锈与耐磨防腐性能，满足户外极端潮湿环境的使用需求。"
+          "content": "<strong>刀片（不锈钢）</strong>：采用<strong>酸洗钝化（化学后处理）</strong>。不锈钢虽不适用于前面介绍的铝合金阳极氧化工艺，但本项目中选用更匹配的酸洗钝化处理。在刀片表面形成一层致密的钝化保护膜，显著提升其防锈与耐磨防腐性能，满足户外极端潮湿环境的使用需求。"
         },
         {
           "id": "b_auto_mat_122",
           "type": "bullet-list",
-          "content": "**塑料握把（PET）**：内部嵌件通过**激光焊接**固定（如固定碳纤维骨架与塑料主体的连接点），实现无痕紧固。"
+          "content": "<strong>塑料握把（PET）</strong>：内部嵌件通过<strong>激光焊接</strong>固定（如固定碳纤维骨架与塑料主体的连接点），实现无痕紧固。"
         },
         {
           "id": "b_auto_mat_123",
           "type": "bullet-list",
-          "content": "**木贴片（胡桃木）**：采用**木蜡油涂装**，保留天然木纹，防潮防污。"
+          "content": "<strong>木贴片（胡桃木）</strong>：采用<strong>木蜡油涂装</strong>，保留天然木纹，防潮防污。"
         },
         {
           "id": "b_auto_mat_124",
