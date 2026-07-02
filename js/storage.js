@@ -75,7 +75,8 @@ export async function loadContent() {
       const lacksProjectHistory = !parsed.pages?.some(p => p.id === 'homework-project-manage' && p.blocks?.some(b => b.content && b.content.includes('Commit: 2ef12e0')));
       const hasOld3DPrinter = parsed.pages?.some(p => p.id === 'homework-3d-printer' && p.blocks?.some(b => b.content && b.content.includes('本作业围绕')));
       const hasOldArduino = parsed.pages?.some(p => p.id === 'homework-arduino-app' && p.blocks?.some(b => b.content && b.content.includes('传感器编程 — 作业汇报')));
-      if (hasBluePrince || lacksArduino || lacksRootHomework || lacksHkz || hkzIsNotFirst || hasOldHomework || hasAbsoluteImages || hasMockHomework || hasOldPurple || lacksProjectHistory || hasOld3DPrinter || hasOldArduino) {
+      const lacksIotMqttSync = !parsed.pages?.some(p => p.id === 'homework-iot-interaction' && p.blocks?.some(b => b.content && b.content.includes('MQTT 协议的 GitHub Pages')));
+      if (hasBluePrince || lacksArduino || lacksRootHomework || lacksHkz || hkzIsNotFirst || hasOldHomework || hasAbsoluteImages || hasMockHomework || hasOldPurple || lacksProjectHistory || hasOld3DPrinter || hasOldArduino || lacksIotMqttSync) {
         console.info('Stale cache detected, forcing reload from content.json');
         localStorage.removeItem(STORAGE_KEY);
       } else {
