@@ -4871,6 +4871,22 @@ void drawCurrentFrame() {
   display.display();
 }
 
+// ==================== 绘制网络连接状态文本 ====================
+void drawStatus(const char* line1, const char* line2 = "") {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  
+  display.setCursor(0, 15);
+  display.println(line1);
+  
+  if (line2 && strlen(line2) > 0) {
+    display.setCursor(0, 35);
+    display.println(line2);
+  }
+  display.display();
+}
+
 // ==================== MQTT 消息接收回调 ====================
 void onMqttMessage(int messageSize) {
   String topic = mqttClient.messageTopic();
@@ -4920,22 +4936,24 @@ void setup() {
   display.clearDisplay();
   display.display();
   
-  // 立即绘制第一帧，防止屏幕长时间黑屏，让机器人先动起来！
-  drawCurrentFrame();
+  // 在屏幕上显示联网状态
+  drawStatus("Connecting WiFi...", ssid);
   
-  // 尝试连接手机热点 WiFi（最长等待 15 秒，确保手机热点有充足时间完成握手与分配 IP，因为屏幕已点亮无需担心黑屏）
+  // 尝试连接手机热点 WiFi（最长等待 20 秒，确保手机热点有充足时间完成握手与分配 IP）
   Serial.print("Connecting to WiFi: ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
   
   unsigned long startWait = millis();
-  while (WiFi.status() != WL_CONNECTED && millis() - startWait < 15000) {
-    delay(250);
+  while (WiFi.status() != WL_CONNECTED && millis() - startWait < 20000) {
+    delay(500);
     Serial.print(".");
   }
   
   if (WiFi.status() == WL_CONNECTED) {
-    Serial.println("\nWiFi connected! Connecting to Adafruit IO...");
+    Serial.println("\nWiFi connected!");
+    drawStatus("WiFi OK!", "Connecting MQTT...");
+    
     mqttClient.setUsernamePassword(mqtt_user, mqtt_pass);
     mqttClient.onMessage(onMqttMessage);
     
@@ -4943,18 +4961,24 @@ void setup() {
     wifiClient.setTimeout(3000);
     if (mqttClient.connect(mqtt_server, mqtt_port)) {
       Serial.println("Adafruit IO connected! Online mode enabled.");
+      drawStatus("MQTT OK!", "Starting Face...");
       mqttClient.subscribe(topic_command); // 订阅指令 Feed
       isOnline = true;
+      delay(1000);
     } else {
       Serial.print("MQTT connection failed! Error code = ");
       Serial.println(mqttClient.connectError());
-      Serial.println("Running in local standalone mode.");
+      drawStatus("MQTT Failed!", "Running Local Mode");
+      delay(1500);
     }
   } else {
-    Serial.println("\nWiFi connection timeout! Running in local standalone mode.");
+    Serial.println("\nWiFi connection timeout!");
+    drawStatus("WiFi Timeout!", "Running Local Mode");
+    delay(1500);
   }
   
-  delay(100);
+  // 立即绘制第一帧，让机器人脸部显示出来
+  drawCurrentFrame();
   
   smoothSound = getSoundIntensity(); // 初始化声音采样
   for (int i = 0; i < 3; i++) lastDistances[i] = getDistance();
@@ -4991,7 +5015,12 @@ void loop() {
         // 按照 ArduinoMqttClient 官方 API 发送消息
         mqttClient.beginMessage(topic_sensors);
         mqttClient.print(json);
-        mqttClient.endMessage();
+        if (mqttClient.endMessage() == 1) {
+          Serial.print("MQTT published: ");
+          Serial.println(json);
+        } else {
+          Serial.println("MQTT publish failed!");
+        }
       }
     }
   }
