@@ -805,6 +805,15 @@ function initMqttForm() {
   if (keyInput) keyInput.value = savedKey;
 
   connectBtn?.addEventListener('click', () => {
+    if (typeof mqtt === 'undefined') {
+      if (statusSpan) {
+        statusSpan.textContent = "❌ 依赖库加载失败，请刷新";
+        statusSpan.style.color = "#ef4444";
+      }
+      logToConsole("[MQTT ERROR] 错误：MQTT 依赖库加载失败！这通常是因为国内连接 unpkg.com 超时或被拦截。请多刷新几次网页，或者切换网络环境试一下！", "error");
+      return;
+    }
+
     const username = usernameInput.value.trim();
     const key = keyInput.value.trim();
     if (!username || !key) {
