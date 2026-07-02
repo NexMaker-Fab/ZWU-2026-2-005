@@ -4955,6 +4955,7 @@ void setup() {
     drawStatus("WiFi OK!", "Connecting MQTT...");
     
     mqttClient.setUsernamePassword(mqtt_user, mqtt_pass);
+    mqttClient.setId("ArduinoUnoR4-" + String(random(0, 9999))); // 生成并设置唯一的 Client ID，解决 Adafruit IO 因空 ID 拒绝连接的问题
     mqttClient.onMessage(onMqttMessage);
     
     // 尝试连接 MQTT Broker (设置 3 秒超时限制，防卡死)
