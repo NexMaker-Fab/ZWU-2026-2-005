@@ -3,12 +3,18 @@ import { applyTranslations, getLang, setLang } from './i18n.js';
 let activeMood = "happy";
 let currentTheme = "dark";
 
-document.addEventListener('DOMContentLoaded', () => {
+function init() {
   initTheme();
   initLanguage();
   initParticleBackground();
   initRobotDashboard();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 
 // ─── Theme Management ──────────────────────────────
 function initTheme() {
@@ -767,7 +773,7 @@ function logToConsole(text, type = "info") {
 const MQTT_BROKER = "wss://io.adafruit.com:443/mqtt"; // 使用 Adafruit IO 加密 WebSockets 端口
 let mqttClient = null;
 
-document.addEventListener('DOMContentLoaded', () => {
+function initMqttForm() {
   const usernameInput = document.getElementById('mqtt-username');
   const keyInput = document.getElementById('mqtt-key');
   const connectBtn = document.getElementById('arduino-connect-btn');
@@ -857,7 +863,13 @@ document.addEventListener('DOMContentLoaded', () => {
       logToConsole(`[MQTT ERROR] 无法连接至 Broker，请检查用户名及密钥是否正确`, "error");
     });
   });
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMqttForm);
+} else {
+  initMqttForm();
+}
 
 // 修改原有的网页端情绪按钮逻辑，当网页强制改表情时，向板子下发指令
 function syncMoodToPhysicsBoard(moodString) {
