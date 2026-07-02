@@ -4952,29 +4952,77 @@ void setup() {
   
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("\nWiFi connected!");
+    Serial.print("IP Address: ");
+    Serial.println(WiFi.localIP());
     drawStatus("WiFi OK!", "Connecting MQTT...");
-    
+
+    // WiFi 连接成功后增加稳定等待时间（等待 DHCP 稳定）
+    delay(2000);
+
+    // 必须先设置 setUsernamePassword 和 setId，再调用 connect
     mqttClient.setUsernamePassword(mqtt_user, mqtt_pass);
-    mqttClient.setId("ArduinoUnoR4-" + String(random(0, 9999))); // 生成并设置唯一的 Client ID，解决 Adafruit IO 因空 ID 拒绝连接的问题
+
+    // 生成唯一的客户端识别码 (R4 没有 ESP.getChipId()，使用 random 和 millis 生成唯一 ID)
+    String clientId = "ArduinoUnoR4_" + String(random(0, 9999)) + "_" + String(millis(), HEX);
+    mqttClient.setId(clientId.c_str());
+
     mqttClient.onMessage(onMqttMessage);
-    
-    // 尝试连接 MQTT Broker (设置 3 秒超时限制，防卡死)
-    wifiClient.setTimeout(3000);
-    if (mqttClient.connect(mqtt_server, mqtt_port)) {
+
+    // 设置连接参数以增强 R4 的握手成功率
+    mqttClient.setKeepAliveInterval(60000);   // 保活间隔 60 秒 (毫秒为单位)
+    mqttClient.setConnectionTimeout(10000);   // MQTT 连接超时 10 秒 (毫秒为单位)
+
+    // WiFiClient 设置更长的超时 (10000毫秒，防止原先 10毫秒 或 3秒 导致握手提前中断)
+    wifiClient.setTimeout(10000); 
+
+    Serial.print("Connecting to Adafruit IO: ");
+    Serial.println(mqtt_server);
+
+    // 连接前先停止旧连接，避免残留状态
+    mqttClient.stop();
+
+    // 尝试连接 MQTT Broker（最多重试 3 次）
+    bool mqttConnected = false;
+    for (int attempt = 1; attempt <= 3 && !mqttConnected; attempt++) {
+      Serial.print("MQTT attempt ");
+      Serial.print(attempt);
+      Serial.print("... ");
+
+      if (mqttClient.connect(mqtt_server, mqtt_port)) {
+        Serial.println("SUCCESS!");
+        mqttConnected = true;
+      } else {
+        int err = mqttClient.connectError();
+        Serial.print("FAILED! Error = ");
+        Serial.println(err);
+        
+        if (attempt < 3) {
+          Serial.println("Waiting 2s before retry...");
+          delay(2000);
+          mqttClient.stop(); // 清理失败的连接
+        }
+      }
+    }
+
+    if (mqttConnected) {
       Serial.println("Adafruit IO connected! Online mode enabled.");
       drawStatus("MQTT OK!", "Starting Face...");
-      mqttClient.subscribe(topic_command); // 订阅指令 Feed
+
+      // 订阅指令 Feed（订阅前等待 100ms 让连接稳定）
+      delay(100);
+      mqttClient.subscribe(topic_command);
+
       isOnline = true;
       delay(1000);
     } else {
-      Serial.print("MQTT connection failed! Error code = ");
+      Serial.print("MQTT connection failed after 3 attempts! Error code = ");
       Serial.println(mqttClient.connectError());
-      drawStatus("MQTT Failed!", "Running Local Mode");
+      drawStatus("MQTT Failed!", "Local Mode");
       delay(1500);
     }
   } else {
     Serial.println("\nWiFi connection timeout!");
-    drawStatus("WiFi Timeout!", "Running Local Mode");
+    drawStatus("WiFi Timeout!", "Local Mode");
     delay(1500);
   }
   
