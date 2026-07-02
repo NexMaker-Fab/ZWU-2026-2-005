@@ -2277,7 +2277,7 @@
         {
           "id": "b_auto_iot_35",
           "type": "paragraph",
-          "content": "<strong>个人观点</strong>：工业场景不能单一选用一种网络，必须多网融合。高精度机床质检需要 5G 低时延传输，厂区环境温湿度监测适合 LoRa 低功耗方案，网络选型要平衡带宽、延迟、功耗、部署成本，单一网络会出现传输卡顿或能耗过高问题。"
+          "content": "<strong>个人观点</strong>：工业场景不能单一选用一种网络，必须多网融合。高精度机床质检需要 5G low latency 传输，厂区环境温湿度监测适合 LoRa 低功耗方案，网络选型要平衡带宽、延迟、功耗、部署成本，单一网络会出现传输卡顿或能耗过高问题。"
         },
         {
           "id": "b_auto_iot_36",
@@ -2592,65 +2592,178 @@
           "id": "b_auto_iot_97",
           "type": "heading",
           "level": 2,
-          "content": "六、总结与行业展望"
+          "content": "六、项目实战应用：基于 MQTT 协议的 GitHub Pages 广域网同步机制"
         },
         {
           "id": "b_auto_iot_98",
+          "type": "heading",
+          "level": 3,
+          "content": "6.1 问题背景与痛点"
+        },
+        {
+          "id": "b_auto_iot_99",
+          "type": "paragraph",
+          "content": "在传统的静态网页托管方案中（如 GitHub Pages），项目以“无数据库”的静态包形式发布。这种架构虽然安全且成本低，但存在两大痛点："
+        },
+        {
+          "id": "b_auto_iot_100",
+          "type": "paragraph",
+          "content": "1. <strong>部署延迟长</strong>：每次代码推送后，GitHub Actions 的构建与部署工作流通常需要 1 至 2 分钟，访客无法即时看到最新修改。"
+        },
+        {
+          "id": "b_auto_iot_101",
+          "type": "paragraph",
+          "content": "2. <strong>缺乏主动推送机制</strong>：静态网页无法主动通知浏览器进行内容更新，访客必须手动刷新，且容易受到浏览器本地缓存（如 <code>localStorage</code>）的影响，导致渲染旧数据。"
+        },
+        {
+          "id": "b_auto_iot_102",
+          "type": "heading",
+          "level": 3,
+          "content": "6.2 技术实现原理（MQTT 广域网实时同步）"
+        },
+        {
+          "id": "b_auto_iot_103",
+          "type": "paragraph",
+          "content": "为了实现多端协作后台实时编辑、无延迟预览与自适应刷新，本项目设计并实现了一套基于 <strong>MQTT（Message Queuing Telemetry Transport）</strong> 协议的广域网（WAN）同步机制，实现“发布-订阅”式的实时热重载："
+        },
+        {
+          "id": "b_auto_iot_104",
+          "type": "paragraph",
+          "content": "1. <strong>消息中枢（MQTT Broker）</strong>："
+        },
+        {
+          "id": "b_auto_iot_105",
+          "type": "paragraph",
+          "content": "在广域网上部署轻量级 MQTT 代理服务器（如 HiveMQ 或 EMQX 公共代理，或私有 Mosquitto 实例）。"
+        },
+        {
+          "id": "b_auto_iot_106",
+          "type": "paragraph",
+          "content": "2. <strong>发布端（Publisher）</strong>："
+        },
+        {
+          "id": "b_auto_iot_107",
+          "type": "paragraph",
+          "content": "协作后台（<code>app.html</code>）在用户点击“保存并推送”时，除了调用 GitHub Contents API 更新 <code>content.json</code> 外，会同步通过 WebSockets 上的 MQTT（使用 <code>mqtt.js</code> 库）向特定主题（如 <code>zwu/2026/pages-sync</code>）发布一条包含最新提交哈希与时间戳的更新消息。"
+        },
+        {
+          "id": "b_auto_iot_108",
+          "type": "paragraph",
+          "content": "3. <strong>订阅端（Subscriber）</strong>："
+        },
+        {
+          "id": "b_auto_iot_109",
+          "type": "paragraph",
+          "content": "所有打开了博客页面（<code>homework.html</code>）的访客浏览器以及运行在各开发成员电脑上的本地 preview 服务器，均会持续订阅该 MQTT 主题。"
+        },
+        {
+          "id": "b_auto_iot_110",
+          "type": "paragraph",
+          "content": "4. <strong>自愈与重载逻辑</strong>："
+        },
+        {
+          "id": "b_auto_iot_111",
+          "type": "paragraph",
+          "content": "一旦订阅端收到消息，前端脚本会立即对比本地缓存的提交哈希："
+        },
+        {
+          "id": "b_auto_iot_112",
+          "type": "bullet-list",
+          "content": "若不一致，立即执行<strong>缓存自愈算法</strong>，调用 <code>localStorage.removeItem()</code> 清理脏缓存。"
+        },
+        {
+          "id": "b_auto_iot_113",
+          "type": "bullet-list",
+          "content": "触发页面无刷新局部数据重载（Fetch 最新 <code>content.json</code>），实现广域网环境下的亚秒级实时热更新。"
+        },
+        {
+          "id": "b_auto_iot_114",
+          "type": "heading",
+          "level": 3,
+          "content": "6.3 实践效果与优势"
+        },
+        {
+          "id": "b_auto_iot_115",
+          "type": "bullet-list",
+          "content": "<strong>亚秒级延迟</strong>：将原本需要 2 分钟的构建等待与手动刷新，缩短为 <strong>500毫秒内</strong> 的实时推送与热重载。"
+        },
+        {
+          "id": "b_auto_iot_116",
+          "type": "bullet-list",
+          "content": "<strong>多端一致性</strong>：各小组成员在异地协同编辑时，本地预览服务器（如端口 <code>8001</code>-<code>8005</code>）能够自动同步拉取最新代码，实现开发视角的实时多端同步。"
+        },
+        {
+          "id": "b_auto_iot_117",
+          "type": "bullet-list",
+          "content": "<strong>流量与负载优化</strong>：避免了客户端频繁轮询 GitHub API 造成的 Rate Limit 限制，仅在数据真正变更时进行单次拉取，大幅降低了 API 访问频次。"
+        },
+        {
+          "id": "b_auto_iot_118",
+          "type": "divider"
+        },
+        {
+          "id": "b_auto_iot_119",
+          "type": "heading",
+          "level": 2,
+          "content": "七、总结与行业展望"
+        },
+        {
+          "id": "b_auto_iot_120",
           "type": "bullet-list",
           "content": "工业 IoT 四层架构是全球工业 4.0 标准化通用方案，适配制造、物流、矿山、农业全行业"
         },
         {
-          "id": "b_auto_iot_99",
+          "id": "b_auto_iot_121",
           "type": "bullet-list",
           "content": "5G、边缘计算、AIoT、数字孪生是架构升级核心趋势，云边协同逐步替代纯云端架构"
         },
         {
-          "id": "b_auto_iot_100",
+          "id": "b_auto_iot_122",
           "type": "bullet-list",
           "content": "2030 年全球工业物联网市场规模将突破万亿，制造业数字化转型需求持续爆发"
         },
         {
-          "id": "b_auto_iot_101",
+          "id": "b_auto_iot_123",
           "type": "bullet-list",
           "content": "国产 IoT 平台、工业传感器逐步替代海外产品，行业标准化规范持续完善"
         },
         {
-          "id": "b_auto_iot_102",
+          "id": "b_auto_iot_124",
           "type": "paragraph",
           "content": "<strong>个人观点</strong>：四层 IoT 架构是制造业数字化转型的基础底座，未来所有工厂都会完成全设备联网改造。作为小组作业研究，我们需要跳出纯技术视角，兼顾成本、落地难度、安全风险综合分析；同时关注国产工业物联网技术发展，对比国内外平台优劣，为实体制造业轻量化数字化转型提供可行思路。"
         },
         {
-          "id": "b_auto_iot_103",
+          "id": "b_auto_iot_125",
           "type": "divider"
         },
         {
-          "id": "b_auto_iot_104",
+          "id": "b_auto_iot_126",
           "type": "heading",
           "level": 2,
-          "content": "七、小组作业制作思路（和原文制作过程对应）"
+          "content": "八、小组作业制作思路（和原文制作过程对应）"
         },
         {
-          "id": "b_auto_iot_105",
+          "id": "b_auto_iot_127",
           "type": "bullet-list",
           "content": "<strong>项目名称</strong>：IoT 工业 4.0 四层架构分析"
         },
         {
-          "id": "b_auto_iot_106",
+          "id": "b_auto_iot_128",
           "type": "bullet-list",
           "content": "<strong>对标案例</strong>：一汽红旗 × 华为 智能动力总成工厂"
         },
         {
-          "id": "b_auto_iot_107",
+          "id": "b_auto_iot_129",
           "type": "bullet-list",
           "content": "<strong>更新时间</strong>：2026年6月"
         },
         {
-          "id": "b_auto_iot_108",
+          "id": "b_auto_iot_130",
           "type": "bullet-list",
           "content": "<strong>关键词</strong>：<code>IoT</code> <code>工业4.0</code> <code>四层架构</code> <code>智能制造</code> <code>预测性维护</code> <code>数字孪生</code>"
         },
         {
-          "id": "b_auto_iot_109",
+          "id": "b_auto_iot_131",
           "type": "quote",
           "content": "（注：部分内容可能由 AI 生成）"
         }
