@@ -169,6 +169,7 @@ const LONELY_TIMEOUT = 10000; // 10s
 const MAX_HISTORY = 40;
 let hrHistory = new Array(MAX_HISTORY).fill(150);
 let tempHistory = new Array(MAX_HISTORY).fill(100);
+let isMqttConnected = false;
 
 function initRobotDashboard() {
   initMoodButtons();
@@ -208,6 +209,7 @@ function initSliders() {
 }
 
 function evaluateStateFromSensors(logEvent = true) {
+  if (isMqttConnected) return; // Skip local simulation calculation if physical board is linked
   const NEAR = 45;
   const FAR = 80;
   const LOUD = 400;
@@ -635,12 +637,6 @@ function startSensorSimulation() {
     drawGraph(tempCtx, tempHistory, '#f59e0b', 0, 260, false);
     // Step response graph: range 0 - 6
     drawGraph(stabCtx, stabHistory, '#10b981', 0, 6, false);
-
-    // Lonely check loop (runs periodically inside update)
-    if (Math.random() < 0.05) {
-      evaluateStateFromSensors(true);
-    }
-
     setTimeout(updateSensors, 100);
   }
 
@@ -773,11 +769,34 @@ function logToConsole(text, type = "info") {
 const MQTT_BROKER = "wss://io.adafruit.com:443/mqtt"; // 使用 Adafruit IO 加密 WebSockets 端口
 let mqttClient = null;
 
+function setSlidersDisabled(disabled) {
+  const sliderDist = document.getElementById('slider-dist');
+  const sliderSound = document.getElementById('slider-sound');
+  if (sliderDist) {
+    sliderDist.disabled = disabled;
+    sliderDist.style.opacity = disabled ? "0.5" : "1";
+    sliderDist.style.pointerEvents = disabled ? "none" : "auto";
+  }
+  if (sliderSound) {
+    sliderSound.disabled = disabled;
+    sliderSound.style.opacity = disabled ? "0.5" : "1";
+    sliderSound.style.pointerEvents = disabled ? "none" : "auto";
+  }
+}
+
 function initMqttForm() {
   const usernameInput = document.getElementById('mqtt-username');
   const keyInput = document.getElementById('mqtt-key');
   const connectBtn = document.getElementById('arduino-connect-btn');
   const statusSpan = document.getElementById('arduino-status');
+
+  // 初始化默认状态为未成功连接，支持手动模拟
+  isMqttConnected = false;
+  if (statusSpan) {
+    statusSpan.textContent = "🔴 未成功连接 / 保持手动模拟";
+    statusSpan.style.color = "#ef4444";
+  }
+  setSlidersDisabled(false);
 
   // 从 LocalStorage 读取上次保存的凭证
   const savedUser = localStorage.getItem('aio_username') || "hkz";
@@ -800,6 +819,11 @@ function initMqttForm() {
     statusSpan.textContent = "🟡 连接中...";
     statusSpan.style.color = "#f59e0b";
 
+    // 如果之前已经有连接，先断开它
+    if (mqttClient) {
+      try { mqttClient.end(); } catch(e) {}
+    }
+
     // 建立加密 WebSocket 连接
     mqttClient = mqtt.connect(MQTT_BROKER, {
       username: username,
@@ -810,9 +834,11 @@ function initMqttForm() {
     const topicSensors = `${username}/feeds/sensors`;
 
     mqttClient.on('connect', () => {
-      statusSpan.textContent = "🟢 已连接";
+      isMqttConnected = true;
+      statusSpan.textContent = "🟢 已成功连接 / 物理数据联动";
       statusSpan.style.color = "#10b981";
-      logToConsole(`[MQTT] 成功连接至 Adafruit IO Broker`, "success");
+      setSlidersDisabled(true);
+      logToConsole(`[MQTT] 成功连接至 Adafruit IO Broker，已切换为真机实时数据模式！`, "success");
 
       // 订阅机器人数据上报
       mqttClient.subscribe(topicSensors, (err) => {
@@ -828,9 +854,20 @@ function initMqttForm() {
       if (topic === topicSensors) {
         try {
           const data = JSON.parse(message.toString());
-          // 将板子真实采集到的数值，赋给网页端渲染变量
+          // 当连接成功并且有数据回传时，对应的传感器数据和表情准确显示
           curDist = data.distance;
           curSound = data.sound;
+
+          // 更新模拟滑块的值，直观显示当前回传的数据大小
+          const sliderDist = document.getElementById('slider-dist');
+          const sliderSound = document.getElementById('slider-sound');
+          const sliderDistVal = document.getElementById('slider-dist-val');
+          const sliderSoundVal = document.getElementById('slider-sound-val');
+          
+          if (sliderDist) sliderDist.value = curDist;
+          if (sliderSound) sliderSound.value = curSound;
+          if (sliderDistVal) sliderDistVal.textContent = `${curDist} cm`;
+          if (sliderSoundVal) sliderSoundVal.textContent = `${curSound}`;
 
           // 更新网页显示
           const hrValEl = document.getElementById('hr-value');
@@ -858,9 +895,21 @@ function initMqttForm() {
     });
 
     mqttClient.on('error', (err) => {
-      statusSpan.textContent = "🔴 连接失败";
+      isMqttConnected = false;
+      statusSpan.textContent = "🔴 未成功连接 / 保持手动模拟";
       statusSpan.style.color = "#ef4444";
-      logToConsole(`[MQTT ERROR] 无法连接至 Broker，请检查用户名及密钥是否正确`, "error");
+      setSlidersDisabled(false);
+      logToConsole(`[MQTT ERROR] 无法连接至 Broker，已回退为手动模拟模式`, "error");
+    });
+
+    mqttClient.on('close', () => {
+      if (isMqttConnected) {
+        isMqttConnected = false;
+        statusSpan.textContent = "🔴 未成功连接 / 保持手动模拟";
+        statusSpan.style.color = "#ef4444";
+        setSlidersDisabled(false);
+        logToConsole(`[MQTT] 与 Broker 的连接已断开，已回退为手动模拟模式`, "warning");
+      }
     });
   });
 }
