@@ -2,7 +2,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <WiFiS3.h>
-#include <PubSubClient.h>
+#include <ArduinoMqttClient.h> // 使用官方推荐且更稳定的 ArduinoMqttClient 库，解决 PubSubClient 带来的死机与黑屏问题
 
 // ==================== WiFi & MQTT (Adafruit IO) 配置 ====================
 const char* ssid          = "YOUR_WIFI_SSID";
@@ -16,10 +16,12 @@ const char* topic_sensors = "hkz/feeds/sensors";
 const char* topic_command = "hkz/feeds/command";
 
 WiFiClient wifiClient;
-PubSubClient mqttClient(wifiClient);
+MqttClient mqttClient(wifiClient); // 实例化官方 MQTT 客户端
 
 unsigned long lastMqttPublishTime = 0;
 int currentDistance = 100;
+bool isOnline = false; // 是否处于在线网络模式（启动联网成功后为 true，断开后直接进入本地模式）
+
 
 // ==================== OLED 配置 ====================
 #define SCREEN_I2C_ADDR 0x3C          // 根据你的实际地址修改（0x3C 或 0x3D）
@@ -4848,11 +4850,15 @@ void updateMood() {
     }
   }
   
-  // 调试信息
-  Serial.print("Dist: "); Serial.print(dist);
-  Serial.print(" Sound: "); Serial.print(smoothSound);
-  Serial.print(" Curr: "); Serial.print(currentMood);
-  Serial.print(" Target: "); Serial.println(targetMood);
+  // 调试信息（限频每 1000ms 打印一次，防止串口积压导致单片机挂起）
+  static unsigned long lastSerialPrintTime = 0;
+  if (millis() - lastSerialPrintTime >= 1000) {
+    lastSerialPrintTime = millis();
+    Serial.print("Dist: "); Serial.print(dist);
+    Serial.print(" Sound: "); Serial.print(smoothSound);
+    Serial.print(" Curr: "); Serial.print(currentMood);
+    Serial.print(" Target: "); Serial.println(targetMood);
+  }
 }
 
 // ==================== 绘制当前帧 ====================
@@ -4866,10 +4872,11 @@ void drawCurrentFrame() {
 }
 
 // ==================== MQTT 消息接收回调 ====================
-void mqttCallback(char* topic, byte* payload, unsigned int length) {
+void onMqttMessage(int messageSize) {
+  String topic = mqttClient.messageTopic();
   String message = "";
-  for (unsigned int i = 0; i < length; i++) {
-    message += (char)payload[i];
+  while (mqttClient.available()) {
+    message += (char)mqttClient.read();
   }
   Serial.print("MQTT message arrived: ");
   Serial.println(message);
@@ -4893,25 +4900,6 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   }
 }
 
-// ==================== 保持 MQTT 连接并鉴权 ====================
-void reconnectMqtt() {
-  while (!mqttClient.connected()) {
-    Serial.print("Connecting to Adafruit IO...");
-    String clientId = "ArduinoClient-" + String(random(0, 9999));
-    
-    // 连接时传入用户名和 AIO Active Key 作为密码鉴权
-    if (mqttClient.connect(clientId.c_str(), mqtt_user, mqtt_pass)) {
-      Serial.println("connected!");
-      mqttClient.subscribe(topic_command); // 成功连接后重新订阅指令 Feed
-    } else {
-      Serial.print("failed, rc=");
-      Serial.print(mqttClient.state());
-      Serial.println(" try again in 5 seconds");
-      delay(5000);
-    }
-  }
-}
-
 // ==================== setup ====================
 void setup() {
   Serial.begin(115200);
@@ -4919,29 +4907,54 @@ void setup() {
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
   
-  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_I2C_ADDR)) {
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;);
+  // 解决冷启动拔插电黑屏 Bug：如果 OLED 供电电压未稳导致失败，循环 busy-wait 重试，直到初始化成功
+  int retries = 0;
+  while(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_I2C_ADDR)) {
+    Serial.println(F("SSD1306 allocation failed, retrying..."));
+    for (volatile uint32_t i = 0; i < 4000000; i++); // 硬件级 busy-wait 延迟，不依赖系统中断
+    retries++;
+    if (retries > 5) break; // 尝试 5 次，防插错针脚导致无限卡死
   }
+  
   Wire.setClock(100000); // 强行将 I2C 时钟降回 100kHz，尝试修复新版 R4 Core 1.5.2 在默认 400kHz 下的 I2C 时序 Bug
   display.clearDisplay();
   display.display();
   
-  // 连接手机热点 WiFi
+  // 立即绘制第一帧，防止屏幕长时间黑屏，让机器人先动起来！
+  drawCurrentFrame();
+  
+  // 尝试连接手机热点 WiFi（最长等待 15 秒，确保手机热点有充足时间完成握手与分配 IP，因为屏幕已点亮无需担心黑屏）
   Serial.print("Connecting to WiFi: ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+  
+  unsigned long startWait = millis();
+  while (WiFi.status() != WL_CONNECTED && millis() - startWait < 15000) {
+    delay(250);
     Serial.print(".");
   }
-  Serial.println("\nWiFi connected!");
   
-  // 设置 MQTT 服务器及消息回调函数
-  mqttClient.setServer(mqtt_server, mqtt_port);
-  mqttClient.setCallback(mqttCallback);
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("\nWiFi connected! Connecting to Adafruit IO...");
+    mqttClient.setUsernamePassword(mqtt_user, mqtt_pass);
+    mqttClient.onMessage(onMqttMessage);
+    
+    // 尝试连接 MQTT Broker (设置 3 秒超时限制，防卡死)
+    wifiClient.setTimeout(3000);
+    if (mqttClient.connect(mqtt_server, mqtt_port)) {
+      Serial.println("Adafruit IO connected! Online mode enabled.");
+      mqttClient.subscribe(topic_command); // 订阅指令 Feed
+      isOnline = true;
+    } else {
+      Serial.print("MQTT connection failed! Error code = ");
+      Serial.println(mqttClient.connectError());
+      Serial.println("Running in local standalone mode.");
+    }
+  } else {
+    Serial.println("\nWiFi connection timeout! Running in local standalone mode.");
+  }
   
-  delay(500);
+  delay(100);
   
   smoothSound = getSoundIntensity(); // 初始化声音采样
   for (int i = 0; i < 3; i++) lastDistances[i] = getDistance();
@@ -4955,38 +4968,36 @@ void setup() {
 
 // ==================== loop ====================
 void loop() {
-  // 确保 WiFi 保持在线
-  if (WiFi.status() != WL_CONNECTED) {
-    WiFi.begin(ssid, password);
-    while (WiFi.status() != WL_CONNECTED) {
-      delay(500);
+  unsigned long now = millis();
+  
+  // ─── 在线网络传输管理（不执行任何阻塞式的重连尝试，彻底杜绝掉线卡死） ───
+  if (isOnline) {
+    // 检查连接是否意外断开
+    if (WiFi.status() != WL_CONNECTED || !mqttClient.connected()) {
+      isOnline = false; // 掉线后直接退回本地独立模式，防止网络握手卡死主循环
+      Serial.println("Network disconnected! Falling back to local offline mode.");
+    } else {
+      mqttClient.poll(); // 处理 MQTT 订阅消息接收
+      
+      // 每 3000ms (符合 Adafruit IO 的限频政策) 上报一次传感器数据到 Feed
+      if (now - lastMqttPublishTime >= 3000) {
+        lastMqttPublishTime = now;
+        int dist = currentDistance;
+        
+        String json = "{\"distance\":" + String(dist) + 
+                      ",\"sound\":" + String((int)smoothSound) + 
+                      ",\"mood\":" + String((int)currentMood) + "}";
+                      
+        // 按照 ArduinoMqttClient 官方 API 发送消息
+        mqttClient.beginMessage(topic_sensors);
+        mqttClient.print(json);
+        mqttClient.endMessage();
+      }
     }
   }
   
-  // 确保 MQTT 保持在线
-  if (!mqttClient.connected()) {
-    reconnectMqtt();
-  }
-  mqttClient.loop(); // 保持监听订阅事件
-  
+  // ─── 核心本地交互与表情动画逻辑（网络断连时依然 100% 保持极致流畅） ───
   updateMood();   // 更新情绪（含切换控制）
-  
-  unsigned long now = millis();
-  
-  // 每 3000ms (符合 Adafruit IO 的限频政策，避免频繁发送导致断连) 上报一次传感器数据到 Feed
-  if (now - lastMqttPublishTime >= 3000) {
-    lastMqttPublishTime = now;
-    
-    // 使用全局变量 currentDistance，避免重复调用 getDistance() 导致 pulseIn 阻塞 CPU
-    int dist = currentDistance;
-    
-    // 拼接 JSON 格式数据发送
-    String json = "{\"distance\":" + String(dist) + 
-                  ",\"sound\":" + String((int)smoothSound) + 
-                  ",\"mood\":" + String((int)currentMood) + "}";
-                  
-    mqttClient.publish(topic_sensors, json.c_str());
-  }
   
   if (inTransition) {
     // 闭眼过渡维持 200 毫秒，然后切换状态并睁眼
