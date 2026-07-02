@@ -6,12 +6,13 @@
   <title>最终项目 — 团队作业的博客 / Final Project</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
   <meta name="description" content="Final Project Dashboard for ZWU-2026-2-005.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com wss://io.adafruit.com:443 wss://broker.emqx.io:8084;">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/landing.css">
   <link rel="stylesheet" href="css/project.css">
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 </head>
 <body>
 
@@ -87,6 +88,7 @@
             <button class="btn btn-secondary btn-sm mood-btn" data-mood="smile">😀 SMILE</button>
             <button class="btn btn-secondary btn-sm mood-btn" data-mood="unhappy">😔 UNHAPPY</button>
             <button class="btn btn-secondary btn-sm mood-btn" data-mood="excited">🤩 EXCITED</button>
+            <button class="btn btn-secondary btn-sm mood-btn" data-mood="sleep">😴 SLEEP</button>
           </div>
 
           <!-- Interactive Input Sliders (For simulating Arduino sensors) -->
@@ -108,6 +110,20 @@
               </div>
               <input type="range" class="control-slider-input" id="slider-sound" min="50" max="600" value="150">
             </div>
+          </div>
+        </div>
+
+        <!-- IoT MQTT Connection Card -->
+        <div class="info-card glass-card iot-card" style="margin-top: 24px;">
+          <h2 class="card-title">📡 物联网广域网连接 / IoT MQTT Connection</h2>
+          <p class="card-desc" style="margin-bottom: 12px;">使用 Adafruit IO 的 MQTT 协议，实现 GitHub 网页端与物理机器人的跨地域双向互联。</p>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="mqtt-username" placeholder="Username (hkz)" value="hkz" style="flex: 1; padding: 8px 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 6px; color: #fff; font-family: inherit; font-size: 0.875rem;">
+              <span id="arduino-status" style="display: inline-flex; align-items: center; font-size: 0.875rem; font-weight: 600; color: #94a3b8; white-space: nowrap;">⚪ 未连接</span>
+            </div>
+            <input type="password" id="mqtt-key" placeholder="AIO Active Key" value="" style="padding: 8px 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 6px; color: #fff; font-family: inherit; font-size: 0.875rem;">
+            <button class="btn btn-primary btn-sm" id="arduino-connect-btn" style="width: 100%;">连接 Adafruit IO Broker</button>
           </div>
         </div>
 

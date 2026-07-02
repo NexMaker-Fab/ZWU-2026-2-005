@@ -160,6 +160,9 @@ let curDist = 100;
 let curSound = 150;
 let lastActiveTime = Date.now();
 const LONELY_TIMEOUT = 10000; // 10s
+const MAX_HISTORY = 40;
+let hrHistory = new Array(MAX_HISTORY).fill(150);
+let tempHistory = new Array(MAX_HISTORY).fill(100);
 
 function initRobotDashboard() {
   initMoodButtons();
@@ -288,6 +291,8 @@ function initMoodButtons() {
         curDist = 60; curSound = 250;
       } else if (mood === "unhappy") {
         curDist = 60; curSound = 120;
+      } else if (mood === "sleep") {
+        curDist = 100; curSound = 50;
       } else { // calm
         curDist = 100; curSound = 250;
       }
@@ -303,6 +308,7 @@ function initMoodButtons() {
       
       lastActiveTime = Date.now();
       logToConsole(`[USER OVERRIDE] Forced mood state to: ${mood.toUpperCase()} (Simulating Dist: ${curDist}cm, Sound: ${curSound})`, "info");
+      syncMoodToPhysicsBoard(mood);
     });
   });
 }
@@ -407,6 +413,17 @@ function startFaceSimulator() {
         alpha: 1.0,
         size: 6 + Math.random() * 6
       });
+    } else if (activeMood === "sleep" && Math.random() < 0.05) {
+      // Spawn Zzz particles rising from the right side of the face
+      particles.push({
+        type: 'Zzz',
+        x: 280 + Math.random() * 20,
+        y: eyeY - 20,
+        vx: 0.3 + Math.random() * 0.4,
+        vy: -0.6 - Math.random() * 0.5,
+        alpha: 1.0,
+        size: 10 + Math.random() * 8
+      });
     }
 
     // Update & draw particles
@@ -426,6 +443,10 @@ function startFaceSimulator() {
         drawTeardrop(ctx, p.x, p.y, p.size);
       } else if (p.type === 'Star') {
         drawStar(ctx, p.x, p.y, p.size);
+      } else if (p.type === 'Zzz') {
+        ctx.fillStyle = '#a78bfa'; // light purple
+        ctx.font = `bold ${p.size}px Outfit, sans-serif`;
+        ctx.fillText("Z", p.x, p.y);
       }
       ctx.restore();
     });
@@ -499,6 +520,14 @@ function startFaceSimulator() {
           ctx.arc(270, eyeY, 6, 0, Math.PI * 2);
           ctx.fill();
           break;
+
+        case "sleep":
+          // Sleep: always closed flat line slits for eyes
+          ctx.beginPath();
+          ctx.moveTo(110, eyeY); ctx.lineTo(150, eyeY);
+          ctx.moveTo(250, eyeY); ctx.lineTo(290, eyeY);
+          ctx.stroke();
+          break;
       }
     }
     
@@ -519,6 +548,10 @@ function startFaceSimulator() {
       ctx.stroke();
     } else if (activeMood === "sad" || activeMood === "unhappy") {
       ctx.arc(200, eyeY + 38, 10, Math.PI, 0, false); // Frown arc
+      ctx.stroke();
+    } else if (activeMood === "sleep") {
+      // Sleep: neutral flat mouth
+      ctx.moveTo(190, eyeY + 30); ctx.lineTo(210, eyeY + 30);
       ctx.stroke();
     } else {
       // calm: neutral flat line mouth
@@ -548,9 +581,7 @@ function startSensorSimulation() {
   const tempCtx = tempCanvas.getContext('2d');
   const stabCtx = stabCanvas.getContext('2d');
 
-  const maxHistory = 40;
-  let hrHistory = new Array(maxHistory).fill(150);
-  let tempHistory = new Array(maxHistory).fill(100);
+  const maxHistory = MAX_HISTORY;
   let stabHistory = new Array(maxHistory).fill(1); // mapped mood states
 
   let timeVal = 0;
@@ -730,4 +761,120 @@ function logToConsole(text, type = "info") {
   
   // Auto-scroll
   consoleEl.scrollTop = consoleEl.scrollHeight;
+}
+
+// ─── MQTT 广域网连接与控制 (Adafruit IO) ─────────
+const MQTT_BROKER = "wss://io.adafruit.com:443/mqtt"; // 使用 Adafruit IO 加密 WebSockets 端口
+let mqttClient = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const usernameInput = document.getElementById('mqtt-username');
+  const keyInput = document.getElementById('mqtt-key');
+  const connectBtn = document.getElementById('arduino-connect-btn');
+  const statusSpan = document.getElementById('arduino-status');
+
+  // 从 LocalStorage 读取上次保存的凭证
+  const savedUser = localStorage.getItem('aio_username') || "hkz";
+  const savedKey = localStorage.getItem('aio_key') || "";
+  if (usernameInput) usernameInput.value = savedUser;
+  if (keyInput) keyInput.value = savedKey;
+
+  connectBtn?.addEventListener('click', () => {
+    const username = usernameInput.value.trim();
+    const key = keyInput.value.trim();
+    if (!username || !key) {
+      logToConsole("[MQTT] 错误：用户名或 Active Key 不能为空！", "error");
+      return;
+    }
+
+    // 保存凭证
+    localStorage.setItem('aio_username', username);
+    localStorage.setItem('aio_key', key);
+
+    statusSpan.textContent = "🟡 连接中...";
+    statusSpan.style.color = "#f59e0b";
+
+    // 建立加密 WebSocket 连接
+    mqttClient = mqtt.connect(MQTT_BROKER, {
+      username: username,
+      password: key,
+      clientId: 'web_client_' + Math.random().toString(16).substr(2, 8)
+    });
+
+    const topicSensors = `${username}/feeds/sensors`;
+
+    mqttClient.on('connect', () => {
+      statusSpan.textContent = "🟢 已连接";
+      statusSpan.style.color = "#10b981";
+      logToConsole(`[MQTT] 成功连接至 Adafruit IO Broker`, "success");
+
+      // 订阅机器人数据上报
+      mqttClient.subscribe(topicSensors, (err) => {
+        if (!err) {
+          logToConsole(`[MQTT] 成功订阅主题: ${topicSensors}`, "success");
+        } else {
+          logToConsole(`[MQTT] 订阅失败: ${err.message}`, "error");
+        }
+      });
+    });
+
+    mqttClient.on('message', (topic, message) => {
+      if (topic === topicSensors) {
+        try {
+          const data = JSON.parse(message.toString());
+          // 将板子真实采集到的数值，赋给网页端渲染变量
+          curDist = data.distance;
+          curSound = data.sound;
+
+          // 更新网页显示
+          const hrValEl = document.getElementById('hr-value');
+          const tempValEl = document.getElementById('temp-value');
+          if (hrValEl) hrValEl.textContent = curSound;
+          if (tempValEl) tempValEl.textContent = curDist;
+
+          // 保持折线图历史同步
+          hrHistory.push(curSound);
+          tempHistory.push(curDist);
+          if (hrHistory.length > MAX_HISTORY) hrHistory.shift();
+          if (tempHistory.length > MAX_HISTORY) tempHistory.shift();
+          
+          // 更新网页端的表情UI（用于跟随物理机器人的自动情绪）
+          const moodsMap = ["calm", "happy", "sad", "smile", "unhappy", "excited", "sleep"];
+          const moodStr = moodsMap[data.mood];
+          if (moodStr && moodStr !== activeMood) {
+            activeMood = moodStr;
+            updateMoodUI(moodStr);
+          }
+        } catch (e) {
+          console.warn("MQTT 消息解析错误: ", e);
+        }
+      }
+    });
+
+    mqttClient.on('error', (err) => {
+      statusSpan.textContent = "🔴 连接失败";
+      statusSpan.style.color = "#ef4444";
+      logToConsole(`[MQTT ERROR] 无法连接至 Broker，请检查用户名及密钥是否正确`, "error");
+    });
+  });
+});
+
+// 修改原有的网页端情绪按钮逻辑，当网页强制改表情时，向板子下发指令
+function syncMoodToPhysicsBoard(moodString) {
+  if (!mqttClient || !mqttClient.connected) return;
+  
+  const username = document.getElementById('mqtt-username')?.value.trim() || "hkz";
+  const topicCommand = `${username}/feeds/command`;
+
+  const moodsMap = { "calm": 0, "happy": 1, "sad": 2, "smile": 3, "unhappy": 4, "excited": 5, "sleep": 6 };
+  const moodVal = moodsMap[moodString];
+  
+  const payload = JSON.stringify({ val: moodVal });
+  mqttClient.publish(topicCommand, payload, { qos: 0 }, (err) => {
+    if (!err) {
+      logToConsole(`[MQTT Sync] 成功发布指令 ${moodString.toUpperCase()} 到 Feed`, "info");
+    } else {
+      logToConsole(`[MQTT Sync Error] 发布指令失败: ${err.message}`, "error");
+    }
+  });
 }
