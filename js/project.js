@@ -3,6 +3,16 @@ import { applyTranslations, getLang, setLang } from './i18n.js';
 let activeMood = "happy";
 let currentTheme = "dark";
 
+// ─── Robot Dashboard Global State ────────────────
+let curDist = 100;
+let curSound = 150;
+let lastActiveTime = Date.now();
+const LONELY_TIMEOUT = 10000; // 10s
+const MAX_HISTORY = 40;
+let hrHistory = new Array(MAX_HISTORY).fill(150);
+let tempHistory = new Array(MAX_HISTORY).fill(100);
+let isMqttConnected = false;
+
 function init() {
   initTheme();
   initLanguage();
@@ -162,14 +172,6 @@ function initParticleBackground() {
 }
 
 // ─── Robot Dashboard Logic ────────────────────────
-let curDist = 100;
-let curSound = 150;
-let lastActiveTime = Date.now();
-const LONELY_TIMEOUT = 10000; // 10s
-const MAX_HISTORY = 40;
-let hrHistory = new Array(MAX_HISTORY).fill(150);
-let tempHistory = new Array(MAX_HISTORY).fill(100);
-let isMqttConnected = false;
 
 function initRobotDashboard() {
   initMoodButtons();
