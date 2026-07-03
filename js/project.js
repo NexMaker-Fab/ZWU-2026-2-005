@@ -3,12 +3,28 @@ import { applyTranslations, getLang, setLang } from './i18n.js';
 let activeMood = "happy";
 let currentTheme = "dark";
 
-document.addEventListener('DOMContentLoaded', () => {
+// ─── Robot Dashboard Global State ────────────────
+let curDist = 100;
+let curSound = 150;
+let lastActiveTime = Date.now();
+const LONELY_TIMEOUT = 10000; // 10s
+const MAX_HISTORY = 40;
+let hrHistory = new Array(MAX_HISTORY).fill(150);
+let tempHistory = new Array(MAX_HISTORY).fill(100);
+let isMqttConnected = false;
+
+function init() {
   initTheme();
   initLanguage();
   initParticleBackground();
   initRobotDashboard();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 
 // ─── Theme Management ──────────────────────────────
 function initTheme() {
@@ -156,33 +172,153 @@ function initParticleBackground() {
 }
 
 // ─── Robot Dashboard Logic ────────────────────────
+
 function initRobotDashboard() {
   initMoodButtons();
+  initSliders();
   startFaceSimulator();
   startSensorSimulation();
   startConsoleSimulation();
+  
+  // Initial calculation
+  evaluateStateFromSensors(false);
+}
+
+function initSliders() {
+  const sliderDist = document.getElementById('slider-dist');
+  const sliderSound = document.getElementById('slider-sound');
+  const sliderDistVal = document.getElementById('slider-dist-val');
+  const sliderSoundVal = document.getElementById('slider-sound-val');
+
+  if (sliderDist && sliderSound) {
+    curDist = parseInt(sliderDist.value);
+    curSound = parseInt(sliderSound.value);
+
+    sliderDist.addEventListener('input', (e) => {
+      curDist = parseInt(e.target.value);
+      if (sliderDistVal) sliderDistVal.textContent = `${curDist} cm`;
+      lastActiveTime = Date.now(); // reset lonely timer
+      evaluateStateFromSensors(true);
+    });
+
+    sliderSound.addEventListener('input', (e) => {
+      curSound = parseInt(e.target.value);
+      if (sliderSoundVal) sliderSoundVal.textContent = `${curSound}`;
+      lastActiveTime = Date.now(); // reset lonely timer
+      evaluateStateFromSensors(true);
+    });
+  }
+}
+
+function evaluateStateFromSensors(logEvent = true) {
+  if (isMqttConnected) return; // Skip local simulation calculation if physical board is linked
+  const NEAR = 45;
+  const FAR = 80;
+  const LOUD = 400;
+  const QUIET = 200;
+
+  let targetMood = activeMood;
+
+  if (curDist < NEAR) {
+    if (curSound > LOUD) targetMood = "excited";
+    else targetMood = "happy";
+  }
+  else if (curDist > FAR) {
+    if (curSound > QUIET) {
+      targetMood = "calm";
+    } else {
+      targetMood = "sad";
+    }
+  }
+  else { // NEAR <= dist <= FAR
+    if (curSound > QUIET) {
+      targetMood = "smile";
+    } else {
+      targetMood = "calm";
+    }
+  }
+
+  // Lonely timeout
+  const now = Date.now();
+  if (now - lastActiveTime > LONELY_TIMEOUT && curSound < QUIET) {
+    targetMood = "sad";
+  }
+
+  if (targetMood !== activeMood) {
+    const oldMood = activeMood;
+    activeMood = targetMood;
+    updateMoodUI(targetMood);
+    if (logEvent) {
+      logToConsole(`[STATE MACHINE] Transition: ${oldMood.toUpperCase()} -> ${targetMood.toUpperCase()} (Dist: ${curDist}cm, Sound: ${curSound})`, "success");
+    }
+  }
+}
+
+function updateMoodUI(mood) {
+  const badge = document.getElementById('robot-mood-badge');
+  if (badge) badge.textContent = mood.toUpperCase();
+
+  const buttons = document.querySelectorAll('.mood-btn');
+  buttons.forEach(btn => {
+    if (btn.getAttribute('data-mood') === mood) {
+      btn.classList.remove('btn-secondary');
+      btn.classList.add('btn-primary', 'active');
+    } else {
+      btn.classList.remove('btn-primary', 'active');
+      btn.classList.add('btn-secondary');
+    }
+  });
+
+  // Sync stability telemetry widget text
+  const stabValEl = document.getElementById('stability-value');
+  if (stabValEl) {
+    stabValEl.textContent = mood.toUpperCase();
+  }
 }
 
 function initMoodButtons() {
   const buttons = document.querySelectorAll('.mood-btn');
-  const badge = document.getElementById('robot-mood-badge');
   
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
-      buttons.forEach(b => {
-        b.classList.remove('btn-primary', 'active');
-        b.classList.add('btn-secondary');
-      });
-      btn.classList.remove('btn-secondary');
-      btn.classList.add('btn-primary', 'active');
-      
       const mood = btn.getAttribute('data-mood');
       activeMood = mood;
-      if (badge) {
-        badge.textContent = mood;
+      updateMoodUI(mood);
+      
+      // Update sliders to represent forced mood values
+      const sliderDist = document.getElementById('slider-dist');
+      const sliderSound = document.getElementById('slider-sound');
+      const sliderDistVal = document.getElementById('slider-dist-val');
+      const sliderSoundVal = document.getElementById('slider-sound-val');
+      
+      if (mood === "excited") {
+        curDist = 20; curSound = 450;
+      } else if (mood === "happy") {
+        curDist = 30; curSound = 150;
+      } else if (mood === "sad") {
+        curDist = 120; curSound = 100;
+      } else if (mood === "smile") {
+        curDist = 60; curSound = 250;
+      } else if (mood === "unhappy") {
+        curDist = 60; curSound = 120;
+      } else if (mood === "sleep") {
+        curDist = 100; curSound = 50;
+      } else { // calm
+        curDist = 100; curSound = 250;
       }
       
-      logToConsole(`[COMMAND] Emotion state updated to: ${mood.toUpperCase()}`, "info");
+      if (sliderDist) {
+        sliderDist.value = curDist;
+        if (sliderDistVal) sliderDistVal.textContent = `${curDist} cm`;
+      }
+      if (sliderSound) {
+        sliderSound.value = curSound;
+        if (sliderSoundVal) sliderSoundVal.textContent = `${curSound}`;
+      }
+      
+      lastActiveTime = Date.now();
+      logToConsole(`[USER OVERRIDE] Forced mood state to: ${mood.toUpperCase()} (Simulating Dist: ${curDist}cm, Sound: ${curSound})`, "info");
+      syncMoodToPhysicsBoard(mood);
     });
   });
 }
@@ -198,7 +334,7 @@ function startFaceSimulator() {
   let isBlinking = false;
   let blinkEndTime = 0;
   
-  let particles = []; // Floating Zs or Hearts
+  let particles = [];
 
   function drawHeart(ctx, x, y, size) {
     ctx.beginPath();
@@ -213,15 +349,38 @@ function startFaceSimulator() {
     ctx.fill();
   }
 
+  function drawTeardrop(ctx, x, y, size) {
+    ctx.fillStyle = '#38bdf8';
+    ctx.beginPath();
+    ctx.arc(x, y, size, 0, Math.PI);
+    ctx.lineTo(x, y - size * 1.5);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function drawStar(ctx, x, y, size) {
+    ctx.fillStyle = '#fbbf24';
+    ctx.beginPath();
+    ctx.moveTo(x, y - size);
+    ctx.lineTo(x + size/3, y - size/3);
+    ctx.lineTo(x + size, y);
+    ctx.lineTo(x + size/3, y + size/3);
+    ctx.lineTo(x, y + size);
+    ctx.lineTo(x - size/3, y + size/3);
+    ctx.lineTo(x - size, y);
+    ctx.lineTo(x - size/3, y - size/3);
+    ctx.closePath();
+    ctx.fill();
+  }
+
   function renderFaceLoop() {
     const time = Date.now();
-    const elapsed = time - startTime;
     
     // Clear screen
     ctx.fillStyle = '#02040a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // OLED screen grid effect (subtle vertical/horizontal scanlines)
+    // OLED screen scanline grid effect
     ctx.fillStyle = 'rgba(255, 255, 255, 0.008)';
     for(let y=0; y < canvas.height; y+=3) {
       ctx.fillRect(0, y, canvas.width, 1.5);
@@ -230,10 +389,10 @@ function startFaceSimulator() {
     // Eye base parameters
     const eyeY = 110 + Math.sin(time / 300) * 3; // Breathing float
     
-    // Handle blinking logic
-    if (time > nextBlink && activeMood !== "sleeping") {
+    // Handle blinking logic (no blinking when excited or sad)
+    if (time > nextBlink && activeMood !== "excited" && activeMood !== "sad") {
       isBlinking = true;
-      blinkEndTime = time + 140; // Blink duration 140ms
+      blinkEndTime = time + 140;
       nextBlink = time + 4000 + Math.random() * 3000;
     }
     
@@ -242,27 +401,38 @@ function startFaceSimulator() {
     }
 
     // Spawn mood particles
-    if (activeMood === "sleeping" && Math.random() < 0.02) {
-      // Spawn a Z
+    if (activeMood === "sad" && Math.random() < 0.06) {
+      // Spawn falling teardrop from left or right eye
       particles.push({
-        type: 'Z',
-        x: 280,
-        y: 80,
-        vx: 0.4 + Math.random() * 0.3,
-        vy: -0.5 - Math.random() * 0.5,
+        type: 'Teardrop',
+        x: Math.random() < 0.5 ? 130 : 270,
+        y: eyeY + 5,
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: 1.5 + Math.random() * 0.8,
         alpha: 1.0,
-        size: 12 + Math.random() * 6
+        size: 3 + Math.random() * 3
       });
-    } else if (activeMood === "love" && Math.random() < 0.04) {
-      // Spawn a tiny heart
+    } else if (activeMood === "excited" && Math.random() < 0.08) {
+      // Spawn sparkling rising stars
       particles.push({
-        type: 'Heart',
-        x: 100 + Math.random() * 200,
-        y: 130,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: -0.6 - Math.random() * 0.4,
+        type: 'Star',
+        x: 80 + Math.random() * 240,
+        y: 140,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: -1.0 - Math.random() * 1.0,
         alpha: 1.0,
         size: 6 + Math.random() * 6
+      });
+    } else if (activeMood === "sleep" && Math.random() < 0.05) {
+      // Spawn Zzz particles rising from the right side of the face
+      particles.push({
+        type: 'Zzz',
+        x: 280 + Math.random() * 20,
+        y: eyeY - 20,
+        vx: 0.3 + Math.random() * 0.4,
+        vy: -0.6 - Math.random() * 0.5,
+        alpha: 1.0,
+        size: 10 + Math.random() * 8
       });
     }
 
@@ -270,7 +440,7 @@ function startFaceSimulator() {
     particles.forEach((p, idx) => {
       p.x += p.vx;
       p.y += p.vy;
-      p.alpha -= 0.01;
+      p.alpha -= 0.015;
       
       if (p.alpha <= 0) {
         particles.splice(idx, 1);
@@ -279,12 +449,14 @@ function startFaceSimulator() {
       
       ctx.save();
       ctx.globalAlpha = p.alpha;
-      if (p.type === 'Z') {
-        ctx.fillStyle = '#06b6d4';
-        ctx.font = `bold ${p.size}px 'Fira Code', monospace`;
+      if (p.type === 'Teardrop') {
+        drawTeardrop(ctx, p.x, p.y, p.size);
+      } else if (p.type === 'Star') {
+        drawStar(ctx, p.x, p.y, p.size);
+      } else if (p.type === 'Zzz') {
+        ctx.fillStyle = '#a78bfa'; // light purple
+        ctx.font = `bold ${p.size}px Outfit, sans-serif`;
         ctx.fillText("Z", p.x, p.y);
-      } else {
-        drawHeart(ctx, p.x, p.y, p.size);
       }
       ctx.restore();
     });
@@ -303,6 +475,14 @@ function startFaceSimulator() {
       ctx.stroke();
     } else {
       switch (activeMood) {
+        case "calm":
+          // Normal filled oval eyes
+          ctx.beginPath();
+          ctx.arc(130, eyeY, 14, 0, Math.PI * 2);
+          ctx.arc(270, eyeY, 14, 0, Math.PI * 2);
+          ctx.fill();
+          break;
+
         case "happy":
           // Curved smiling eyes (inverted U)
           ctx.beginPath();
@@ -323,34 +503,71 @@ function startFaceSimulator() {
           ctx.stroke();
           break;
           
-        case "sleeping":
-          // Horizontal sleepy slits (flashing slightly)
+        case "smile":
+          // Squinting closed smile (inverted V chevron)
           ctx.beginPath();
-          ctx.moveTo(110, eyeY + 5); ctx.lineTo(150, eyeY + 5);
-          ctx.moveTo(250, eyeY + 5); ctx.lineTo(290, eyeY + 5);
+          ctx.moveTo(110, eyeY + 4); ctx.lineTo(130, eyeY - 6); ctx.lineTo(150, eyeY + 4);
+          ctx.moveTo(250, eyeY + 4); ctx.lineTo(270, eyeY - 6); ctx.lineTo(290, eyeY + 4);
           ctx.stroke();
           break;
           
-        case "love":
-          // Big pink glowing hearts!
-          drawHeart(ctx, 130, eyeY, 18);
-          drawHeart(ctx, 270, eyeY, 18);
+        case "unhappy":
+          // Downward slanted angry/sad eyebrows/eyes
+          ctx.beginPath();
+          ctx.moveTo(115, eyeY - 8); ctx.lineTo(145, eyeY + 4);
+          ctx.moveTo(285, eyeY - 8); ctx.lineTo(255, eyeY + 4);
+          ctx.stroke();
+          break;
+
+        case "excited":
+          // Big circular eyes with glowing pupils
+          ctx.beginPath();
+          ctx.arc(130, eyeY, 20, 0, Math.PI * 2);
+          ctx.arc(270, eyeY, 20, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(130, eyeY, 6, 0, Math.PI * 2);
+          ctx.arc(270, eyeY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          break;
+
+        case "sleep":
+          // Sleep: always closed flat line slits for eyes
+          ctx.beginPath();
+          ctx.moveTo(110, eyeY); ctx.lineTo(150, eyeY);
+          ctx.moveTo(250, eyeY); ctx.lineTo(290, eyeY);
+          ctx.stroke();
           break;
       }
     }
     
-    // Draw subtle mouth
+    // Draw Mouth
     ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 4;
     ctx.beginPath();
-    if (activeMood === "happy" || activeMood === "love") {
-      ctx.arc(200, eyeY + 25, 12, 0, Math.PI, false); // Smile
-    } else if (activeMood === "sad") {
-      ctx.arc(200, eyeY + 38, 10, Math.PI, 0, false); // Frown
+    
+    if (activeMood === "happy" || activeMood === "smile") {
+      ctx.arc(200, eyeY + 25, 12, 0, Math.PI, false); // Smile arc
+      ctx.stroke();
+    } else if (activeMood === "excited") {
+      // Big gasping O shape mouth (filled)
+      ctx.beginPath();
+      ctx.arc(200, eyeY + 30, 9, 0, Math.PI * 2);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fill();
+      ctx.stroke();
+    } else if (activeMood === "sad" || activeMood === "unhappy") {
+      ctx.arc(200, eyeY + 38, 10, Math.PI, 0, false); // Frown arc
+      ctx.stroke();
+    } else if (activeMood === "sleep") {
+      // Sleep: neutral flat mouth
+      ctx.moveTo(190, eyeY + 30); ctx.lineTo(210, eyeY + 30);
+      ctx.stroke();
     } else {
-      ctx.moveTo(190, eyeY + 30); ctx.lineTo(210, eyeY + 30); // Sleep straight mouth
+      // calm: neutral flat line mouth
+      ctx.moveTo(190, eyeY + 30); ctx.lineTo(210, eyeY + 30);
+      ctx.stroke();
     }
-    ctx.stroke();
 
     requestAnimationFrame(renderFaceLoop);
   }
@@ -360,11 +577,10 @@ function startFaceSimulator() {
 
 // ─── Sensor Telemetry Simulation ──────────────────
 function startSensorSimulation() {
-  const hrValEl = document.getElementById('hr-value');
-  const tempValEl = document.getElementById('temp-value');
-  const stabValEl = document.getElementById('stability-value');
+  const hrValEl = document.getElementById('hr-value'); // Sound raw
+  const tempValEl = document.getElementById('temp-value'); // Dist cm
+  const stabValEl = document.getElementById('stability-value'); // Mood state text
   
-  // Graph canvases
   const hrCanvas = document.getElementById('hr-graph');
   const tempCanvas = document.getElementById('temp-graph');
   const stabCanvas = document.getElementById('stability-graph');
@@ -375,102 +591,58 @@ function startSensorSimulation() {
   const tempCtx = tempCanvas.getContext('2d');
   const stabCtx = stabCanvas.getContext('2d');
 
-  // History buffers
-  const maxHistory = 40;
-  let hrHistory = new Array(maxHistory).fill(40);
-  let tempHistory = new Array(maxHistory).fill(30);
-  let stabHistory = new Array(maxHistory).fill(50);
+  const maxHistory = MAX_HISTORY;
+  let stabHistory = new Array(maxHistory).fill(1); // mapped mood states
 
-  let hrBeatTime = 0;
   let timeVal = 0;
 
   function updateSensors() {
     timeVal += 0.1;
     
-    // 1. Temperature Calculation
-    const targetTemp = activeMood === "sleeping" ? 36.4 : 36.8;
-    const currentTemp = targetTemp + Math.sin(timeVal / 5) * 0.1 + (Math.random() - 0.5) * 0.05;
-    if (tempValEl) tempValEl.textContent = currentTemp.toFixed(1);
-    tempHistory.push(currentTemp);
-    if (tempHistory.length > maxHistory) tempHistory.shift();
+    // Auto fluctuate values slightly to look alive
+    const soundNoise = (Math.random() - 0.5) * 12;
+    const distNoise = (Math.random() - 0.5) * 1.5;
 
-    // 2. Stability Calculation
-    const baseStab = activeMood === "sleeping" ? 99.8 : (activeMood === "sad" ? 92.0 : 98.2);
-    const currentStab = baseStab + (Math.random() - 0.5) * 0.6 - (Math.random() < 0.04 ? 8.0 : 0.0);
-    const displayStab = Math.min(100, Math.max(0, currentStab));
-    if (stabValEl) stabValEl.textContent = displayStab.toFixed(1);
-    stabHistory.push(displayStab);
-    if (stabHistory.length > maxHistory) stabHistory.shift();
+    // Read current slider inputs + minor noise
+    const simSound = Math.max(50, Math.min(600, Math.floor(curSound + soundNoise)));
+    const simDist = Math.max(5, Math.min(250, Math.floor(curDist + distNoise)));
 
-    // 3. Heart Rate Calculation (ECG Simulation)
-    let baseHR = 72;
-    if (activeMood === "happy") baseHR = 80;
-    if (activeMood === "love") baseHR = 92;
-    if (activeMood === "sleeping") baseHR = 60;
-    if (activeMood === "sad") baseHR = 65;
-    
-    if (hrValEl) {
-      const displayHR = Math.floor(baseHR + Math.sin(timeVal) * 2 + (Math.random() - 0.5) * 2);
-      hrValEl.textContent = displayHR;
-    }
+    // Update labels
+    if (hrValEl) hrValEl.textContent = simSound;
+    if (tempValEl) tempValEl.textContent = simDist;
+    if (stabValEl) stabValEl.textContent = activeMood.toUpperCase();
 
-    // ECG Heart beat cycle simulation
-    const cycleMs = (60 / baseHR) * 1000;
-    const now = Date.now();
-    const cycleElapsed = (now - hrBeatTime) % cycleMs;
-    
-    let ecgY = 30; // base flat line
-    
-    // ECG Waveform mapping
-    if (cycleElapsed < 100) {
-      ecgY = 30;
-    } else if (cycleElapsed >= 100 && cycleElapsed < 180) {
-      // P wave (small bump)
-      const ratio = (cycleElapsed - 100) / 80;
-      ecgY = 30 - Math.sin(ratio * Math.PI) * 4;
-    } else if (cycleElapsed >= 180 && cycleElapsed < 220) {
-      // Flat PR segment
-      ecgY = 30;
-    } else if (cycleElapsed >= 220 && cycleElapsed < 240) {
-      // Q wave (dip)
-      const ratio = (cycleElapsed - 220) / 20;
-      ecgY = 30 + ratio * 6;
-    } else if (cycleElapsed >= 240 && cycleElapsed < 270) {
-      // R wave (huge spike)
-      const ratio = (cycleElapsed - 240) / 30;
-      ecgY = 36 - ratio * 42;
-    } else if (cycleElapsed >= 270 && cycleElapsed < 300) {
-      // S wave (deep dip)
-      const ratio = (cycleElapsed - 270) / 30;
-      ecgY = -6 + ratio * 46;
-    } else if (cycleElapsed >= 300 && cycleElapsed < 330) {
-      // Return to baseline
-      const ratio = (cycleElapsed - 300) / 30;
-      ecgY = 40 - ratio * 10;
-    } else if (cycleElapsed >= 330 && cycleElapsed < 420) {
-      // Flat ST
-      ecgY = 30;
-    } else if (cycleElapsed >= 420 && cycleElapsed < 520) {
-      // T wave (medium bump)
-      const ratio = (cycleElapsed - 420) / 100;
-      ecgY = 30 - Math.sin(ratio * Math.PI) * 8;
-    } else {
-      // Baseline
-      ecgY = 30;
-    }
-
-    hrHistory.push(ecgY);
+    // Sound wave drawing mapping
+    hrHistory.push(simSound);
     if (hrHistory.length > maxHistory) hrHistory.shift();
 
-    // Render graphs
-    drawGraph(hrCtx, hrHistory, '#f43f5e', 0, 60);
-    drawGraph(tempCtx, tempHistory, '#f59e0b', 35.8, 37.8);
-    drawGraph(stabCtx, stabHistory, '#10b981', 80, 101);
+    // Distance drawing mapping
+    tempHistory.push(simDist);
+    if (tempHistory.length > maxHistory) tempHistory.shift();
 
-    setTimeout(updateSensors, 50); // High-frequency polling for smooth ECG scrolling
+    // Map activeMood string to a step height on stability graph
+    let moodInt = 1;
+    if (activeMood === "calm") moodInt = 1;
+    else if (activeMood === "happy") moodInt = 3;
+    else if (activeMood === "sad") moodInt = 0.5;
+    else if (activeMood === "smile") moodInt = 4;
+    else if (activeMood === "unhappy") moodInt = 2;
+    else if (activeMood === "excited") moodInt = 5;
+
+    stabHistory.push(moodInt);
+    if (stabHistory.length > maxHistory) stabHistory.shift();
+
+    // Render graphs
+    // Sound wave graph: range 0 - 650
+    drawGraph(hrCtx, hrHistory, '#38bdf8', 0, 650, true);
+    // Distance graph: range 0 - 260
+    drawGraph(tempCtx, tempHistory, '#f59e0b', 0, 260, false);
+    // Step response graph: range 0 - 6
+    drawGraph(stabCtx, stabHistory, '#10b981', 0, 6, false);
+    setTimeout(updateSensors, 100);
   }
 
-  function drawGraph(ctx, history, color, minVal, maxVal) {
+  function drawGraph(ctx, history, color, minVal, maxVal, isAudioWave = false) {
     const canvas = ctx.canvas;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
@@ -497,13 +669,14 @@ function startSensorSimulation() {
       const x = i * step;
       let y;
       
-      if (minVal === 0 && maxVal === 60) {
-        // Special mapping for raw ECG values
-        y = val;
+      if (isAudioWave) {
+        // Render sound level as a symmetric audio waveform around center line (y=30)
+        const center = canvas.height / 2;
+        const amplitude = ((val - minVal) / (maxVal - minVal)) * (canvas.height / 2.5);
+        y = center + (i % 2 === 0 ? amplitude : -amplitude);
       } else {
-        // Normal scale mapping
         const ratio = (val - minVal) / (maxVal - minVal);
-        y = canvas.height - (ratio * (canvas.height - 10) + 5);
+        y = canvas.height - (ratio * (canvas.height - 12) + 6);
       }
       
       if (i === 0) ctx.moveTo(x, y);
@@ -512,12 +685,10 @@ function startSensorSimulation() {
     
     ctx.stroke();
 
-    // Draw gradient fill below graph line (except for raw ECG)
-    if (!(minVal === 0 && maxVal === 60)) {
+    // Draw gradient fill below graph line (for distance and mood step graphs)
+    if (!isAudioWave) {
       const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      grad.addColorStop(0, color.replace(')', ', 0.15)').replace('#', 'rgba(')); // rough conversion helper or hardcoded
-      if (color === '#f59e0b') grad.addColorStop(0, 'rgba(245, 158, 11, 0.15)');
-      if (color === '#10b981') grad.addColorStop(0, 'rgba(16, 185, 129, 0.15)');
+      grad.addColorStop(0, color === '#f59e0b' ? 'rgba(245, 158, 11, 0.15)' : 'rgba(16, 185, 129, 0.15)');
       grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
       
       ctx.fillStyle = grad;
@@ -537,37 +708,37 @@ function startConsoleSimulation() {
   if (!consoleEl) return;
 
   const logs = [
-    { text: "Initializing I2C bus...", type: "info" },
-    { text: "OLED display SSD1306 found at address 0x3C", type: "success" },
-    { text: "DHT11 Temperature Sensor online.", type: "success" },
-    { text: "MAX30102 Biometrics module online.", type: "success" },
-    { text: "Calibrating MPU6050 Accelerometer (do not move)...", type: "info" },
-    { text: "Calibration complete. Offset X: 0.02, Y: -0.04, Z: 0.98", type: "success" },
-    { text: "BLE Advertising started. Device ID: ZWU-EmotionalRobot-005", type: "info" },
-    { text: "Entering loop: Standby state: HAPPY.", type: "success" }
+    { text: "Initializing I2C bus at 400kHz...", type: "info" },
+    { text: "SSD1306 OLED screen found at I2C address 0x3C", type: "success" },
+    { text: "HC-SR04 Trigger pin 9 (OUTPUT), Echo pin 10 (INPUT) initialized.", type: "success" },
+    { text: "HS-S05B Sound Sensor ADC pin A0 online.", type: "success" },
+    { text: "Calibrating sound sensor baseline noise level...", type: "info" },
+    { text: "Calibration complete. Baseline noise: 148 RAW", type: "success" },
+    { text: "State Machine Active. Lonely timer set: 10000ms", type: "info" },
+    { text: "Entering loop: Current mood: CALM.", type: "success" }
   ];
 
   logs.forEach(log => logToConsole(log.text, log.type));
 
   const simulationEvents = [
-    { text: "BLE packet received: command [STATE_MOOD = SAD]", type: "info", triggerMood: "sad" },
-    { text: "Servo motors X-axis offset set to -12 deg.", type: "info" },
-    { text: "Temperature threshold warning: DHT11 reading 37.1 C.", type: "warn" },
-    { text: "BLE packet received: command [STATE_MOOD = LOVING]", type: "info", triggerMood: "love" },
-    { text: "Pulse wave detected. Heartrate peak reading: 92 BPM.", type: "success" },
-    { text: "Stability alarm! Accel XYZ fluctuation > 0.3g.", type: "error" },
-    { text: "Heading servo drift correction triggered.", type: "warn" },
-    { text: "BLE packet received: command [STATE_MOOD = SLEEPING]", type: "info", triggerMood: "sleeping" },
-    { text: "OLED brightness dimmed to 15% (energy save).", type: "info" }
+    { text: "HC-SR04: Distance echo reading ok (中值滤波已启用)", type: "info" },
+    { text: "HS-S05B: Sound peak threshold filter passed.", type: "info" },
+    { text: "Min display time lock active (防抖状态锁中: 630ms)", type: "warn" },
+    { text: "Arduino Uno R4 WiFi serial link ok.", type: "success" },
+    { text: "Console loop heartbeat: ok.", type: "info" }
   ];
 
   function loop() {
-    const delay = 4000 + Math.random() * 5000;
+    const delay = 6000 + Math.random() * 8000;
     setTimeout(() => {
-      const idx = Math.floor(Math.random() * simulationEvents.length);
-      const ev = simulationEvents[idx];
-      
-      logToConsole(ev.text, ev.type);
+      if (Math.random() < 0.3) {
+        // print a dynamic sensor reading
+        logToConsole(`[SENSOR] HC-SR04: ${curDist}cm | HS-S05B: ${curSound} RAW -> State: ${activeMood.toUpperCase()}`, "info");
+      } else {
+        const idx = Math.floor(Math.random() * simulationEvents.length);
+        const ev = simulationEvents[idx];
+        logToConsole(ev.text, ev.type);
+      }
       loop();
     }, delay);
   }
@@ -594,4 +765,188 @@ function logToConsole(text, type = "info") {
   
   // Auto-scroll
   consoleEl.scrollTop = consoleEl.scrollHeight;
+}
+
+// ─── MQTT 广域网连接与控制 (Adafruit IO) ─────────
+const MQTT_BROKER = "wss://io.adafruit.com:443/mqtt"; // 使用 Adafruit IO 加密 WebSockets 端口
+let mqttClient = null;
+
+function setSlidersDisabled(disabled) {
+  const sliderDist = document.getElementById('slider-dist');
+  const sliderSound = document.getElementById('slider-sound');
+  if (sliderDist) {
+    sliderDist.disabled = disabled;
+    sliderDist.style.opacity = disabled ? "0.5" : "1";
+    sliderDist.style.pointerEvents = disabled ? "none" : "auto";
+  }
+  if (sliderSound) {
+    sliderSound.disabled = disabled;
+    sliderSound.style.opacity = disabled ? "0.5" : "1";
+    sliderSound.style.pointerEvents = disabled ? "none" : "auto";
+  }
+}
+
+function initMqttForm() {
+  const usernameInput = document.getElementById('mqtt-username');
+  const keyInput = document.getElementById('mqtt-key');
+  const connectBtn = document.getElementById('arduino-connect-btn');
+  const statusSpan = document.getElementById('arduino-status');
+
+  // 初始化默认状态为未成功连接，支持手动模拟
+  isMqttConnected = false;
+  if (statusSpan) {
+    statusSpan.textContent = "🔴 未成功连接 / 保持手动模拟";
+    statusSpan.style.color = "#ef4444";
+  }
+  setSlidersDisabled(false);
+
+  // 从 LocalStorage 读取上次保存的凭证
+  const savedUser = localStorage.getItem('aio_username') || "hkz";
+  const savedKey = localStorage.getItem('aio_key') || "";
+  if (usernameInput) usernameInput.value = savedUser;
+  if (keyInput) keyInput.value = savedKey;
+
+  connectBtn?.addEventListener('click', () => {
+    if (typeof mqtt === 'undefined') {
+      if (statusSpan) {
+        statusSpan.textContent = "❌ 依赖库加载失败，请刷新";
+        statusSpan.style.color = "#ef4444";
+      }
+      logToConsole("[MQTT ERROR] 错误：MQTT 依赖库加载失败！这通常是因为国内连接 unpkg.com 超时或被拦截。请多刷新几次网页，或者切换网络环境试一下！", "error");
+      return;
+    }
+
+    const username = usernameInput.value.trim();
+    const key = keyInput.value.trim();
+    if (!username || !key) {
+      logToConsole("[MQTT] 错误：用户名或 Active Key 不能为空！", "error");
+      return;
+    }
+
+    // 保存凭证
+    localStorage.setItem('aio_username', username);
+    localStorage.setItem('aio_key', key);
+
+    statusSpan.textContent = "🟡 连接中...";
+    statusSpan.style.color = "#f59e0b";
+
+    // 如果之前已经有连接，先断开它
+    if (mqttClient) {
+      try { mqttClient.end(); } catch(e) {}
+    }
+
+    // 建立加密 WebSocket 连接
+    mqttClient = mqtt.connect(MQTT_BROKER, {
+      username: username,
+      password: key,
+      clientId: 'web_client_' + Math.random().toString(16).substr(2, 8)
+    });
+
+    const topicSensors = `${username}/feeds/sensors`;
+
+    mqttClient.on('connect', () => {
+      isMqttConnected = true;
+      statusSpan.textContent = "🟢 已成功连接 / 物理数据联动";
+      statusSpan.style.color = "#10b981";
+      setSlidersDisabled(true);
+      logToConsole(`[MQTT] 成功连接至 Adafruit IO Broker，已切换为真机实时数据模式！`, "success");
+
+      // 订阅机器人数据上报
+      mqttClient.subscribe(topicSensors, (err) => {
+        if (!err) {
+          logToConsole(`[MQTT] 成功订阅主题: ${topicSensors}`, "success");
+        } else {
+          logToConsole(`[MQTT] 订阅失败: ${err.message}`, "error");
+        }
+      });
+    });
+
+    mqttClient.on('message', (topic, message) => {
+      if (topic === topicSensors) {
+        try {
+          const data = JSON.parse(message.toString());
+          // 当连接成功并且有数据回传时，对应的传感器数据和表情准确显示
+          curDist = data.distance;
+          curSound = data.sound;
+
+          // 更新模拟滑块的值，直观显示当前回传的数据大小
+          const sliderDist = document.getElementById('slider-dist');
+          const sliderSound = document.getElementById('slider-sound');
+          const sliderDistVal = document.getElementById('slider-dist-val');
+          const sliderSoundVal = document.getElementById('slider-sound-val');
+          
+          if (sliderDist) sliderDist.value = curDist;
+          if (sliderSound) sliderSound.value = curSound;
+          if (sliderDistVal) sliderDistVal.textContent = `${curDist} cm`;
+          if (sliderSoundVal) sliderSoundVal.textContent = `${curSound}`;
+
+          // 更新网页显示
+          const hrValEl = document.getElementById('hr-value');
+          const tempValEl = document.getElementById('temp-value');
+          if (hrValEl) hrValEl.textContent = curSound;
+          if (tempValEl) tempValEl.textContent = curDist;
+
+          // 保持折线图历史同步
+          hrHistory.push(curSound);
+          tempHistory.push(curDist);
+          if (hrHistory.length > MAX_HISTORY) hrHistory.shift();
+          if (tempHistory.length > MAX_HISTORY) tempHistory.shift();
+          
+          // 更新网页端的表情UI（用于跟随物理机器人的自动情绪）
+          const moodsMap = ["calm", "happy", "sad", "smile", "unhappy", "excited", "sleep"];
+          const moodStr = moodsMap[data.mood];
+          if (moodStr && moodStr !== activeMood) {
+            activeMood = moodStr;
+            updateMoodUI(moodStr);
+          }
+        } catch (e) {
+          console.warn("MQTT 消息解析错误: ", e);
+        }
+      }
+    });
+
+    mqttClient.on('error', (err) => {
+      isMqttConnected = false;
+      statusSpan.textContent = "🔴 未成功连接 / 保持手动模拟";
+      statusSpan.style.color = "#ef4444";
+      setSlidersDisabled(false);
+      logToConsole(`[MQTT ERROR] 无法连接至 Broker，已回退为手动模拟模式`, "error");
+    });
+
+    mqttClient.on('close', () => {
+      if (isMqttConnected) {
+        isMqttConnected = false;
+        statusSpan.textContent = "🔴 未成功连接 / 保持手动模拟";
+        statusSpan.style.color = "#ef4444";
+        setSlidersDisabled(false);
+        logToConsole(`[MQTT] 与 Broker 的连接已断开，已回退为手动模拟模式`, "warning");
+      }
+    });
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMqttForm);
+} else {
+  initMqttForm();
+}
+
+// 修改原有的网页端情绪按钮逻辑，当网页强制改表情时，向板子下发指令
+function syncMoodToPhysicsBoard(moodString) {
+  if (!mqttClient || !mqttClient.connected) return;
+  
+  const username = document.getElementById('mqtt-username')?.value.trim() || "hkz";
+  const topicCommand = `${username}/feeds/command`;
+
+  const moodsMap = { "calm": 0, "happy": 1, "sad": 2, "smile": 3, "unhappy": 4, "excited": 5, "sleep": 6 };
+  const moodVal = moodsMap[moodString];
+  
+  const payload = JSON.stringify({ val: moodVal });
+  mqttClient.publish(topicCommand, payload, { qos: 0 }, (err) => {
+    if (!err) {
+      logToConsole(`[MQTT Sync] 成功发布指令 ${moodString.toUpperCase()} 到 Feed`, "info");
+    } else {
+      logToConsole(`[MQTT Sync Error] 发布指令失败: ${err.message}`, "error");
+    }
+  });
 }

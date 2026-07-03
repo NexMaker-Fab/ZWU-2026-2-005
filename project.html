@@ -6,12 +6,13 @@
   <title>最终项目 — 团队作业的博客 / Final Project</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
   <meta name="description" content="Final Project Dashboard for ZWU-2026-2-005.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com https://cdnjs.cloudflare.com https://cdn.bootcdn.net https://npm.elemecdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' https://assets.mixkit.co; connect-src 'self' https://api.github.com wss://io.adafruit.com:443 wss://broker.emqx.io:8084;">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/landing.css">
-  <link rel="stylesheet" href="css/project.css">
+  <link rel="stylesheet" href="css/project.css?v=20260703a">
+  <script src="https://cdn.bootcdn.net/ajax/libs/mqtt/5.2.2/mqtt.min.js"></script>
 </head>
 <body>
 
@@ -64,6 +65,66 @@
       <p class="hero-subtitle" data-i18n="project.hero.subtitle">基于 Arduino 开发的老年情感陪伴机器人与 Web 可视化监测底座</p>
     </section>
 
+    <!-- Media Showcase Grid -->
+    <div class="media-grid">
+      <!-- Left Column: 9:16 Poster Card -->
+      <div class="media-poster-card">
+        <img class="media-poster-img" src="images/project_poster.jpg" alt="Emotional Companion Robot Poster">
+        <div class="media-poster-overlay">
+          <h3 class="media-poster-title">📢 情感陪伴机器人展板</h3>
+          <p class="media-poster-desc">项目 9:16 概念展板，展示了机器人的工业设计美学与核心交互理念。</p>
+          <a class="media-poster-btn" href="images/project_poster.jpg" target="_blank">
+            🔍 查看原图 / Fullscreen
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: 16:9 Video Player & Highlights -->
+      <div class="media-right-container">
+        <!-- 16:9 Video Card -->
+        <div class="media-video-card">
+          <video controls src="images/project_video.mp4">
+            您的浏览器不支持 HTML5 视频播放。
+          </video>
+        </div>
+
+        <!-- Project Highlights Card -->
+        <div class="info-card glass-card media-highlights-card">
+          <h3 class="highlights-title">✨ 核心系统亮点 / System Highlights</h3>
+          <div class="highlights-list">
+            <div class="highlight-item">
+              <span class="highlight-bullet">⚡</span>
+              <div class="highlight-text">
+                <h5>高性能 Uno R4 WiFi</h5>
+                <p>采用 Renesas RA4M1 主控，内置 ESP32-S3 提供高速的本地与物联网控制。</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-bullet">🔄</span>
+              <div class="highlight-text">
+                <h5>双向远程 MQTT 网关</h5>
+                <p>集成 Adafruit IO 云端通道，实现低延迟的双向指令下发与遥测上报。</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-bullet">🧠</span>
+              <div class="highlight-text">
+                <h5>迟滞比较器消抖</h5>
+                <p>硬件层使用双阈值迟滞（Hysteresis）算法，有效滤除物理环境突发扰动。</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-bullet">😴</span>
+              <div class="highlight-text">
+                <h5>自动休眠与大刺激惊醒</h5>
+                <p>15秒无活动自动进入打盹（SLEEP）状态，仅大动静或声音方可惊醒，防止视觉过载。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
     <!-- Grid Layout -->
     <div class="project-grid">
       
@@ -77,41 +138,52 @@
           
           <div class="canvas-container">
             <canvas id="robot-canvas" width="400" height="240"></canvas>
-            <div class="robot-status-badge" id="robot-mood-badge">HAPPY</div>
+            <div class="robot-status-badge" id="robot-mood-badge">CALM</div>
           </div>
           
           <div class="mood-controls">
-            <button class="btn btn-primary btn-sm mood-btn active" data-mood="happy">😊 HAPPY</button>
+            <button class="btn btn-primary btn-sm mood-btn active" data-mood="calm">😐 CALM</button>
+            <button class="btn btn-secondary btn-sm mood-btn" data-mood="happy">😊 HAPPY</button>
             <button class="btn btn-secondary btn-sm mood-btn" data-mood="sad">😢 SAD</button>
-            <button class="btn btn-secondary btn-sm mood-btn" data-mood="sleeping">💤 SLEEPY</button>
-            <button class="btn btn-secondary btn-sm mood-btn" data-mood="love">❤️ LOVING</button>
+            <button class="btn btn-secondary btn-sm mood-btn" data-mood="smile">😀 SMILE</button>
+            <button class="btn btn-secondary btn-sm mood-btn" data-mood="unhappy">😔 UNHAPPY</button>
+            <button class="btn btn-secondary btn-sm mood-btn" data-mood="excited">🤩 EXCITED</button>
+            <button class="btn btn-secondary btn-sm mood-btn" data-mood="sleep">😴 SLEEP</button>
+          </div>
+
+          <!-- Interactive Input Sliders (For simulating Arduino sensors) -->
+          <div style="margin-top: 24px;">
+            <p class="card-desc" style="margin-bottom: 8px; font-weight: 600; color: var(--text-main);">🎛️ 传感器数值模拟器 / Interactive Input Simulator:</p>
+            
+            <div class="dashboard-control-slider">
+              <div class="control-slider-header">
+                <span>超声波距离 / HC-SR04 Distance</span>
+                <span class="control-slider-value" id="slider-dist-val">100 cm</span>
+              </div>
+              <input type="range" class="control-slider-input" id="slider-dist" min="5" max="250" value="100">
+            </div>
+
+            <div class="dashboard-control-slider">
+              <div class="control-slider-header">
+                <span>声音强度 / HS-S05B Sound</span>
+                <span class="control-slider-value" id="slider-sound-val">150</span>
+              </div>
+              <input type="range" class="control-slider-input" id="slider-sound" min="50" max="600" value="150">
+            </div>
           </div>
         </div>
 
-        <!-- Specifications Card -->
-        <div class="info-card glass-card spec-card" style="margin-top: 24px;">
-          <h2 class="card-title" data-i18n="project.specs.title">🛠️ 硬件架构与物料 / Spec Sheets</h2>
-          <div class="spec-list">
-            <div class="spec-item">
-              <span class="spec-name">MCU Controller</span>
-              <span class="spec-val">Arduino Nano ESP32</span>
+        <!-- IoT MQTT Connection Card -->
+        <div class="info-card glass-card iot-card" style="margin-top: 24px;">
+          <h2 class="card-title">📡 物联网广域网连接 / IoT MQTT Connection</h2>
+          <p class="card-desc" style="margin-bottom: 12px;">使用 Adafruit IO 的 MQTT 协议，实现 GitHub 网页端与物理机器人的跨地域双向互联。</p>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="mqtt-username" placeholder="Username (hkz)" value="hkz" style="flex: 1; padding: 8px 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 6px; color: #fff; font-family: inherit; font-size: 0.875rem;">
+              <span id="arduino-status" style="display: inline-flex; align-items: center; font-size: 0.875rem; font-weight: 600; color: #94a3b8; white-space: nowrap;">⚪ 未连接</span>
             </div>
-            <div class="spec-item">
-              <span class="spec-name">Biometric Sensor</span>
-              <span class="spec-val">MAX30102 Heart Rate & SpO2</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-name">Environment Sensing</span>
-              <span class="spec-val">DHT11 Temp & Humidity</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-name">Actuators</span>
-              <span class="spec-val">2x SG90 Servo Motors (Head tilt)</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-name">Display Module</span>
-              <span class="spec-val">0.96 inch SSD1306 I2C OLED</span>
-            </div>
+            <input type="password" id="mqtt-key" placeholder="AIO Active Key" value="" style="padding: 8px 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 6px; color: #fff; font-family: inherit; font-size: 0.875rem;">
+            <button class="btn btn-primary btn-sm" id="arduino-connect-btn" style="width: 100%;">连接 Adafruit IO Broker</button>
           </div>
         </div>
 
@@ -125,37 +197,37 @@
           <h2 class="card-title" data-i18n="project.sensors.title">📊 传感器实时数据 / Telemetry</h2>
           
           <div class="sensor-grid">
-            <!-- Heart Rate -->
+            <!-- Sound Level -->
             <div class="sensor-widget">
               <div class="widget-header">
-                <span class="widget-icon">💓</span>
-                <span class="widget-label" data-i18n="project.sensor.hr">Heart Rate</span>
+                <span class="widget-icon">🎤</span>
+                <span class="widget-label" data-i18n="project.sensor.hr">Sound Level</span>
               </div>
-              <div class="widget-value"><span id="hr-value">72</span> <span class="widget-unit">BPM</span></div>
+              <div class="widget-value"><span id="hr-value">150</span> <span class="widget-unit">RAW</span></div>
               <div class="graph-container">
                 <canvas id="hr-graph" width="220" height="60"></canvas>
               </div>
             </div>
 
-            <!-- Body Temperature -->
+            <!-- Distance -->
             <div class="sensor-widget">
               <div class="widget-header">
-                <span class="widget-icon">🌡️</span>
-                <span class="widget-label" data-i18n="project.sensor.temp">Temperature</span>
+                <span class="widget-icon">📏</span>
+                <span class="widget-label" data-i18n="project.sensor.temp">Distance</span>
               </div>
-              <div class="widget-value"><span id="temp-value">36.7</span> <span class="widget-unit">°C</span></div>
+              <div class="widget-value"><span id="temp-value">100</span> <span class="widget-unit">cm</span></div>
               <div class="graph-container">
                 <canvas id="temp-graph" width="220" height="60"></canvas>
               </div>
             </div>
 
-            <!-- Stability (IMU) -->
+            <!-- Mood State -->
             <div class="sensor-widget">
               <div class="widget-header">
-                <span class="widget-icon">📐</span>
-                <span class="widget-label" data-i18n="project.sensor.stability">Stability</span>
+                <span class="widget-icon">🤖</span>
+                <span class="widget-label" data-i18n="project.sensor.stability">Mood State</span>
               </div>
-              <div class="widget-value"><span id="stability-value">98.5</span> <span class="widget-unit">%</span></div>
+              <div class="widget-value" style="font-size: 1.25rem; font-weight: 800; padding: 5px 0;"><span id="stability-value">CALM</span></div>
               <div class="graph-container">
                 <canvas id="stability-graph" width="220" height="60"></canvas>
               </div>
@@ -177,12 +249,405 @@
 
     </div>
 
+    <!-- Report Sections (Sandbox Style Layout) -->
+    <div class="sandbox-project">
+      
+      <!-- Project Concept -->
+      <section class="sandbox-section">
+        <h2><span class="sec-icon">💡</span> 项目概念 / Project Concept</h2>
+        <p>本项目致力于针对独居老年人（或其他需要情感关怀的特殊群体），开发一款低成本、高可靠性、具备柔和感官体验的情感陪伴机器人。机器人通过主动感知环境声音和老年人的接近距离，自动调整自身的表情状态（平静、快乐、伤心、微笑、难过、兴奋），从而提供无声但温馨的“情绪陪伴”。设计理念遵循<strong>非侵入式、低感官刺激、可预测性</strong>，避免突兀的声光报警给老年人带来焦虑，为老年人构筑一个充满安全感的交互环境。</p>
+        
+        <div class="goal-grid">
+          <div class="goal-card">
+            <div class="goal-icon">👥</div>
+            <h4>缓解孤独感 / Relieve Loneliness</h4>
+            <p>通过实时表情交互，为独居老人提供温馨的视觉陪伴与互动反馈。</p>
+          </div>
+          <div class="goal-card">
+            <div class="goal-icon">🌿</div>
+            <h4>低感官刺激 / Low Stimulation</h4>
+            <p>不使用刺眼的强光或刺耳 of 警报音，完全通过平滑的 OLED 表情温和响应。</p>
+          </div>
+          <div class="goal-card">
+            <div class="goal-icon">💓</div>
+            <h4>防抖动平滑 / Anti-Flicker</h4>
+            <p>设置最短表情显示延迟（630ms），避免因短暂外界噪音造成表情剧烈跳动。</p>
+          </div>
+          <div class="goal-card">
+            <div class="goal-icon">🌐</div>
+            <h4>IoT 远程互联 / IoT Connected</h4>
+            <p>支持将交互频率、声音及距离数据上传云端，让子女能远程感知父母的活跃状态。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Core Interaction Logic Flow -->
+      <section class="sandbox-section">
+        <h2><span class="sec-icon">🔄</span> 核心交互逻辑 / Core Interaction</h2>
+        <div class="interaction-flow">
+          <div class="flow-step">
+            <div class="step-icon">🚶</div>
+            <div class="step-title">动作 (Action)</div>
+            <div class="step-desc">走近/远离 & 说话/发出声音</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="step-icon">📡</div>
+            <div class="step-title">感知 (Sensing)</div>
+            <div class="step-desc">超声波测距 & 声音检测</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="step-icon">🧠</div>
+            <div class="step-title">控制 (Control)</div>
+            <div class="step-desc">Arduino 情绪状态机</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="step-icon">💫</div>
+            <div class="step-title">反馈 (Feedback)</div>
+            <div class="step-desc">SSD1306 表情变化</div>
+          </div>
+        </div>
+        <div class="flow-principle">
+          <strong>状态转移机制：</strong>机器人会根据手部或人体的<strong>接近距离</strong>与<strong>环境声强</strong>，在 6 个情绪状态之间平滑切换。为防止表情频繁抖动，代码内置了 <code>MIN_DISPLAY_TIME (630ms)</code> 的最短状态显示时间锁。
+        </div>
+      </section>
+
+      <!-- Overall Structure -->
+      <section class="sandbox-section">
+        <h2><span class="sec-icon">🏗️</span> 整体结构层 / System Architecture</h2>
+        <div class="layer-grid">
+          <div class="layer-card">
+            <div class="layer-icon">🎤</div>
+            <h4>一、听觉感知层 / Sound Input</h4>
+            <p>利用 HS-S05B 声音模块捕捉老人的说话声、呼唤声或室内环境噪音。通过滤波算法滤除随机毛刺，计算出平滑的声强数据。</p>
+            <div class="layer-detail">
+              <span>HS-S05B 传感器</span><span>一阶低通滤波</span><span>环境声强级</span>
+            </div>
+          </div>
+          <div class="layer-card">
+            <div class="layer-icon">📏</div>
+            <h4>二、距离感知层 / Distance Input</h4>
+            <p>利用 HC-SR04 超声波测距传感器，实时计算老人的接近距离。采用三点中值滤波算法，消除测距异常跳变，确保数据准确稳定。</p>
+            <div class="layer-detail">
+              <span>HC-SR04 传感器</span><span>三点中值滤波</span><span>人体接近感知</span>
+            </div>
+          </div>
+          <div class="layer-card">
+            <div class="layer-icon">📺</div>
+            <h4>三、视觉表达层 / Visual Output</h4>
+            <p>将 0.96" SSD1306 OLED 屏幕作为机器人的“面部”，由 Adafruit_SSD1306 库驱动，以 42ms 的帧间隔（24FPS）平滑循环显示当前情绪的动态点阵图画。</p>
+            <div class="layer-detail">
+              <span>SSD1306 屏幕</span><span>Adafruit 绘图库</span><span>情绪位图点阵</span><span>24FPS 动画</span>
+            </div>
+          </div>
+          <div class="layer-card">
+            <div class="layer-icon">☁️</div>
+            <h4>四、IoT 数据链 / IoT Base</h4>
+            <p>利用 Arduino 控制器的联网功能，将获取的距离、声音及情绪数据推送至 Web 可视化网关，方便监护人或看护中心监测老年人的日常起居活跃度。</p>
+            <div class="layer-detail">
+              <span>Uno R4 WiFi</span><span>Web 实时看板</span><span>起居轨迹遥测</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sensor System -->
+      <section class="sandbox-section">
+        <h2><span class="sec-icon">📡</span> 硬件设备详情 / Hardware Details</h2>
+        <div class="module-grid">
+          <div class="module-card">
+            <div class="mod-icon">🔌</div>
+            <div class="mod-info">
+              <h4>Arduino Uno R4 WiFi</h4>
+              <div class="mod-type">微控制器 | 主控芯片</div>
+              <p>作为核心控制大脑，负责传感器数据滤波、情绪状态机判定、SSD1306 屏幕像素驱动以及数据串口/网络外发。</p>
+            </div>
+          </div>
+          <div class="module-card">
+            <div class="mod-icon">📏</div>
+            <div class="mod-info">
+              <h4>HC-SR04 超声波测距传感器</h4>
+              <div class="mod-type">距离传感器 | GPIO</div>
+              <p>利用声波发射与接收的时间差计算距离。测距范围 2cm - 400cm，分辨率可达 3mm。主要判定近距交互（迟滞比较：切入 &lt; 40cm，切出 &gt; 50cm）与远距陪伴状态（切入 &gt; 85cm，切出 &lt; 75cm）。</p>
+            </div>
+          </div>
+          <div class="module-card">
+            <div class="mod-icon">🎤</div>
+            <div class="mod-info">
+              <h4>HS-S05B 声音检测传感器</h4>
+              <div class="mod-type">声强传感器 | ADC 模拟量</div>
+              <p>内置驻极体话筒与放大器，输出代表声音强度的模拟变化波形。主控通过峰峰值检测提取音量，大声判定阈值设定为 LOUD &gt; 250，小声与安静判定阈值设定为 QUIET &gt; 30。</p>
+            </div>
+          </div>
+          <div class="module-card">
+            <div class="mod-icon">🖥️</div>
+            <div class="mod-info">
+              <h4>SSD1306 0.96" OLED 点阵屏</h4>
+              <div class="mod-type">显示模组 | I²C 协议</div>
+              <p>128x64 高对比度单色自发光点阵屏，运行在 400kHz 高速 I2C 模式，用于平滑播放 64x64 点阵的情感表情序列帧。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- State Machine Matrix -->
+      <section class="sandbox-section">
+        <h2><span class="sec-icon">🧪</span> 表情判定与状态机矩阵 / State Decision Matrix</h2>
+        <div class="experiment-card">
+          <p>机器人会周期性读取超声波距离与声音声强，并在每个 20ms 的循环周期内，根据下面的二维阈值状态转化矩阵决定目标情绪：</p>
+          <table class="interaction-table">
+            <thead>
+              <tr>
+                <th>感应距离范围 (Distance)</th>
+                <th>声强状态 (Sound Level)</th>
+                <th>目标表情 (Target Mood)</th>
+                <th>交互含义与表现 (Behavioral Semantics)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>近距离 &lt; 40 cm</strong> (有人接近交互)<br><span style="font-size:0.76rem; color:var(--text-muted);">迟滞滤波：切入 &lt;40cm，切出 &gt;50cm</span></td>
+                <td>大声 (&gt;250)</td>
+                <td><span style="color:var(--accent-primary); font-weight:bold;">EXCITED (兴奋)</span></td>
+                <td>老人正在开心凑近说话，发出大声互动，机器人开心睁大眼睛，加快眨眼。</td>
+              </tr>
+              <tr>
+                <td><strong>近距离 &lt; 40 cm</strong> (有人接近交互)<br><span style="font-size:0.76rem; color:var(--text-muted);">迟滞滤波：切入 &lt;40cm，切出 &gt;50cm</span></td>
+                <td>小声/安静 (&lt;250)</td>
+                <td><span style="color:var(--accent-primary); font-weight:bold;">HAPPY (快乐)</span></td>
+                <td>老人静静陪伴在机器人跟前，无强声干扰，机器人报以温暖的快乐睁眼。</td>
+              </tr>
+              <tr>
+                <td><strong>远距离 &gt; 85 cm</strong> (无人在身旁)<br><span style="font-size:0.76rem; color:var(--text-muted);">迟滞滤波：切入 &gt;85cm，切出 &lt;75cm</span></td>
+                <td>大声 (&gt;30) (远方动静)</td>
+                <td><span style="color:var(--accent-primary); font-weight:bold;">CALM (平静)</span></td>
+                <td>虽离得远，但能听到脚步或说话动静，保持平稳工作，重置孤独计时器。</td>
+              </tr>
+              <tr>
+                <td><strong>远距离 &gt; 85 cm</strong> (无人在身旁)<br><span style="font-size:0.76rem; color:var(--text-muted);">迟滞滤波：切入 &gt;85cm，切出 &lt;75cm</span></td>
+                <td>小声/安静 (&lt;30)</td>
+                <td><span style="color:#f43f5e; font-weight:bold;">SAD (伤心)</span></td>
+                <td>无人在身旁且无动静，孤独计时器超过 10 秒即触发孤独/伤心动画。</td>
+              </tr>
+              <tr>
+                <td><strong>中距离 40cm - 85cm</strong> (正常距离交互)</td>
+                <td>大声 (&gt;30)</td>
+                <td><span style="color:var(--accent-primary); font-weight:bold;">SMILE (微笑)</span></td>
+                <td>老人正对着机器人发出声响互动，机器人露出眯眼喜悦微笑。</td>
+              </tr>
+              <tr>
+                <td><strong>中距离 40cm - 85cm</strong> (正常距离交互)</td>
+                <td>小声/安静 (&lt;30)</td>
+                <td><span style="color:var(--accent-primary); font-weight:bold;">CALM (平静)</span></td>
+                <td>老人在常规距离，但周围没有发出大声响，机器人保持平静待机。</td>
+              </tr>
+              <tr>
+                <td><strong>全范围 (无交互刺激)</strong></td>
+                <td>持续静止 (&lt;30)</td>
+                <td><span style="color:#64748b; font-weight:bold;">SLEEP (打盹睡眠)</span></td>
+                <td><strong>15秒极静自动休眠</strong>：持续 15 秒环境无声音且无运动，屏幕播放打盹动画。<strong>惊醒机制</strong>：外界距离变化 &gt;30cm（且在1.2m内）或声音 &gt;250 时瞬间恢复平静。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Arduino Core Code Section -->
+      <section class="sandbox-section">
+        <h2><span class="sec-icon">💻</span> Arduino 核心驱动代码 / Embedded Source Code</h2>
+        <div class="code-section" style="margin:0; padding:0; border:none;">
+          <p>以下展示了 <code>sketch_improve.ino</code> 中最核心的传感器滤波处理与状态转移控制逻辑，体现了如何从硬件数据抽丝剥茧为老人的陪伴反馈：</p>
+          <div class="code-scroll-container">
+            <pre class="code-highlight"><code>// ==================== 情绪更新核心逻辑 ====================
+void updateMood() {
+  // 限制传感器物理采样频率为 20Hz (每 50ms 一次)
+  static unsigned long lastSensorReadTime = 0;
+  static int cachedDist = 100;
+  static int cachedSound = 0;
+  
+  if (millis() - lastSensorReadTime >= 50 || lastSensorReadTime == 0) {
+    lastSensorReadTime = millis();
+    cachedDist = getDistance();
+    currentDistance = cachedDist; // 更新全局变量，供 MQTT 传输
+    cachedSound = getSoundIntensity();
+    smoothSound = smoothSound * 0.6 + cachedSound * 0.4;
+  }
+  
+  int dist = cachedDist;
+  
+  // 1. 稳态与活动检测（用于重置打盹计时器）
+  bool motionDetected = (abs(dist - prevDist) > 15 && dist < 200);
+  bool soundDetected = (smoothSound > 120);
+  if (motionDetected || soundDetected) {
+    lastStateChangeTime = millis(); 
+    prevDist = dist;
+    prevSound = smoothSound;
+  }
+  
+  // 2. 深度打盹“惊醒”检测（休眠时，大刺激唤醒）
+  if (currentMood == MOOD_SLEEP && !inTransition) {
+    bool wakeMotion = (abs(dist - prevDist) > 30 && dist < 120);
+    bool wakeSound = (smoothSound > 250);
+    if (wakeMotion || wakeSound) {
+      inTransition = true;
+      transitionStartTime = millis();
+      nextMood = MOOD_CALM;
+      currentFrame = 4; // 闭眼开始过渡
+      lastActiveTime = millis();
+      lastStateChangeTime = millis();
+      prevDist = dist;
+      prevSound = smoothSound;
+      return;
+    }
+  }
+  
+  // 3. 持续 15 秒静止无活动，自动进入打盹（SLEEP）状态
+  if (millis() - lastStateChangeTime >= 15000 && !inTransition && currentMood != MOOD_SLEEP) {
+    inTransition = true;
+    transitionStartTime = millis();
+    nextMood = MOOD_SLEEP;
+    currentFrame = 4; // 闭眼过渡
+    return;
+  }
+  
+  // 处于睡眠状态且未被惊醒，不处理常规情绪转化
+  if (currentMood == MOOD_SLEEP) return;
+
+  const int LOUD = 250, QUIET = 30; // 调优后的音量噪声阈值
+
+  // 4. 双阈值迟滞比较器 (Hysteresis) 消除距离边界处的表情抖动
+  if (dist < 40) {
+    isNear = true;
+    isFar = false;
+  } else if (dist > 50) {
+    isNear = false;
+  }
+
+  if (dist > 85) {
+    isFar = true;
+    isNear = false;
+  } else if (dist < 75) {
+    isFar = false;
+  }
+  
+  bool interacting = false;
+  Mood targetMood = currentMood;
+  
+  if (isNear) {
+    interacting = true;
+    if (smoothSound > LOUD) targetMood = MOOD_EXCITED;
+    else targetMood = MOOD_HAPPY;
+  }
+  else if (isFar) {
+    if (smoothSound > QUIET) {
+      interacting = true;
+      targetMood = MOOD_CALM;
+    } else {
+      targetMood = MOOD_SAD; // 远距且无声，稳定触发孤独/伤心
+    }
+  }
+  else {
+    if (smoothSound > QUIET) {
+      interacting = true;
+      targetMood = MOOD_SMILE;
+    } else {
+      targetMood = MOOD_CALM;
+    }
+  }
+  
+  if (interacting) lastActiveTime = millis();
+  
+  // 10秒无交互超时触发伤心/孤独
+  if ((millis() - lastActiveTime > LONELY_TIMEOUT) && (smoothSound < QUIET)) {
+    targetMood = MOOD_SAD;
+  }
+  
+  // 5. 情绪转换过渡限制：满足最小显示时间（630ms）时才允许切换
+  if (targetMood != currentMood && !inTransition) {
+    unsigned long now = millis();
+    if (now - moodChangeTime >= MIN_DISPLAY_TIME) {
+      inTransition = true;
+      transitionStartTime = now;
+      nextMood = targetMood;
+      currentFrame = 4; // 开始闭眼动画，切入过渡帧
+    }
+  }
+}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Innovation Points -->
+      <section class="sandbox-section">
+        <h2><span class="sec-icon">⭐</span> 项目创新点 / Design Innovations</h2>
+        <ul class="innovation-list">
+          <li>
+            <span class="inno-icon">🌱</span>
+            <div>
+              <strong>情感抚慰导向设计</strong>
+              <p>区别于常规避障或警报设备，本机器人完全服务于陪伴，表情慢变柔和，避免电子垃圾式突兀交互。</p>
+            </div>
+          </li>
+          <li>
+            <span class="inno-icon">🛡️</span>
+            <div>
+              <strong>中值与低通双重滤波</strong>
+              <p>软件端对 HC-SR04 使用三点中值滤波去噪，对 HS-S05B 采用一阶低通平滑，数据在物理层即干净抗干扰。</p>
+            </div>
+          </li>
+          <li>
+            <span class="inno-icon">⏱️</span>
+            <div>
+              <strong>防表情跳跃切换锁</strong>
+              <p>增加了 <code>MIN_DISPLAY_TIME</code> 表情最小显示周期锁，使得动画哪怕在剧烈干扰下也能播满 3 遍，视觉更顺畅。</p>
+            </div>
+          </li>
+          <li>
+            <span class="inno-icon">📉</span>
+            <div>
+              <strong>极简架构与极高性价比</strong>
+              <p>仅采用百元以下的主控与基本传感器，即可达到极为高雅且高还原度的情感表情算法表达，利于向社区普及。</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Development Roadmap -->
+      <section class="sandbox-section">
+        <h2><span class="sec-icon">📋</span> 阶段总结与计划 / Project Roadmap</h2>
+        <div class="stage-summary">
+          <div class="stage-done">
+            <h4>✅ 已完成 / Finished</h4>
+            <ul>
+              <li>老年情感机器人核心定位与外观设计规划</li>
+              <li>主控 Arduino 与超声波测距/声敏传感器硬件线路搭建</li>
+              <li>一阶滤波及中值滤波等抗干扰算法开发</li>
+              <li>一整套 64x64 表情位图帧的存储与播放管理</li>
+              <li>防表情跳动状态机在 sketch_improve.ino 内的完整实现与联调</li>
+            </ul>
+          </div>
+          <div class="stage-next">
+            <h4>🔜 下一阶段计划 / Future Plans</h4>
+            <ul>
+              <li>利用 3D 打印为机器人设计可爱、无攻击感的弧面外壳</li>
+              <li>加入轻质 SG90 舵机模拟“眨眼晃脑”或“歪头倾听”的物理外壳动作</li>
+              <li>引入 Wi-Fi 板载芯片将声音距离曲线无缝上报云端</li>
+              <li>在养老社区开展真实老年用户陪护体验测试，打磨声强灵敏度</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
     <!-- Page Footer -->
     <footer class="landing-footer">
       <p class="footer-text">Made by ZWU-2026-2-005 2026</p>
     </footer>
   </div>
 
-  <script type="module" src="js/project.js"></script>
+  <script type="module" src="js/project.js?v=20260703a"></script>
 </body>
 </html>
