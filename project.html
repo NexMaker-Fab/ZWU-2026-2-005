@@ -6,7 +6,7 @@
   <title>最终项目 — 团队作业的博客 / Final Project</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
   <meta name="description" content="Final Project Dashboard for ZWU-2026-2-005.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com https://cdnjs.cloudflare.com https://cdn.bootcdn.net https://npm.elemecdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com wss://io.adafruit.com:443 wss://broker.emqx.io:8084;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com https://cdnjs.cloudflare.com https://cdn.bootcdn.net https://npm.elemecdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' https://assets.mixkit.co; connect-src 'self' https://api.github.com wss://io.adafruit.com:443 wss://broker.emqx.io:8084;">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
@@ -64,6 +64,66 @@
       <h1 class="hero-title-shimmer" data-i18n="project.hero.title">🤖 情感互动机器人 / Emotional Robot</h1>
       <p class="hero-subtitle" data-i18n="project.hero.subtitle">基于 Arduino 开发的老年情感陪伴机器人与 Web 可视化监测底座</p>
     </section>
+
+    <!-- Media Showcase Grid -->
+    <div class="media-grid">
+      <!-- Left Column: 9:16 Poster Card -->
+      <div class="media-poster-card">
+        <img class="media-poster-img" src="images/project_poster.png" alt="Emotional Companion Robot Poster">
+        <div class="media-poster-overlay">
+          <h3 class="media-poster-title">📢 情感陪伴机器人展板</h3>
+          <p class="media-poster-desc">项目 9:16 概念展板，展示了机器人的工业设计美学与核心交互理念。</p>
+          <a class="media-poster-btn" href="images/project_poster.png" target="_blank">
+            🔍 查看原图 / Fullscreen
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: 16:9 Video Player & Highlights -->
+      <div class="media-right-container">
+        <!-- 16:9 Video Card -->
+        <div class="media-video-card">
+          <video controls poster="images/video_cover.png" src="https://assets.mixkit.co/videos/preview/mixkit-electronic-circuit-board-close-up-1558-large.mp4">
+            您的浏览器不支持 HTML5 视频播放。
+          </video>
+        </div>
+
+        <!-- Project Highlights Card -->
+        <div class="info-card glass-card media-highlights-card">
+          <h3 class="highlights-title">✨ 核心系统亮点 / System Highlights</h3>
+          <div class="highlights-list">
+            <div class="highlight-item">
+              <span class="highlight-bullet">⚡</span>
+              <div class="highlight-text">
+                <h5>高性能 Uno R4 WiFi</h5>
+                <p>采用 Renesas RA4M1 主控，内置 ESP32-S3 提供高速的本地与物联网控制。</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-bullet">🔄</span>
+              <div class="highlight-text">
+                <h5>双向远程 MQTT 网关</h5>
+                <p>集成 Adafruit IO 云端通道，实现低延迟的双向指令下发与遥测上报。</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-bullet">🧠</span>
+              <div class="highlight-text">
+                <h5>迟滞比较器消抖</h5>
+                <p>硬件层使用双阈值迟滞（Hysteresis）算法，有效滤除物理环境突发扰动。</p>
+              </div>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-bullet">😴</span>
+              <div class="highlight-text">
+                <h5>自动休眠与大刺激惊醒</h5>
+                <p>15秒无活动自动进入打盹（SLEEP）状态，仅大动静或声音方可惊醒，防止视觉过载。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
  
     <!-- Grid Layout -->
     <div class="project-grid">
@@ -124,33 +184,6 @@
             </div>
             <input type="password" id="mqtt-key" placeholder="AIO Active Key" value="" style="padding: 8px 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 6px; color: #fff; font-family: inherit; font-size: 0.875rem;">
             <button class="btn btn-primary btn-sm" id="arduino-connect-btn" style="width: 100%;">连接 Adafruit IO Broker</button>
-          </div>
-        </div>
-
-        <!-- Specifications Card -->
-        <div class="info-card glass-card spec-card" style="margin-top: 24px;">
-          <h2 class="card-title" data-i18n="project.specs.title">🛠️ 硬件架构与物料 / Spec Sheets</h2>
-          <div class="spec-list">
-            <div class="spec-item">
-              <span class="spec-name">MCU Controller</span>
-              <span class="spec-val">Arduino Uno R4 WiFi</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-name">Sound Sensor</span>
-              <span class="spec-val">HS-S05B Sound Module</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-name">Distance Sensor</span>
-              <span class="spec-val">HC-SR04 Ultrasonic Sensor</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-name">Display Module</span>
-              <span class="spec-val">0.96" SSD1306 I2C OLED</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-name">Interaction Logic</span>
-              <span class="spec-val">Sound & Dist State Machine</span>
-            </div>
           </div>
         </div>
 
@@ -233,7 +266,7 @@
           <div class="goal-card">
             <div class="goal-icon">🌿</div>
             <h4>低感官刺激 / Low Stimulation</h4>
-            <p>不使用刺眼的强光或刺耳的警报音，完全通过平滑的 OLED 表情温和响应。</p>
+            <p>不使用刺眼的强光或刺耳 of 警报音，完全通过平滑的 OLED 表情温和响应。</p>
           </div>
           <div class="goal-card">
             <div class="goal-icon">💓</div>
@@ -337,7 +370,7 @@
             <div class="mod-info">
               <h4>HC-SR04 超声波测距传感器</h4>
               <div class="mod-type">距离传感器 | GPIO</div>
-              <p>利用声波发射与接收的时间差计算距离。测距范围 2cm - 400cm，分辨率可达 3mm。主要判定近距交互 (NEAR &lt; 45cm) 与远距断联 (FAR &gt; 80cm)。</p>
+              <p>利用声波发射与接收的时间差计算距离。测距范围 2cm - 400cm，分辨率可达 3mm。主要判定近距交互（迟滞比较：切入 &lt; 40cm，切出 &gt; 50cm）与远距陪伴状态（切入 &gt; 85cm，切出 &lt; 75cm）。</p>
             </div>
           </div>
           <div class="module-card">
@@ -345,7 +378,7 @@
             <div class="mod-info">
               <h4>HS-S05B 声音检测传感器</h4>
               <div class="mod-type">声强传感器 | ADC 模拟量</div>
-              <p>内置驻极体话筒与放大器，输出代表声音强度的模拟电压值。通过阈值判断判断周围是否有人大声呼唤 (LOUD &gt; 400) 或存在轻度声响 (QUIET &gt; 200)。</p>
+              <p>内置驻极体话筒与放大器，输出代表声音强度的模拟变化波形。主控通过峰峰值检测提取音量，大声判定阈值设定为 LOUD &gt; 250，小声与安静判定阈值设定为 QUIET &gt; 30。</p>
             </div>
           </div>
           <div class="module-card">
@@ -375,40 +408,46 @@
             </thead>
             <tbody>
               <tr>
-                <td><strong>近距离 &lt; 45 cm</strong> (有人凑近看)</td>
-                <td>大声 (&gt;400)</td>
+                <td><strong>近距离 &lt; 40 cm</strong> (有人接近交互)<br><span style="font-size:0.76rem; color:var(--text-muted);">迟滞滤波：切入 &lt;40cm，切出 &gt;50cm</span></td>
+                <td>大声 (&gt;250)</td>
                 <td><span style="color:var(--accent-primary); font-weight:bold;">EXCITED (兴奋)</span></td>
-                <td>老人正在开心地贴近大声跟它说话互动，机器人极力眨眼回应。</td>
+                <td>老人正在开心凑近说话，发出大声互动，机器人开心睁大眼睛，加快眨眼。</td>
               </tr>
               <tr>
-                <td><strong>近距离 &lt; 45 cm</strong> (有人凑近看)</td>
-                <td>小声/安静</td>
+                <td><strong>近距离 &lt; 40 cm</strong> (有人接近交互)<br><span style="font-size:0.76rem; color:var(--text-muted);">迟滞滤波：切入 &lt;40cm，切出 &gt;50cm</span></td>
+                <td>小声/安静 (&lt;250)</td>
                 <td><span style="color:var(--accent-primary); font-weight:bold;">HAPPY (快乐)</span></td>
-                <td>老人静静地陪伴在机器人跟前，机器人报以温暖的微笑与睁眼。</td>
+                <td>老人静静陪伴在机器人跟前，无强声干扰，机器人报以温暖的快乐睁眼。</td>
               </tr>
               <tr>
-                <td><strong>远距离 &gt; 80 cm</strong> (无人接近)</td>
-                <td>大声 (&gt;200) (远方呼唤)</td>
+                <td><strong>远距离 &gt; 85 cm</strong> (无人在身旁)<br><span style="font-size:0.76rem; color:var(--text-muted);">迟滞滤波：切入 &gt;85cm，切出 &lt;75cm</span></td>
+                <td>大声 (&gt;30) (远方动静)</td>
                 <td><span style="color:var(--accent-primary); font-weight:bold;">CALM (平静)</span></td>
-                <td>虽然老人离得远，但能听到声音（老人在房里走动），保持平稳待机。</td>
+                <td>虽离得远，但能听到脚步或说话动静，保持平稳工作，重置孤独计时器。</td>
               </tr>
               <tr>
-                <td><strong>远距离 &gt; 80 cm</strong> (无人接近)</td>
-                <td>小声/安静</td>
+                <td><strong>远距离 &gt; 85 cm</strong> (无人在身旁)<br><span style="font-size:0.76rem; color:var(--text-muted);">迟滞滤波：切入 &gt;85cm，切出 &lt;75cm</span></td>
+                <td>小声/安静 (&lt;30)</td>
                 <td><span style="color:#f43f5e; font-weight:bold;">SAD (伤心)</span></td>
-                <td>无人在身旁且没有动静，超过 10 秒未活动即触发孤独/伤心动画。</td>
+                <td>无人在身旁且无动静，孤独计时器超过 10 秒即触发孤独/伤心动画。</td>
               </tr>
               <tr>
-                <td><strong>中距离 45cm - 80cm</strong> (常规互动)</td>
-                <td>大声 (&gt;200)</td>
+                <td><strong>中距离 40cm - 85cm</strong> (正常距离交互)</td>
+                <td>大声 (&gt;30)</td>
                 <td><span style="color:var(--accent-primary); font-weight:bold;">SMILE (微笑)</span></td>
-                <td>老人在正常交互距离下说话，机器人露出友善的眯眼笑容。</td>
+                <td>老人正对着机器人发出声响互动，机器人露出眯眼喜悦微笑。</td>
               </tr>
               <tr>
-                <td><strong>中距离 45cm - 80cm</strong> (常规互动)</td>
-                <td>小声/安静</td>
+                <td><strong>中距离 40cm - 85cm</strong> (正常距离交互)</td>
+                <td>小声/安静 (&lt;30)</td>
                 <td><span style="color:var(--accent-primary); font-weight:bold;">CALM (平静)</span></td>
-                <td>老人在常规距离，但没有发出声响，保持平静待机状态。</td>
+                <td>老人在常规距离，但周围没有发出大声响，机器人保持平静待机。</td>
+              </tr>
+              <tr>
+                <td><strong>全范围 (无交互刺激)</strong></td>
+                <td>持续静止 (&lt;30)</td>
+                <td><span style="color:#64748b; font-weight:bold;">SLEEP (打盹睡眠)</span></td>
+                <td><strong>15秒极静自动休眠</strong>：持续 15 秒环境无声音且无运动，屏幕播放打盹动画。<strong>惊醒机制</strong>：外界距离变化 &gt;30cm（且在1.2m内）或声音 &gt;250 时瞬间恢复平静。</td>
               </tr>
             </tbody>
           </table>
@@ -423,32 +462,94 @@
           <div class="code-scroll-container">
             <pre class="code-highlight"><code>// ==================== 情绪更新核心逻辑 ====================
 void updateMood() {
-  int raw = analogRead(SOUND_PIN);
-  smoothSound = smoothSound * 0.6 + raw * 0.4; // 一阶低通滤波
+  // 限制传感器物理采样频率为 20Hz (每 50ms 一次)
+  static unsigned long lastSensorReadTime = 0;
+  static int cachedDist = 100;
+  static int cachedSound = 0;
   
-  int dist = getDistance(); // 中值滤波获取超声波距离
+  if (millis() - lastSensorReadTime >= 50 || lastSensorReadTime == 0) {
+    lastSensorReadTime = millis();
+    cachedDist = getDistance();
+    currentDistance = cachedDist; // 更新全局变量，供 MQTT 传输
+    cachedSound = getSoundIntensity();
+    smoothSound = smoothSound * 0.6 + cachedSound * 0.4;
+  }
   
-  const int NEAR = 45, FAR = 80;
-  const int LOUD = 400, QUIET = 200;
+  int dist = cachedDist;
+  
+  // 1. 稳态与活动检测（用于重置打盹计时器）
+  bool motionDetected = (abs(dist - prevDist) > 15 && dist < 200);
+  bool soundDetected = (smoothSound > 120);
+  if (motionDetected || soundDetected) {
+    lastStateChangeTime = millis(); 
+    prevDist = dist;
+    prevSound = smoothSound;
+  }
+  
+  // 2. 深度打盹“惊醒”检测（休眠时，大刺激唤醒）
+  if (currentMood == MOOD_SLEEP && !inTransition) {
+    bool wakeMotion = (abs(dist - prevDist) > 30 && dist < 120);
+    bool wakeSound = (smoothSound > 250);
+    if (wakeMotion || wakeSound) {
+      inTransition = true;
+      transitionStartTime = millis();
+      nextMood = MOOD_CALM;
+      currentFrame = 4; // 闭眼开始过渡
+      lastActiveTime = millis();
+      lastStateChangeTime = millis();
+      prevDist = dist;
+      prevSound = smoothSound;
+      return;
+    }
+  }
+  
+  // 3. 持续 15 秒静止无活动，自动进入打盹（SLEEP）状态
+  if (millis() - lastStateChangeTime >= 15000 && !inTransition && currentMood != MOOD_SLEEP) {
+    inTransition = true;
+    transitionStartTime = millis();
+    nextMood = MOOD_SLEEP;
+    currentFrame = 4; // 闭眼过渡
+    return;
+  }
+  
+  // 处于睡眠状态且未被惊醒，不处理常规情绪转化
+  if (currentMood == MOOD_SLEEP) return;
+
+  const int LOUD = 250, QUIET = 30; // 调优后的音量噪声阈值
+
+  // 4. 双阈值迟滞比较器 (Hysteresis) 消除距离边界处的表情抖动
+  if (dist < 40) {
+    isNear = true;
+    isFar = false;
+  } else if (dist > 50) {
+    isNear = false;
+  }
+
+  if (dist > 85) {
+    isFar = true;
+    isNear = false;
+  } else if (dist < 75) {
+    isFar = false;
+  }
   
   bool interacting = false;
-  Mood targetMood = currentMood; // 默认情绪保持不变
+  Mood targetMood = currentMood;
   
-  if (dist &lt; NEAR) {
+  if (isNear) {
     interacting = true;
-    if (smoothSound &gt; LOUD) targetMood = MOOD_EXCITED;
+    if (smoothSound > LOUD) targetMood = MOOD_EXCITED;
     else targetMood = MOOD_HAPPY;
   }
-  else if (dist &gt; FAR) {
-    if (smoothSound &gt; QUIET) {
+  else if (isFar) {
+    if (smoothSound > QUIET) {
       interacting = true;
       targetMood = MOOD_CALM;
     } else {
-      targetMood = MOOD_SAD;
+      targetMood = MOOD_SAD; // 远距且无声，稳定触发孤独/伤心
     }
   }
-  else { // 中等距离
-    if (smoothSound &gt; QUIET) {
+  else {
+    if (smoothSound > QUIET) {
       interacting = true;
       targetMood = MOOD_SMILE;
     } else {
@@ -456,20 +557,21 @@ void updateMood() {
     }
   }
   
-  if (interacting) lastActiveTime = millis(); // 记录最近活跃时间戳
+  if (interacting) lastActiveTime = millis();
   
-  // 10秒超时无人理睬，机器人自动感到孤独并转为 SAD 表情
-  if ((millis() - lastActiveTime &gt; LONELY_TIMEOUT) &amp;&amp; (smoothSound &lt; QUIET)) {
+  // 10秒无交互超时触发伤心/孤独
+  if ((millis() - lastActiveTime > LONELY_TIMEOUT) && (smoothSound < QUIET)) {
     targetMood = MOOD_SAD;
   }
   
-  // 核心切换控制：仅当前情绪显示超过 630ms 时才允许发生状态切换，防止抖动
-  if (targetMood != currentMood) {
+  // 5. 情绪转换过渡限制：满足最小显示时间（630ms）时才允许切换
+  if (targetMood != currentMood && !inTransition) {
     unsigned long now = millis();
-    if (now - moodChangeTime &gt;= MIN_DISPLAY_TIME) {
-      currentMood = targetMood;
-      moodChangeTime = now;
-      currentFrame = 0; // 重置帧，以防播放一半的表情闪烁
+    if (now - moodChangeTime >= MIN_DISPLAY_TIME) {
+      inTransition = true;
+      transitionStartTime = now;
+      nextMood = targetMood;
+      currentFrame = 4; // 开始闭眼动画，切入过渡帧
     }
   }
 }</code></pre>
@@ -506,7 +608,7 @@ void updateMood() {
             <span class="inno-icon">📉</span>
             <div>
               <strong>极简架构与极高性价比</strong>
-              <p>仅采用百元以下的主控与基本传感器，即可达到极为高雅且高还原度的情绪算法表达，利于向社区普及。</p>
+              <p>仅采用百元以下的主控与基本传感器，即可达到极为高雅且高还原度的情感表情算法表达，利于向社区普及。</p>
             </div>
           </li>
         </ul>
